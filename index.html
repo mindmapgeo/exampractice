@@ -1753,6 +1753,10 @@
     <div class="section-title">📖 Full Glossary</div>
     <div class="section-subtitle">All 469 terms from the Interpreters Glossary. Search in English or Ukrainian.</div>
 
+    <div style="margin-bottom:24px; background:var(--card); padding:16px; border-radius:12px; border:1px solid var(--border);">
+      <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px;">🎧 Comprehensive Audiobook (English & Ukrainian)</div>
+      <audio controls src="glossary_audiobook_comprehensive.mp3" style="width:100%; height:40px; outline:none;"></audio>
+    </div>
     <div class="glossary-header">
       <input type="text" class="search-input" id="glossarySearch" placeholder="🔍 Search English or Ukrainian..." oninput="filterGlossary()">
       <select class="select-styled" id="glossaryFilter" onchange="filterGlossary()">
@@ -2367,13 +2371,26 @@ function renderGlossary(filtered) {
     'ROUTINE VISITS': 'Routine Visits', 'SPECIALTY CARE': 'Specialty', 'PAIN DESCRIPTORS': 'Pain',
     'ANATOMY': 'Anatomy', 'MED INSURANCE': 'Insurance'
   };
-  tbody.innerHTML = terms.map(t => `
+  tbody.innerHTML = terms.map(t => {
+    const safeEn = t.english.replace(/"/g, '&quot;').replace(/'/g, '\\\'');
+    const safeUk = t.ukrainian.replace(/"/g, '&quot;').replace(/'/g, '\\\'');
+    return `
     <tr>
-      <td>${t.english}</td>
-      <td>${t.ukrainian}</td>
+      <td>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${t.english}
+          <button onclick="speakGlossary('${safeEn}', 'en-US')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Listen in English">🔊</button>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${t.ukrainian}
+          <button onclick="speakGlossary('${safeUk}', 'uk-UA')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Listen in Ukrainian">🔊</button>
+        </div>
+      </td>
       <td><span class="sheet-badge">${catLabels[t.category] || t.category}</span></td>
     </tr>
-  `).join('');
+  `}).join('');
   document.getElementById('glossaryCount').textContent = `Showing ${terms.length} of ${allCards.length} terms`;
 }
 
@@ -2708,6 +2725,18 @@ function speakSection(text) {
     speaking = true;
   } else {
     alert('Text-to-speech is not supported in this browser. Please copy the script and paste it into a TTS tool like Natural Reader or ElevenLabs.');
+  }
+}
+
+function speakGlossary(text, lang) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = lang;
+    utt.rate = 0.9;
+    window.speechSynthesis.speak(utt);
+  } else {
+    alert('Text-to-speech is not supported in this browser.');
   }
 }
 
