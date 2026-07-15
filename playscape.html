@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playscape - Interpreter Chats</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg2: #111520;
+    --card: #1a2035;
+    --card-hover: #1f2640;
+    --border: #2a3350;
+    --accent: #4f8ef7;
+    --accent2: #7c5af7;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --doctor: #34d399;
+    --interpreter: #a78bfa;
+    --patient: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', sans-serif;
+    height: 100vh; display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+
+  header {
+    background: rgba(10,13,20,0.85);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px; display: flex; align-items: center;
+    height: 64px; flex-shrink: 0; z-index: 10;
+  }
+  .logo {
+    font-weight: 800; font-size: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .main-container {
+    display: flex; flex: 1; overflow: hidden;
+  }
+
+  .sidebar {
+    width: 320px; background: var(--bg2); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .filters {
+    padding: 16px; border-bottom: 1px solid var(--border);
+  }
+  .filters select {
+    width: 100%; padding: 10px; background: var(--card); border: 1px solid var(--border);
+    color: var(--text); border-radius: 8px; font-family: 'Inter'; outline: none;
+  }
+  
+  .chat-list {
+    flex: 1; overflow-y: auto;
+  }
+  .chat-item {
+    padding: 16px; border-bottom: 1px solid var(--border); cursor: pointer;
+    transition: background 0.2s;
+  }
+  .chat-item:hover, .chat-item.active {
+    background: var(--card-hover);
+  }
+  .chat-item-topic {
+    font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .chat-item-title {
+    font-size: 15px; font-weight: 600; color: var(--text);
+  }
+
+  .chat-area {
+    flex: 1; display: flex; flex-direction: column; background: var(--bg);
+    position: relative;
+  }
+  .chat-header {
+    padding: 20px 24px; border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .chat-header h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .chat-header p { color: var(--text2); font-size: 14px; }
+
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 24px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .message {
+    max-width: 80%; padding: 16px; border-radius: 12px;
+    position: relative; animation: fadeIn 0.3s ease-out;
+    display: none; /* hidden until clicked */
+  }
+  .message.visible { display: block; }
+  
+  .message.Doctor { align-self: flex-start; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.2); }
+  .message.Patient { align-self: flex-start; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); }
+  .message.Interpreter { align-self: flex-end; background: rgba(167, 139, 250, 0.1); border: 1px solid rgba(167, 139, 250, 0.2); }
+  
+  .message-role {
+    font-size: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase;
+  }
+  .Doctor .message-role { color: var(--doctor); }
+  .Patient .message-role { color: var(--patient); }
+  .Interpreter .message-role { color: var(--interpreter); }
+
+  .message-text { font-size: 15px; line-height: 1.5; }
+
+  .controls {
+    padding: 16px 24px; border-top: 1px solid var(--border); background: var(--bg2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn {
+    padding: 12px 24px; border-radius: 8px; border: none; font-weight: 600; font-family: 'Inter';
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #3b76d6; }
+  .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--card-hover); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .empty-state {
+    display: flex; flex: 1; align-items: center; justify-content: center;
+    color: var(--text2); font-size: 16px; flex-direction: column; gap: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PLAYSCAPE // Interactive Chat Training</div>
+</header>
+
+<div class="main-container">
+  <div class="sidebar">
+    <div class="filters">
+      <select id="topicFilter">
+        <option value="ALL">All Topics</option>
+        <option value="ANEMIA">Anemia</option>
+        <option value="THYROID">Thyroid</option>
+        <option value="SEIZURES">Seizures</option>
+        <option value="GENERAL WELLNESS">General Wellness</option>
+        <option value="HEART ISSUES">Heart Issues</option>
+        <option value="DIABETES">Diabetes</option>
+        <option value="PREGNANCY">Pregnancy</option>
+      </select>
+    </div>
+    <div class="chat-list" id="chatList"></div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header" id="chatHeader" style="display:none;">
+      <h2 id="chatTitle"></h2>
+      <p id="chatTopic"></p>
+    </div>
+    
+    <div class="chat-messages" id="chatMessages">
+      <div class="empty-state">
+        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+        Select a scenario to start practicing
+      </div>
+    </div>
+
+    <div class="controls" id="chatControls" style="display:none;">
+      <button class="btn btn-secondary" id="btnReset">Reset Scenario</button>
+      <button class="btn btn-primary" id="btnNext">Reveal Next Line (Space)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const chats = [{"title": "Fatigue and Iron Levels", "topic": "ANEMIA", "messages": [{"role": "Doctor", "text": "Hello, I have your blood test results. Your iron levels are quite low, which explains your fatigue.", "lang": "en"}, {"role": "Interpreter", "text": "\u0414\u043e\u0431\u0440\u043e\u0433\u043e \u0434\u043d\u044f, \u044f \u043c\u0430\u044e \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0438 \u0432\u0430\u0448\u043e\u0433\u043e \u0430\u043d\u0430\u043b\u0456\u0437\u0443 \u043a\u0440\u043e\u0432\u0456. \u0420\u0456\u0432\u0435\u043d\u044c \u0437\u0430\u043b\u0456\u0437\u0430 \u0443 \u0432\u0430\u0441 \u0434\u043e\u0441\u0438\u0442\u044c \u043d\u0438\u0437\u044c\u043a\u0438\u0439, \u0449\u043e \u043f\u043e\u044f\u0441\u043d\u044e\u0454 \u0432\u0430\u0448\u0443 \u0432\u0442\u043e\u043c\u0443.", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u0442\u0430\u043a \u0456 \u0434\u0443\u043c\u0430\u043b\u0430. \u0429\u043e \u043c\u0435\u043d\u0456 \u0442\u0435\u043f\u0435\u0440 \u0440\u043e\u0431\u0438\u0442\u0438?", "lang": "uk"}, {"role": "Interpreter", "text": "I thought so. What should I do now?", "lang": "en"}, {"role": "Doctor", "text": "I'm going to prescribe iron supplements. You need to take one pill daily with orange juice.", "lang": "en"}, {"role": "Interpreter", "text": "\u042f \u0432\u0438\u043f\u0438\u0448\u0443 \u0432\u0430\u043c \u043f\u0440\u0435\u043f\u0430\u0440\u0430\u0442\u0438 \u0437\u0430\u043b\u0456\u0437\u0430. \u0412\u0430\u043c \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u043f\u0440\u0438\u0439\u043c\u0430\u0442\u0438 \u043f\u043e \u043e\u0434\u043d\u0456\u0439 \u0442\u0430\u0431\u043b\u0435\u0442\u0446\u0456 \u0449\u043e\u0434\u043d\u044f \u0437 \u0430\u043f\u0435\u043b\u044c\u0441\u0438\u043d\u043e\u0432\u0438\u043c \u0441\u043e\u043a\u043e\u043c.", "lang": "uk"}]}, {"title": "Severe Dizziness", "topic": "ANEMIA", "messages": [{"role": "Doctor", "text": "You mentioned you've been feeling dizzy when you stand up.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0438 \u0437\u0433\u0430\u0434\u0443\u0432\u0430\u043b\u0438, \u0449\u043e \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u0454\u0442\u0435 \u0437\u0430\u043f\u0430\u043c\u043e\u0440\u043e\u0447\u0435\u043d\u043d\u044f, \u043a\u043e\u043b\u0438 \u0432\u0441\u0442\u0430\u0454\u0442\u0435.", "lang": "uk"}, {"role": "Patient", "text": "\u0422\u0430\u043a, \u0456\u043d\u043e\u0434\u0456 \u0432 \u043c\u0435\u043d\u0435 \u0442\u0435\u043c\u043d\u0456\u0454 \u0432 \u043e\u0447\u0430\u0445.", "lang": "uk"}, {"role": "Interpreter", "text": "Yes, sometimes it gets dark in my eyes.", "lang": "en"}, {"role": "Doctor", "text": "This is a common symptom of anemia. We will need to monitor your hemoglobin levels closely.", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u043f\u043e\u0448\u0438\u0440\u0435\u043d\u0438\u0439 \u0441\u0438\u043c\u043f\u0442\u043e\u043c \u0430\u043d\u0435\u043c\u0456\u0457. \u041d\u0430\u043c \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u0431\u0443\u0434\u0435 \u0440\u0435\u0442\u0435\u043b\u044c\u043d\u043e \u0441\u0442\u0435\u0436\u0438\u0442\u0438 \u0437\u0430 \u0440\u0456\u0432\u043d\u0435\u043c \u0432\u0430\u0448\u043e\u0433\u043e \u0433\u0435\u043c\u043e\u0433\u043b\u043e\u0431\u0456\u043d\u0443.", "lang": "uk"}]}, {"title": "Dietary Changes", "topic": "ANEMIA", "messages": [{"role": "Doctor", "text": "Besides medication, you should eat more iron-rich foods like spinach and red meat.", "lang": "en"}, {"role": "Interpreter", "text": "\u041e\u043a\u0440\u0456\u043c \u043b\u0456\u043a\u0456\u0432, \u0432\u0430\u043c \u0441\u043b\u0456\u0434 \u0457\u0441\u0442\u0438 \u0431\u0456\u043b\u044c\u0448\u0435 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u0456\u0432, \u0431\u0430\u0433\u0430\u0442\u0438\u0445 \u043d\u0430 \u0437\u0430\u043b\u0456\u0437\u043e, \u0442\u0430\u043a\u0438\u0445 \u044f\u043a \u0448\u043f\u0438\u043d\u0430\u0442 \u0442\u0430 \u0447\u0435\u0440\u0432\u043e\u043d\u0435 \u043c'\u044f\u0441\u043e.", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u043d\u0435 \u0457\u043c \u043c'\u044f\u0441\u0430, \u044f \u0432\u0435\u0433\u0435\u0442\u0430\u0440\u0456\u0430\u043d\u043a\u0430.", "lang": "uk"}, {"role": "Interpreter", "text": "I don't eat meat, I am a vegetarian.", "lang": "en"}, {"role": "Doctor", "text": "In that case, focus on lentils, beans, and fortified cereals.", "lang": "en"}, {"role": "Interpreter", "text": "\u0423 \u0442\u0430\u043a\u043e\u043c\u0443 \u0440\u0430\u0437\u0456 \u0437\u043e\u0441\u0435\u0440\u0435\u0434\u044c\u0442\u0435\u0441\u044f \u043d\u0430 \u0441\u043e\u0447\u0435\u0432\u0438\u0446\u0456, \u043a\u0432\u0430\u0441\u043e\u043b\u0456 \u0442\u0430 \u0437\u0431\u0430\u0433\u0430\u0447\u0435\u043d\u0438\u0445 \u043a\u0430\u0448\u0430\u0445.", "lang": "uk"}]}, {"title": "Hypothyroidism Follow-up", "topic": "THYROID", "messages": [{"role": "Doctor", "text": "How have you been feeling since we adjusted your Levothyroxine dose?", "lang": "en"}, {"role": "Interpreter", "text": "\u042f\u043a \u0432\u0438 \u043f\u043e\u0447\u0443\u0432\u0430\u0454\u0442\u0435\u0441\u044f \u0432\u0456\u0434\u0442\u043e\u0434\u0456, \u044f\u043a \u043c\u0438 \u0441\u043a\u043e\u0440\u0438\u0433\u0443\u0432\u0430\u043b\u0438 \u0432\u0430\u0448\u0443 \u0434\u043e\u0437\u0443 \u043b\u0435\u0432\u043e\u0442\u0438\u0440\u043e\u043a\u0441\u0438\u043d\u0443?", "lang": "uk"}, {"role": "Patient", "text": "\u041d\u0430\u0431\u0430\u0433\u0430\u0442\u043e \u043a\u0440\u0430\u0449\u0435, \u0430\u043b\u0435 \u044f \u0432\u0441\u0435 \u0449\u0435 \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u044e \u0445\u043e\u043b\u043e\u0434.", "lang": "uk"}, {"role": "Interpreter", "text": "Much better, but I still feel cold.", "lang": "en"}, {"role": "Doctor", "text": "Your TSH levels are still slightly elevated. We might need another small adjustment.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u0448 \u0440\u0456\u0432\u0435\u043d\u044c \u0422\u0422\u0413 \u0432\u0441\u0435 \u0449\u0435 \u0442\u0440\u043e\u0445\u0438 \u043f\u0456\u0434\u0432\u0438\u0449\u0435\u043d\u0438\u0439. \u041c\u043e\u0436\u043b\u0438\u0432\u043e, \u043d\u0430\u043c \u0437\u043d\u0430\u0434\u043e\u0431\u0438\u0442\u044c\u0441\u044f \u0449\u0435 \u043e\u0434\u043d\u0435 \u043d\u0435\u0432\u0435\u043b\u0438\u043a\u0435 \u043a\u043e\u0440\u0438\u0433\u0443\u0432\u0430\u043d\u043d\u044f.", "lang": "uk"}]}, {"title": "Weight Fluctuations", "topic": "THYROID", "messages": [{"role": "Doctor", "text": "Have you noticed any unexplained weight loss or gain recently?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u043f\u043e\u043c\u0456\u0447\u0430\u043b\u0438 \u0432\u0438 \u043e\u0441\u0442\u0430\u043d\u043d\u0456\u043c \u0447\u0430\u0441\u043e\u043c \u043d\u0435\u0437\u0440\u043e\u0437\u0443\u043c\u0456\u043b\u0443 \u0432\u0442\u0440\u0430\u0442\u0443 \u0430\u0431\u043e \u0437\u0431\u0456\u043b\u044c\u0448\u0435\u043d\u043d\u044f \u0432\u0430\u0433\u0438?", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u043d\u0430\u0431\u0440\u0430\u043b\u0430 5 \u043a\u0456\u043b\u043e\u0433\u0440\u0430\u043c\u0456\u0432 \u0437\u0430 \u043c\u0456\u0441\u044f\u0446\u044c \u0431\u0435\u0437 \u0437\u043c\u0456\u043d\u0438 \u0434\u0456\u0454\u0442\u0438.", "lang": "uk"}, {"role": "Interpreter", "text": "I gained 5 kilograms in a month without changing my diet.", "lang": "en"}, {"role": "Doctor", "text": "That is a classic sign of an underactive thyroid. Let's run a full thyroid panel.", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u043a\u043b\u0430\u0441\u0438\u0447\u043d\u0430 \u043e\u0437\u043d\u0430\u043a\u0430 \u0437\u043d\u0438\u0436\u0435\u043d\u043e\u0457 \u0444\u0443\u043d\u043a\u0446\u0456\u0457 \u0449\u0438\u0442\u043e\u0432\u0438\u0434\u043d\u043e\u0457 \u0437\u0430\u043b\u043e\u0437\u0438. \u0414\u0430\u0432\u0430\u0439\u0442\u0435 \u0437\u0440\u043e\u0431\u0438\u043c\u043e \u043f\u043e\u0432\u043d\u0438\u0439 \u0430\u043d\u0430\u043b\u0456\u0437 \u043d\u0430 \u0433\u043e\u0440\u043c\u043e\u043d\u0438 \u0449\u0438\u0442\u043e\u0432\u0438\u0434\u043d\u043e\u0457 \u0437\u0430\u043b\u043e\u0437\u0438.", "lang": "uk"}]}, {"title": "Swelling in the Neck", "topic": "THYROID", "messages": [{"role": "Doctor", "text": "I noticed some swelling in your neck area. Does it hurt when you swallow?", "lang": "en"}, {"role": "Interpreter", "text": "\u042f \u043f\u043e\u043c\u0456\u0442\u0438\u0432 \u043d\u0435\u0432\u0435\u043b\u0438\u043a\u0438\u0439 \u043d\u0430\u0431\u0440\u044f\u043a \u0443 \u0434\u0456\u043b\u044f\u043d\u0446\u0456 \u0432\u0430\u0448\u043e\u0457 \u0448\u0438\u0457. \u0427\u0438 \u0431\u043e\u043b\u044f\u0447\u0435 \u0432\u0430\u043c \u043a\u043e\u0432\u0442\u0430\u0442\u0438?", "lang": "uk"}, {"role": "Patient", "text": "\u0422\u0440\u043e\u0445\u0438, \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u0454\u0442\u044c\u0441\u044f \u044f\u043a \u043a\u043b\u0443\u0431\u043e\u043a \u0443 \u0433\u043e\u0440\u043b\u0456.", "lang": "uk"}, {"role": "Interpreter", "text": "A little, it feels like a lump in my throat.", "lang": "en"}, {"role": "Doctor", "text": "I would like to order an ultrasound of your thyroid to check for nodules.", "lang": "en"}, {"role": "Interpreter", "text": "\u042f \u0445\u043e\u0442\u0456\u0432 \u0431\u0438 \u043f\u0440\u0438\u0437\u043d\u0430\u0447\u0438\u0442\u0438 \u0423\u0417\u0414 \u0432\u0430\u0448\u043e\u0457 \u0449\u0438\u0442\u043e\u0432\u0438\u0434\u043d\u043e\u0457 \u0437\u0430\u043b\u043e\u0437\u0438, \u0449\u043e\u0431 \u043f\u0435\u0440\u0435\u0432\u0456\u0440\u0438\u0442\u0438 \u043d\u0430\u044f\u0432\u043d\u0456\u0441\u0442\u044c \u0432\u0443\u0437\u043b\u0456\u0432.", "lang": "uk"}]}, {"title": "New Onset Seizure", "topic": "SEIZURES", "messages": [{"role": "Doctor", "text": "Can you describe what happened right before the seizure?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u043c\u043e\u0436\u0435\u0442\u0435 \u0432\u0438 \u043e\u043f\u0438\u0441\u0430\u0442\u0438, \u0449\u043e \u0441\u0442\u0430\u043b\u043e\u0441\u044f \u0431\u0435\u0437\u043f\u043e\u0441\u0435\u0440\u0435\u0434\u043d\u044c\u043e \u043f\u0435\u0440\u0435\u0434 \u043d\u0430\u043f\u0430\u0434\u043e\u043c?", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u0432\u0456\u0434\u0447\u0443\u0432 \u0434\u0438\u0432\u043d\u0438\u0439 \u0437\u0430\u043f\u0430\u0445, \u0430 \u043f\u043e\u0442\u0456\u043c \u0437\u043d\u0435\u043f\u0440\u0438\u0442\u043e\u043c\u043d\u0456\u0432.", "lang": "uk"}, {"role": "Interpreter", "text": "I smelled a strange odor, and then I passed out.", "lang": "en"}, {"role": "Doctor", "text": "That sounds like an aura. Have you ever experienced anything like this before?", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u0441\u0445\u043e\u0436\u0435 \u043d\u0430 \u0430\u0443\u0440\u0443. \u0427\u0438 \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u043b\u0438 \u0432\u0438 \u0449\u043e\u0441\u044c \u043f\u043e\u0434\u0456\u0431\u043d\u0435 \u0440\u0430\u043d\u0456\u0448\u0435?", "lang": "uk"}]}, {"title": "Medication Side Effects", "topic": "SEIZURES", "messages": [{"role": "Doctor", "text": "Are you experiencing any side effects from the anti-seizure medication?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u0454\u0442\u0435 \u0432\u0438 \u044f\u043a\u0456\u0441\u044c \u043f\u043e\u0431\u0456\u0447\u043d\u0456 \u0435\u0444\u0435\u043a\u0442\u0438 \u0432\u0456\u0434 \u043f\u0440\u043e\u0442\u0438\u0441\u0443\u0434\u043e\u043c\u043d\u0438\u0445 \u043b\u0456\u043a\u0456\u0432?", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u043f\u043e\u0441\u0442\u0456\u0439\u043d\u043e \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u044e \u0441\u043e\u043d\u043b\u0438\u0432\u0456\u0441\u0442\u044c \u0456 \u0437\u0430\u043f\u0430\u043c\u043e\u0440\u043e\u0447\u0435\u043d\u043d\u044f.", "lang": "uk"}, {"role": "Interpreter", "text": "I constantly feel drowsy and dizzy.", "lang": "en"}, {"role": "Doctor", "text": "We may need to lower your dose or try a different medication if it persists.", "lang": "en"}, {"role": "Interpreter", "text": "\u041c\u043e\u0436\u043b\u0438\u0432\u043e, \u043d\u0430\u043c \u0434\u043e\u0432\u0435\u0434\u0435\u0442\u044c\u0441\u044f \u0437\u043d\u0438\u0437\u0438\u0442\u0438 \u0432\u0430\u0448\u0443 \u0434\u043e\u0437\u0443 \u0430\u0431\u043e \u0441\u043f\u0440\u043e\u0431\u0443\u0432\u0430\u0442\u0438 \u0456\u043d\u0448\u0456 \u043b\u0456\u043a\u0438, \u044f\u043a\u0449\u043e \u0446\u0435 \u0442\u0440\u0438\u0432\u0430\u0442\u0438\u043c\u0435.", "lang": "uk"}]}, {"title": "Post-Seizure Recovery", "topic": "SEIZURES", "messages": [{"role": "Doctor", "text": "You cannot drive for at least six months following a seizure.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u043c \u043d\u0435 \u043c\u043e\u0436\u043d\u0430 \u043a\u0435\u0440\u0443\u0432\u0430\u0442\u0438 \u0430\u0432\u0442\u043e\u043c\u043e\u0431\u0456\u043b\u0435\u043c \u0449\u043e\u043d\u0430\u0439\u043c\u0435\u043d\u0448\u0435 \u0448\u0456\u0441\u0442\u044c \u043c\u0456\u0441\u044f\u0446\u0456\u0432 \u043f\u0456\u0441\u043b\u044f \u043d\u0430\u043f\u0430\u0434\u0443.", "lang": "uk"}, {"role": "Patient", "text": "\u0426\u0435 \u0431\u0443\u0434\u0435 \u0434\u0443\u0436\u0435 \u0432\u0430\u0436\u043a\u043e \u0434\u043b\u044f \u043c\u043e\u0454\u0457 \u0440\u043e\u0431\u043e\u0442\u0438.", "lang": "uk"}, {"role": "Interpreter", "text": "This will be very difficult for my job.", "lang": "en"}, {"role": "Doctor", "text": "I understand, but it is required by law for your safety and the safety of others.", "lang": "en"}, {"role": "Interpreter", "text": "\u042f \u0440\u043e\u0437\u0443\u043c\u0456\u044e, \u0430\u043b\u0435 \u0446\u044c\u043e\u0433\u043e \u0432\u0438\u043c\u0430\u0433\u0430\u0454 \u0437\u0430\u043a\u043e\u043d \u0437\u0430\u0434\u043b\u044f \u0432\u0430\u0448\u043e\u0457 \u0431\u0435\u0437\u043f\u0435\u043a\u0438 \u0442\u0430 \u0431\u0435\u0437\u043f\u0435\u043a\u0438 \u0456\u043d\u0448\u0438\u0445.", "lang": "uk"}]}, {"title": "Annual Checkup", "topic": "GENERAL WELLNESS", "messages": [{"role": "Doctor", "text": "Overall, your lab results look excellent.", "lang": "en"}, {"role": "Interpreter", "text": "\u0417\u0430\u0433\u0430\u043b\u043e\u043c, \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0438 \u0432\u0430\u0448\u0438\u0445 \u0430\u043d\u0430\u043b\u0456\u0437\u0456\u0432 \u0432\u0438\u0433\u043b\u044f\u0434\u0430\u044e\u0442\u044c \u0432\u0456\u0434\u043c\u0456\u043d\u043d\u043e.", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u0440\u0430\u0434\u0430 \u0446\u0435 \u0447\u0443\u0442\u0438. \u042f \u043d\u0430\u043c\u0430\u0433\u0430\u043b\u0430\u0441\u044f \u0431\u0456\u043b\u044c\u0448\u0435 \u0442\u0440\u0435\u043d\u0443\u0432\u0430\u0442\u0438\u0441\u044f.", "lang": "uk"}, {"role": "Interpreter", "text": "I am glad to hear that. I have been trying to exercise more.", "lang": "en"}, {"role": "Doctor", "text": "It is definitely paying off. Keep up the good work with your routine.", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u0431\u0435\u0437\u0443\u043c\u043e\u0432\u043d\u043e \u0434\u0430\u0454 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0438. \u041f\u0440\u043e\u0434\u043e\u0432\u0436\u0443\u0439\u0442\u0435 \u0432 \u0442\u043e\u043c\u0443 \u0436 \u0434\u0443\u0441\u0456 \u0437\u0456 \u0441\u0432\u043e\u0457\u043c \u0440\u0435\u0436\u0438\u043c\u043e\u043c.", "lang": "uk"}]}, {"title": "Vaccination Schedule", "topic": "GENERAL WELLNESS", "messages": [{"role": "Doctor", "text": "You are due for your flu shot and a tetanus booster today.", "lang": "en"}, {"role": "Interpreter", "text": "\u0421\u044c\u043e\u0433\u043e\u0434\u043d\u0456 \u0432\u0430\u043c \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u0437\u0440\u043e\u0431\u0438\u0442\u0438 \u0449\u0435\u043f\u043b\u0435\u043d\u043d\u044f \u0432\u0456\u0434 \u0433\u0440\u0438\u043f\u0443 \u0442\u0430 \u0440\u0435\u0432\u0430\u043a\u0446\u0438\u043d\u0430\u0446\u0456\u044e \u0432\u0456\u0434 \u043f\u0440\u0430\u0432\u0446\u044f.", "lang": "uk"}, {"role": "Patient", "text": "\u0427\u0438 \u043c\u043e\u0436\u043d\u0430 \u0437\u0440\u043e\u0431\u0438\u0442\u0438 \u0457\u0445 \u043e\u0431\u0438\u0434\u0432\u0430 \u0432 \u043e\u0434\u0438\u043d \u0434\u0435\u043d\u044c?", "lang": "uk"}, {"role": "Interpreter", "text": "Can I get them both on the same day?", "lang": "en"}, {"role": "Doctor", "text": "Yes, it is perfectly safe to receive them together. We will do one in each arm.", "lang": "en"}, {"role": "Interpreter", "text": "\u0422\u0430\u043a, \u0457\u0445 \u0446\u0456\u043b\u043a\u043e\u043c \u0431\u0435\u0437\u043f\u0435\u0447\u043d\u043e \u0432\u0432\u043e\u0434\u0438\u0442\u0438 \u0440\u0430\u0437\u043e\u043c. \u041c\u0438 \u0437\u0440\u043e\u0431\u0438\u043c\u043e \u043f\u043e \u043e\u0434\u043d\u043e\u043c\u0443 \u0432 \u043a\u043e\u0436\u043d\u0443 \u0440\u0443\u043a\u0443.", "lang": "uk"}]}, {"title": "Sleep Hygiene", "topic": "GENERAL WELLNESS", "messages": [{"role": "Doctor", "text": "You mentioned you are having trouble sleeping. How many hours do you get a night?", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0438 \u0437\u0433\u0430\u0434\u0430\u043b\u0438, \u0449\u043e \u043c\u0430\u0454\u0442\u0435 \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u0438 \u0437\u0456 \u0441\u043d\u043e\u043c. \u0421\u043a\u0456\u043b\u044c\u043a\u0438 \u0433\u043e\u0434\u0438\u043d \u0432\u0438 \u0441\u043f\u0438\u0442\u0435 \u0432\u043d\u043e\u0447\u0456?", "lang": "uk"}, {"role": "Patient", "text": "\u0411\u043b\u0438\u0437\u044c\u043a\u043e \u0447\u043e\u0442\u0438\u0440\u044c\u043e\u0445 \u0430\u0431\u043e \u043f'\u044f\u0442\u0438 \u0433\u043e\u0434\u0438\u043d. \u042f \u0447\u0430\u0441\u0442\u043e \u043f\u0440\u043e\u043a\u0438\u0434\u0430\u044e\u0441\u044f.", "lang": "uk"}, {"role": "Interpreter", "text": "About four or five hours. I wake up often.", "lang": "en"}, {"role": "Doctor", "text": "Try avoiding screens an hour before bed and stick to a consistent sleep schedule.", "lang": "en"}, {"role": "Interpreter", "text": "\u0421\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0443\u043d\u0438\u043a\u0430\u0442\u0438 \u0435\u043a\u0440\u0430\u043d\u0456\u0432 \u0437\u0430 \u0433\u043e\u0434\u0438\u043d\u0443 \u0434\u043e \u0441\u043d\u0443 \u0442\u0430 \u0434\u043e\u0442\u0440\u0438\u043c\u0443\u0439\u0442\u0435\u0441\u044f \u043f\u043e\u0441\u0442\u0456\u0439\u043d\u043e\u0433\u043e \u0433\u0440\u0430\u0444\u0456\u043a\u0430 \u0441\u043d\u0443.", "lang": "uk"}]}, {"title": "High Blood Pressure", "topic": "HEART ISSUES", "messages": [{"role": "Doctor", "text": "Your blood pressure reading is 150 over 95 today, which is high.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u0448 \u0430\u0440\u0442\u0435\u0440\u0456\u0430\u043b\u044c\u043d\u0438\u0439 \u0442\u0438\u0441\u043a \u0441\u044c\u043e\u0433\u043e\u0434\u043d\u0456 150 \u043d\u0430 95, \u0446\u0435 \u0432\u0438\u0441\u043e\u043a\u043e.", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u043e\u0441\u0442\u0430\u043d\u043d\u0456\u043c \u0447\u0430\u0441\u043e\u043c \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u044e \u0441\u0438\u043b\u044c\u043d\u0438\u0439 \u0441\u0442\u0440\u0435\u0441 \u043d\u0430 \u0440\u043e\u0431\u043e\u0442\u0456.", "lang": "uk"}, {"role": "Interpreter", "text": "I have been feeling a lot of stress at work lately.", "lang": "en"}, {"role": "Doctor", "text": "Stress can elevate your pressure. I want you to monitor it at home for a week.", "lang": "en"}, {"role": "Interpreter", "text": "\u0421\u0442\u0440\u0435\u0441 \u043c\u043e\u0436\u0435 \u043f\u0456\u0434\u0432\u0438\u0449\u0443\u0432\u0430\u0442\u0438 \u0442\u0438\u0441\u043a. \u042f \u0445\u043e\u0447\u0443, \u0449\u043e\u0431 \u0432\u0438 \u043a\u043e\u043d\u0442\u0440\u043e\u043b\u044e\u0432\u0430\u043b\u0438 \u0439\u043e\u0433\u043e \u0432\u0434\u043e\u043c\u0430 \u043f\u0440\u043e\u0442\u044f\u0433\u043e\u043c \u0442\u0438\u0436\u043d\u044f.", "lang": "uk"}]}, {"title": "Chest Pain Symptoms", "topic": "HEART ISSUES", "messages": [{"role": "Doctor", "text": "Where exactly do you feel the pain in your chest?", "lang": "en"}, {"role": "Interpreter", "text": "\u0414\u0435 \u0441\u0430\u043c\u0435 \u0432\u0438 \u0432\u0456\u0434\u0447\u0443\u0432\u0430\u0454\u0442\u0435 \u0431\u0456\u043b\u044c \u0443 \u0433\u0440\u0443\u0434\u044f\u0445?", "lang": "uk"}, {"role": "Patient", "text": "\u041f\u0440\u044f\u043c\u043e \u043f\u043e\u0441\u0435\u0440\u0435\u0434\u0438\u043d\u0456, \u0456 \u0431\u0456\u043b\u044c \u0432\u0456\u0434\u0434\u0430\u0454 \u0432 \u043b\u0456\u0432\u0443 \u0440\u0443\u043a\u0443.", "lang": "uk"}, {"role": "Interpreter", "text": "Right in the middle, and the pain radiates to my left arm.", "lang": "en"}, {"role": "Doctor", "text": "We need to do an EKG immediately to rule out a heart attack.", "lang": "en"}, {"role": "Interpreter", "text": "\u041d\u0430\u043c \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u043d\u0435\u0433\u0430\u0439\u043d\u043e \u0437\u0440\u043e\u0431\u0438\u0442\u0438 \u0415\u041a\u0413, \u0449\u043e\u0431 \u0432\u0438\u043a\u043b\u044e\u0447\u0438\u0442\u0438 \u0441\u0435\u0440\u0446\u0435\u0432\u0438\u0439 \u043d\u0430\u043f\u0430\u0434.", "lang": "uk"}]}, {"title": "Cholesterol Management", "topic": "HEART ISSUES", "messages": [{"role": "Doctor", "text": "Your LDL, or bad cholesterol, is elevated. We need to discuss your diet.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u0448 \u041b\u041f\u041d\u0429, \u0430\u0431\u043e \u043f\u043e\u0433\u0430\u043d\u0438\u0439 \u0445\u043e\u043b\u0435\u0441\u0442\u0435\u0440\u0438\u043d, \u043f\u0456\u0434\u0432\u0438\u0449\u0435\u043d\u0438\u0439. \u041d\u0430\u043c \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u043e\u0431\u0433\u043e\u0432\u043e\u0440\u0438\u0442\u0438 \u0432\u0430\u0448\u0443 \u0434\u0456\u0454\u0442\u0443.", "lang": "uk"}, {"role": "Patient", "text": "\u042f \u043d\u0430\u043c\u0430\u0433\u0430\u044e\u0441\u044f \u0443\u043d\u0438\u043a\u0430\u0442\u0438 \u0441\u043c\u0430\u0436\u0435\u043d\u043e\u0457 \u0457\u0436\u0456.", "lang": "uk"}, {"role": "Interpreter", "text": "I try to avoid fried foods.", "lang": "en"}, {"role": "Doctor", "text": "That's a good start. Also increase your fiber intake with oats and beans.", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u0445\u043e\u0440\u043e\u0448\u0438\u0439 \u043f\u043e\u0447\u0430\u0442\u043e\u043a. \u0422\u0430\u043a\u043e\u0436 \u0437\u0431\u0456\u043b\u044c\u0448\u0442\u0435 \u0441\u043f\u043e\u0436\u0438\u0432\u0430\u043d\u043d\u044f \u043a\u043b\u0456\u0442\u043a\u043e\u0432\u0438\u043d\u0438 \u0437\u0430 \u0440\u0430\u0445\u0443\u043d\u043e\u043a \u0432\u0456\u0432\u0441\u044f\u043d\u043a\u0438 \u0442\u0430 \u043a\u0432\u0430\u0441\u043e\u043b\u0456.", "lang": "uk"}]}, {"title": "Insulin Administration", "topic": "DIABETES", "messages": [{"role": "Doctor", "text": "Are you rotating the sites where you inject your insulin?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u0447\u0435\u0440\u0433\u0443\u0454\u0442\u0435 \u0432\u0438 \u043c\u0456\u0441\u0446\u044f, \u043a\u0443\u0434\u0438 \u0432\u0432\u043e\u0434\u0438\u0442\u0435 \u0456\u043d\u0441\u0443\u043b\u0456\u043d?", "lang": "uk"}, {"role": "Patient", "text": "\u0422\u0430\u043a, \u044f \u0447\u0435\u0440\u0433\u0443\u044e \u0436\u0438\u0432\u0456\u0442 \u0456 \u0441\u0442\u0435\u0433\u043d\u0430.", "lang": "uk"}, {"role": "Interpreter", "text": "Yes, I alternate between my abdomen and my thighs.", "lang": "en"}, {"role": "Doctor", "text": "Excellent. That helps prevent lipohypertrophy, which are hard lumps under the skin.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0456\u0434\u043c\u0456\u043d\u043d\u043e. \u0426\u0435 \u0434\u043e\u043f\u043e\u043c\u0430\u0433\u0430\u0454 \u0437\u0430\u043f\u043e\u0431\u0456\u0433\u0442\u0438 \u043b\u0456\u043f\u043e\u0433\u0456\u043f\u0435\u0440\u0442\u0440\u043e\u0444\u0456\u0457, \u0442\u043e\u0431\u0442\u043e \u0443\u0442\u0432\u043e\u0440\u0435\u043d\u043d\u044e \u0442\u0432\u0435\u0440\u0434\u0438\u0445 \u0491\u0443\u043b\u044c \u043f\u0456\u0434 \u0448\u043a\u0456\u0440\u043e\u044e.", "lang": "uk"}]}, {"title": "A1C Results", "topic": "DIABETES", "messages": [{"role": "Doctor", "text": "Your A1C is down to 6.5%, which is a great improvement.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u0448 \u0433\u043b\u0456\u043a\u043e\u0432\u0430\u043d\u0438\u0439 \u0433\u0435\u043c\u043e\u0433\u043b\u043e\u0431\u0456\u043d \u0437\u043d\u0438\u0437\u0438\u0432\u0441\u044f \u0434\u043e 6,5%, \u0446\u0435 \u0447\u0443\u0434\u043e\u0432\u0435 \u043f\u043e\u043a\u0440\u0430\u0449\u0435\u043d\u043d\u044f.", "lang": "uk"}, {"role": "Patient", "text": "\u0414\u044f\u043a\u0443\u044e, \u044f \u0434\u0443\u0436\u0435 \u0441\u0443\u0432\u043e\u0440\u043e \u0434\u043e\u0442\u0440\u0438\u043c\u0443\u0432\u0430\u0432\u0441\u044f \u0434\u0456\u0454\u0442\u0438.", "lang": "uk"}, {"role": "Interpreter", "text": "Thank you, I have been very strict with my diet.", "lang": "en"}, {"role": "Doctor", "text": "Your hard work is paying off. Keep doing what you are doing.", "lang": "en"}, {"role": "Interpreter", "text": "\u0412\u0430\u0448\u0430 \u043d\u0430\u043f\u043e\u043b\u0435\u0433\u043b\u0438\u0432\u0430 \u043f\u0440\u0430\u0446\u044f \u0434\u0430\u0454 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u0438. \u041f\u0440\u043e\u0434\u043e\u0432\u0436\u0443\u0439\u0442\u0435 \u0432 \u0442\u043e\u043c\u0443 \u0436 \u0434\u0443\u0441\u0456.", "lang": "uk"}]}, {"title": "Neuropathy Symptoms", "topic": "DIABETES", "messages": [{"role": "Doctor", "text": "Have you noticed any tingling or numbness in your feet?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u043f\u043e\u043c\u0456\u0447\u0430\u043b\u0438 \u0432\u0438 \u043f\u043e\u043a\u043e\u043b\u044e\u0432\u0430\u043d\u043d\u044f \u0430\u0431\u043e \u043e\u043d\u0456\u043c\u0456\u043d\u043d\u044f \u0432 \u043d\u043e\u0433\u0430\u0445?", "lang": "uk"}, {"role": "Patient", "text": "\u0422\u0430\u043a, \u043e\u0441\u043e\u0431\u043b\u0438\u0432\u043e \u0432\u043d\u043e\u0447\u0456 \u043c\u043e\u0457 \u043f\u0430\u043b\u044c\u0446\u0456 \u043d\u0456\u043c\u0456\u044e\u0442\u044c.", "lang": "uk"}, {"role": "Interpreter", "text": "Yes, especially at night my toes get numb.", "lang": "en"}, {"role": "Doctor", "text": "This is diabetic neuropathy. I'll prescribe some medication to help with the nerve pain.", "lang": "en"}, {"role": "Interpreter", "text": "\u0426\u0435 \u0434\u0456\u0430\u0431\u0435\u0442\u0438\u0447\u043d\u0430 \u043d\u0435\u0439\u0440\u043e\u043f\u0430\u0442\u0456\u044f. \u042f \u0432\u0438\u043f\u0438\u0448\u0443 \u0432\u0430\u043c \u043b\u0456\u043a\u0438, \u044f\u043a\u0456 \u0434\u043e\u043f\u043e\u043c\u043e\u0436\u0443\u0442\u044c \u0437\u043d\u044f\u0442\u0438 \u043d\u0435\u0440\u0432\u043e\u0432\u0438\u0439 \u0431\u0456\u043b\u044c.", "lang": "uk"}]}, {"title": "First Trimester Nausea", "topic": "PREGNANCY", "messages": [{"role": "Doctor", "text": "Are you experiencing a lot of morning sickness?", "lang": "en"}, {"role": "Interpreter", "text": "\u0427\u0438 \u0447\u0430\u0441\u0442\u043e \u0432\u0438 \u0441\u0442\u0440\u0430\u0436\u0434\u0430\u0454\u0442\u0435 \u0432\u0456\u0434 \u0440\u0430\u043d\u043a\u043e\u0432\u043e\u0457 \u043d\u0443\u0434\u043e\u0442\u0438?", "lang": "uk"}, {"role": "Patient", "text": "\u0422\u0430\u043a, \u044f \u043d\u0435 \u043c\u043e\u0436\u0443 \u0432\u0442\u0440\u0438\u043c\u0430\u0442\u0438 \u0436\u043e\u0434\u043d\u043e\u0457 \u0457\u0436\u0456 \u0437\u0440\u0430\u043d\u043a\u0443.", "lang": "uk"}, {"role": "Interpreter", "text": "Yes, I cannot keep any food down in the morning.", "lang": "en"}, {"role": "Doctor", "text": "Try eating small, frequent meals and keeping dry crackers by your bed.", "lang": "en"}, {"role": "Interpreter", "text": "\u0421\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0457\u0441\u0442\u0438 \u0447\u0430\u0441\u0442\u043e \u0456 \u043d\u0435\u0432\u0435\u043b\u0438\u043a\u0438\u043c\u0438 \u043f\u043e\u0440\u0446\u0456\u044f\u043c\u0438, \u0430 \u0442\u0430\u043a\u043e\u0436 \u0442\u0440\u0438\u043c\u0430\u0439\u0442\u0435 \u0441\u0443\u0445\u0456 \u043a\u0440\u0435\u043a\u0435\u0440\u0438 \u0431\u0456\u043b\u044f \u043b\u0456\u0436\u043a\u0430.", "lang": "uk"}]}, {"title": "Gestational Diabetes Test", "topic": "PREGNANCY", "messages": [{"role": "Doctor", "text": "Next visit, we will do the glucose tolerance test to check for gestational diabetes.", "lang": "en"}, {"role": "Interpreter", "text": "\u041d\u0430\u0441\u0442\u0443\u043f\u043d\u043e\u0433\u043e \u0432\u0456\u0437\u0438\u0442\u0443 \u043c\u0438 \u0437\u0440\u043e\u0431\u0438\u0454\u043c\u043e \u0442\u0435\u0441\u0442 \u043d\u0430 \u0442\u043e\u043b\u0435\u0440\u0430\u043d\u0442\u043d\u0456\u0441\u0442\u044c \u0434\u043e \u0433\u043b\u044e\u043a\u043e\u0437\u0438, \u0449\u043e\u0431 \u043f\u0435\u0440\u0435\u0432\u0456\u0440\u0438\u0442\u0438 \u043d\u0430\u044f\u0432\u043d\u0456\u0441\u0442\u044c \u0433\u0435\u0441\u0442\u0430\u0446\u0456\u0439\u043d\u043e\u0433\u043e \u0434\u0456\u0430\u0431\u0435\u0442\u0443.", "lang": "uk"}, {"role": "Patient", "text": "\u0427\u0438 \u043f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u043c\u0435\u043d\u0456 \u043f\u0440\u0438\u0445\u043e\u0434\u0438\u0442\u0438 \u043d\u0430\u0442\u0449\u0435\u0441\u0435\u0440\u0446\u0435?", "lang": "uk"}, {"role": "Interpreter", "text": "Do I need to come fasting?", "lang": "en"}, {"role": "Doctor", "text": "No, you can eat a normal breakfast, but avoid very sugary foods that morning.", "lang": "en"}, {"role": "Interpreter", "text": "\u041d\u0456, \u0432\u0438 \u043c\u043e\u0436\u0435\u0442\u0435 \u043d\u043e\u0440\u043c\u0430\u043b\u044c\u043d\u043e \u043f\u043e\u0441\u043d\u0456\u0434\u0430\u0442\u0438, \u0430\u043b\u0435 \u0443\u043d\u0438\u043a\u0430\u0439\u0442\u0435 \u0434\u0443\u0436\u0435 \u0441\u043e\u043b\u043e\u0434\u043a\u043e\u0457 \u0457\u0436\u0456 \u0442\u043e\u0433\u043e \u0440\u0430\u043d\u043a\u0443.", "lang": "uk"}]}];
+  
+  let currentChat = null;
+  let currentStep = 0;
+
+  const chatListEl = document.getElementById('chatList');
+  const chatMessagesEl = document.getElementById('chatMessages');
+  const topicFilter = document.getElementById('topicFilter');
+  const chatHeader = document.getElementById('chatHeader');
+  const chatControls = document.getElementById('chatControls');
+  const chatTitle = document.getElementById('chatTitle');
+  const chatTopic = document.getElementById('chatTopic');
+  const btnNext = document.getElementById('btnNext');
+  const btnReset = document.getElementById('btnReset');
+
+  function renderList(filter = 'ALL') {
+    chatListEl.innerHTML = '';
+    chats.forEach((chat, index) => {
+      if (filter !== 'ALL' && chat.topic !== filter) return;
+      
+      const div = document.createElement('div');
+      div.className = 'chat-item';
+      div.innerHTML = `
+        <div class="chat-item-topic">${chat.topic}</div>
+        <div class="chat-item-title">${chat.title}</div>
+      `;
+      div.onclick = () => loadChat(index);
+      chatListEl.appendChild(div);
+    });
+  }
+
+  function loadChat(index) {
+    currentChat = chats[index];
+    currentStep = 0;
+    
+    document.querySelectorAll('.chat-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    chatHeader.style.display = 'block';
+    chatControls.style.display = 'flex';
+    
+    chatTitle.textContent = currentChat.title;
+    chatTopic.textContent = "Topic: " + currentChat.topic;
+
+    chatMessagesEl.innerHTML = '';
+    
+    currentChat.messages.forEach((msg, i) => {
+      const div = document.createElement('div');
+      div.className = `message ${msg.role}`;
+      div.id = `msg-${i}`;
+      div.innerHTML = `
+        <div class="message-role">${msg.role}</div>
+        <div class="message-text">${msg.text}</div>
+      `;
+      chatMessagesEl.appendChild(div);
+    });
+    
+    updateButtonState();
+  }
+
+  function revealNext() {
+    if (!currentChat || currentStep >= currentChat.messages.length) return;
+    
+    const msgEl = document.getElementById(`msg-${currentStep}`);
+    if (msgEl) {
+      msgEl.classList.add('visible');
+      msgEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+    currentStep++;
+    updateButtonState();
+  }
+
+  function resetChat() {
+    if (!currentChat) return;
+    currentStep = 0;
+    document.querySelectorAll('.message').forEach(el => el.classList.remove('visible'));
+    updateButtonState();
+  }
+
+  function updateButtonState() {
+    if (currentStep >= currentChat.messages.length) {
+      btnNext.textContent = "Scenario Complete";
+      btnNext.disabled = true;
+      btnNext.style.opacity = '0.5';
+    } else {
+      btnNext.textContent = "Reveal Next Line (Space)";
+      btnNext.disabled = false;
+      btnNext.style.opacity = '1';
+    }
+  }
+
+  topicFilter.addEventListener('change', (e) => {
+    renderList(e.target.value);
+  });
+
+  btnNext.addEventListener('click', revealNext);
+  btnReset.addEventListener('click', resetChat);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' && currentChat) {
+      e.preventDefault();
+      revealNext();
+    }
+  });
+
+  // Init
+  renderList();
+</script>
+</body>
+</html>
