@@ -48,7 +48,7 @@
   }
 
   /* ── HEADER ── */
-  header {
+  header { display: flex; align-items: center; justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -292,7 +292,7 @@
   }
 
   /* ── FLASHCARD MODE ── */
-  .fc-header {
+  .fc-header { display: flex; align-items: center; justify-content: space-between;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -574,7 +574,7 @@
 
   .protocol-card:hover { border-color: var(--accent2); }
 
-  .protocol-header {
+  .protocol-header { display: flex; align-items: center; justify-content: space-between;
     padding: 20px 24px;
     cursor: pointer;
     display: flex;
@@ -711,7 +711,7 @@
   .timing-badge.ok { border-color: var(--green); color: var(--green); }
 
   /* ── GLOSSARY TABLE ── */
-  .glossary-header {
+  .glossary-header { display: flex; align-items: center; justify-content: space-between;
     display: flex;
     gap: 12px;
     margin-bottom: 20px;
@@ -998,9 +998,18 @@
     .cheatsheet-grid { grid-template-columns: 1fr; }
     .dash-grid { grid-template-columns: 1fr; }
     .progress-grid { grid-template-columns: repeat(2, 1fr); }
-    header { padding: 0 16px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
     main { padding: 20px 16px; }
   }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-search input { padding: 8px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; width: 300px; outline: none; }
+  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
+  #langToggle { padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; }
+  #langToggle option { color: black; }
+  #searchResults { display: none; padding: 20px; background: var(--bg2); border-radius: 12px; margin-top: 20px; }
+  .search-highlight { background: rgba(255,215,0,0.3); font-weight: bold; }
+
 </style>
 </head>
 <body>
@@ -1010,7 +1019,16 @@
     <div class="logo-icon">🇺🇦</div>
     Medical Interpreter Study Guide
   </div>
-  <div class="header-stats">
+  
+  <div class="header-search">
+    <input type="text" id="globalSearch" placeholder="🔍 Search glossary & protocols..." onkeyup="handleSearch(event)">
+  </div>
+  <div class="header-right">
+    <select id="langToggle" onchange="changeLanguage(this.value)">
+      <option value="ukrainian">🇺🇦 Ukrainian</option>
+      <option value="spanish">🇪🇸 Spanish</option>
+    </select>
+    <div class="header-stats" style="display:flex;gap:12px;">
     <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
     <div class="stat-pill">Quiz score: <span id="quizBest">—</span></div>
   </div>
@@ -2017,30 +2035,2344 @@
 
 const GLOSSARY_DATA = {
   "VOCAB": [
-    {"english":"Bloodwork","ukrainian":"Аналіз крові"},{"english":"Anemia","ukrainian":"Анемія"},{"english":"Weight gain","ukrainian":"Набір ваги"},{"english":"Weight loss","ukrainian":"Втрата ваги"},{"english":"High blood pressure","ukrainian":"Високий кров'яний тиск"},{"english":"Low blood pressure","ukrainian":"Низький кров'яний тиск"},{"english":"Diabetes","ukrainian":"Діабет"},{"english":"Cholesterol","ukrainian":"Холестерин"},{"english":"Blood sugar","ukrainian":"Рівень цукру в крові"},{"english":"Heart rate","ukrainian":"Частота серцевих скорочень"},{"english":"Pulse","ukrainian":"Пульс"},{"english":"Fever","ukrainian":"Лихоманка"},{"english":"Nausea","ukrainian":"Нудота"},{"english":"Vomiting","ukrainian":"Блювання"},{"english":"Diarrhea","ukrainian":"Діарея"},{"english":"Constipation","ukrainian":"Запор"},{"english":"Fatigue","ukrainian":"Втома"},{"english":"Shortness of breath","ukrainian":"Задишка"},{"english":"Chest pain","ukrainian":"Біль у грудях"},{"english":"Rash","ukrainian":"Висип"},{"english":"Swelling","ukrainian":"Набряк"},{"english":"Infection","ukrainian":"Інфекція"},{"english":"Inflammation","ukrainian":"Запалення"},{"english":"Fracture","ukrainian":"Перелом"},{"english":"Sprain","ukrainian":"Розтягнення"},{"english":"Allergy","ukrainian":"Алергія"},{"english":"Asthma","ukrainian":"Астма"},{"english":"Cancer","ukrainian":"Рак"},{"english":"Stroke","ukrainian":"Інсульт"},{"english":"Heart attack","ukrainian":"Серцевий напад"},{"english":"Seizure","ukrainian":"Судоми"},{"english":"Migraine","ukrainian":"Мігрень"},{"english":"Arthritis","ukrainian":"Артрит"},{"english":"Pregnancy","ukrainian":"Вагітність"},{"english":"Miscarriage","ukrainian":"Викидень"},{"english":"Discharge","ukrainian":"Виділення"},{"english":"Urine","ukrainian":"Сеча"},{"english":"Stool","ukrainian":"Кал"},{"english":"X-ray","ukrainian":"Рентген"},{"english":"MRI","ukrainian":"МРТ"},{"english":"Ultrasound","ukrainian":"УЗД"},{"english":"Biopsy","ukrainian":"Біопсія"},{"english":"Surgery","ukrainian":"Хірургічна операція"},{"english":"Anesthesia","ukrainian":"Анестезія"},{"english":"Wound","ukrainian":"Рана"},{"english":"Sutures","ukrainian":"Шви"},{"english":"Catheter","ukrainian":"Катетер"},{"english":"IV (Intravenous)","ukrainian":"Внутрішньовенне введення"},{"english":"Vaccination","ukrainian":"Вакцинація"},{"english":"Immunization","ukrainian":"Імунізація"},{"english":"Blood type","ukrainian":"Група крові"},{"english":"Platelet","ukrainian":"Тромбоцит"},{"english":"White blood cell","ukrainian":"Лейкоцит"},{"english":"Red blood cell","ukrainian":"Еритроцит"},{"english":"Hemoglobin","ukrainian":"Гемоглобін"},{"english":"Antibiotic","ukrainian":"Антибіотик"},{"english":"Antiviral","ukrainian":"Противірусний препарат"},{"english":"Anti-inflammatory","ukrainian":"Протизапальний препарат"},{"english":"Painkiller","ukrainian":"Знеболюючий препарат"},{"english":"Insulin","ukrainian":"Інсулін"},{"english":"Blood pressure cuff","ukrainian":"Тонометр"},{"english":"Stethoscope","ukrainian":"Стетоскоп"},{"english":"Thermometer","ukrainian":"Термометр"},{"english":"Oxygen","ukrainian":"Кисень"},{"english":"Ventilator","ukrainian":"Апарат штучної вентиляції легенів"},{"english":"Intubation","ukrainian":"Інтубація"},{"english":"CPR","ukrainian":"Серцево-легенева реанімація"},{"english":"AED","ukrainian":"Автоматичний зовнішній дефібрилятор"},{"english":"Emergency","ukrainian":"Невідкладна допомога"},{"english":"ICU","ukrainian":"Відділення інтенсивної терапії"},{"english":"ER (Emergency Room)","ukrainian":"Відділення швидкої допомоги"},{"english":"Ambulance","ukrainian":"Швидка допомога"},{"english":"Discharge (hospital)","ukrainian":"Виписка зі стаціонару"},{"english":"Referral","ukrainian":"Направлення"},{"english":"Prescription","ukrainian":"Рецепт"}
+    {
+      "english": "Bloodwork",
+      "ukrainian": "Аналіз крові",
+      "spanish": "Hipertensión"
+    },
+    {
+      "english": "Anemia",
+      "ukrainian": "Анемія",
+      "spanish": "Hipertensión"
+    },
+    {
+      "english": "Weight gain",
+      "ukrainian": "Набір ваги",
+      "spanish": "Hipertensión"
+    },
+    {
+      "english": "Weight loss",
+      "ukrainian": "Втрата ваги",
+      "spanish": "Hipertensión"
+    },
+    {
+      "english": "High blood pressure",
+      "ukrainian": "Високий кров'яний тиск",
+      "spanish": "Hipertensión"
+    },
+    {
+      "english": "Low blood pressure",
+      "ukrainian": "Низький кров'яний тиск",
+      "spanish": "presión arterial baja"
+    },
+    {
+      "english": "Diabetes",
+      "ukrainian": "Діабет",
+      "spanish": "Diabetes"
+    },
+    {
+      "english": "Cholesterol",
+      "ukrainian": "Холестерин",
+      "spanish": "Colesterol"
+    },
+    {
+      "english": "Blood sugar",
+      "ukrainian": "Рівень цукру в крові",
+      "spanish": "Glucemia"
+    },
+    {
+      "english": "Heart rate",
+      "ukrainian": "Частота серцевих скорочень",
+      "spanish": "frecuencia cardiaca"
+    },
+    {
+      "english": "Pulse",
+      "ukrainian": "Пульс",
+      "spanish": "Legumbres"
+    },
+    {
+      "english": "Fever",
+      "ukrainian": "Лихоманка",
+      "spanish": "Fiebre"
+    },
+    {
+      "english": "Nausea",
+      "ukrainian": "Нудота",
+      "spanish": "Náuseas"
+    },
+    {
+      "english": "Vomiting",
+      "ukrainian": "Блювання",
+      "spanish": "Vómitos"
+    },
+    {
+      "english": "Diarrhea",
+      "ukrainian": "Діарея",
+      "spanish": "Diarrea"
+    },
+    {
+      "english": "Constipation",
+      "ukrainian": "Запор",
+      "spanish": "Constipación"
+    },
+    {
+      "english": "Fatigue",
+      "ukrainian": "Втома",
+      "spanish": "Fatiga"
+    },
+    {
+      "english": "Shortness of breath",
+      "ukrainian": "Задишка",
+      "spanish": "Dificultad para respirar"
+    },
+    {
+      "english": "Chest pain",
+      "ukrainian": "Біль у грудях",
+      "spanish": "Dolor en el pecho"
+    },
+    {
+      "english": "Rash",
+      "ukrainian": "Висип",
+      "spanish": "Erupción"
+    },
+    {
+      "english": "Swelling",
+      "ukrainian": "Набряк",
+      "spanish": "Hinchazón"
+    },
+    {
+      "english": "Infection",
+      "ukrainian": "Інфекція",
+      "spanish": "Infección"
+    },
+    {
+      "english": "Inflammation",
+      "ukrainian": "Запалення",
+      "spanish": "Inflamación"
+    },
+    {
+      "english": "Fracture",
+      "ukrainian": "Перелом",
+      "spanish": "Fractura"
+    },
+    {
+      "english": "Sprain",
+      "ukrainian": "Розтягнення",
+      "spanish": "Esguince"
+    },
+    {
+      "english": "Allergy",
+      "ukrainian": "Алергія",
+      "spanish": "Alergia"
+    },
+    {
+      "english": "Asthma",
+      "ukrainian": "Астма",
+      "spanish": "Asma"
+    },
+    {
+      "english": "Cancer",
+      "ukrainian": "Рак",
+      "spanish": "Cáncer"
+    },
+    {
+      "english": "Stroke",
+      "ukrainian": "Інсульт",
+      "spanish": "Ataque"
+    },
+    {
+      "english": "Heart attack",
+      "ukrainian": "Серцевий напад",
+      "spanish": "Infarto de miocardio"
+    },
+    {
+      "english": "Seizure",
+      "ukrainian": "Судоми",
+      "spanish": "Convulsión"
+    },
+    {
+      "english": "Migraine",
+      "ukrainian": "Мігрень",
+      "spanish": "Migraña"
+    },
+    {
+      "english": "Arthritis",
+      "ukrainian": "Артрит",
+      "spanish": "Artritis"
+    },
+    {
+      "english": "Pregnancy",
+      "ukrainian": "Вагітність",
+      "spanish": "Embarazo"
+    },
+    {
+      "english": "Miscarriage",
+      "ukrainian": "Викидень",
+      "spanish": "Aborto espontáneo"
+    },
+    {
+      "english": "Discharge",
+      "ukrainian": "Виділення",
+      "spanish": "Descargar"
+    },
+    {
+      "english": "Urine",
+      "ukrainian": "Сеча",
+      "spanish": "Orina"
+    },
+    {
+      "english": "Stool",
+      "ukrainian": "Кал",
+      "spanish": "Heces"
+    },
+    {
+      "english": "X-ray",
+      "ukrainian": "Рентген",
+      "spanish": "radiografía"
+    },
+    {
+      "english": "MRI",
+      "ukrainian": "МРТ",
+      "spanish": "resonancia magnética"
+    },
+    {
+      "english": "Ultrasound",
+      "ukrainian": "УЗД",
+      "spanish": "Ultrasonido"
+    },
+    {
+      "english": "Biopsy",
+      "ukrainian": "Біопсія",
+      "spanish": "Biopsia"
+    },
+    {
+      "english": "Surgery",
+      "ukrainian": "Хірургічна операція",
+      "spanish": "Cirugía"
+    },
+    {
+      "english": "Anesthesia",
+      "ukrainian": "Анестезія",
+      "spanish": "Anestesia"
+    },
+    {
+      "english": "Wound",
+      "ukrainian": "Рана",
+      "spanish": "Herida"
+    },
+    {
+      "english": "Sutures",
+      "ukrainian": "Шви",
+      "spanish": "Suturas"
+    },
+    {
+      "english": "Catheter",
+      "ukrainian": "Катетер",
+      "spanish": "Catéter"
+    },
+    {
+      "english": "IV (Intravenous)",
+      "ukrainian": "Внутрішньовенне введення",
+      "spanish": "IV (intravenoso)"
+    },
+    {
+      "english": "Vaccination",
+      "ukrainian": "Вакцинація",
+      "spanish": "Vacunación"
+    },
+    {
+      "english": "Immunization",
+      "ukrainian": "Імунізація",
+      "spanish": "Inmunización"
+    },
+    {
+      "english": "Blood type",
+      "ukrainian": "Група крові",
+      "spanish": "Tipo de sangre"
+    },
+    {
+      "english": "Platelet",
+      "ukrainian": "Тромбоцит",
+      "spanish": "Plaqueta"
+    },
+    {
+      "english": "White blood cell",
+      "ukrainian": "Лейкоцит",
+      "spanish": "glóbulo blanco"
+    },
+    {
+      "english": "Red blood cell",
+      "ukrainian": "Еритроцит",
+      "spanish": "glóbulo rojo"
+    },
+    {
+      "english": "Hemoglobin",
+      "ukrainian": "Гемоглобін",
+      "spanish": "Hemoglobina"
+    },
+    {
+      "english": "Antibiotic",
+      "ukrainian": "Антибіотик",
+      "spanish": "Antibiótico"
+    },
+    {
+      "english": "Antiviral",
+      "ukrainian": "Противірусний препарат",
+      "spanish": "Antivírico"
+    },
+    {
+      "english": "Anti-inflammatory",
+      "ukrainian": "Протизапальний препарат",
+      "spanish": "Antiinflamatorio"
+    },
+    {
+      "english": "Painkiller",
+      "ukrainian": "Знеболюючий препарат",
+      "spanish": "Analgésico"
+    },
+    {
+      "english": "Insulin",
+      "ukrainian": "Інсулін",
+      "spanish": "Insulina"
+    },
+    {
+      "english": "Blood pressure cuff",
+      "ukrainian": "Тонометр",
+      "spanish": "Manguito de presión arterial"
+    },
+    {
+      "english": "Stethoscope",
+      "ukrainian": "Стетоскоп",
+      "spanish": "Estetoscopio"
+    },
+    {
+      "english": "Thermometer",
+      "ukrainian": "Термометр",
+      "spanish": "Termómetro"
+    },
+    {
+      "english": "Oxygen",
+      "ukrainian": "Кисень",
+      "spanish": "Oxígeno"
+    },
+    {
+      "english": "Ventilator",
+      "ukrainian": "Апарат штучної вентиляції легенів",
+      "spanish": "Ventilador"
+    },
+    {
+      "english": "Intubation",
+      "ukrainian": "Інтубація",
+      "spanish": "Intubación"
+    },
+    {
+      "english": "CPR",
+      "ukrainian": "Серцево-легенева реанімація",
+      "spanish": "RCP"
+    },
+    {
+      "english": "AED",
+      "ukrainian": "Автоматичний зовнішній дефібрилятор",
+      "spanish": "DEA"
+    },
+    {
+      "english": "Emergency",
+      "ukrainian": "Невідкладна допомога",
+      "spanish": "Emergencia"
+    },
+    {
+      "english": "ICU",
+      "ukrainian": "Відділення інтенсивної терапії",
+      "spanish": "UCI"
+    },
+    {
+      "english": "ER (Emergency Room)",
+      "ukrainian": "Відділення швидкої допомоги",
+      "spanish": "ER (sala de emergencias)"
+    },
+    {
+      "english": "Ambulance",
+      "ukrainian": "Швидка допомога",
+      "spanish": "Ambulancia"
+    },
+    {
+      "english": "Discharge (hospital)",
+      "ukrainian": "Виписка зі стаціонару",
+      "spanish": "Alta (hospital)"
+    },
+    {
+      "english": "Referral",
+      "ukrainian": "Направлення",
+      "spanish": "Remisión"
+    },
+    {
+      "english": "Prescription",
+      "ukrainian": "Рецепт",
+      "spanish": "Prescripción"
+    }
   ],
   "PROC ACRONYMS": [
-    {"english":"CAT scan (Computer Axial Tomography)","ukrainian":"КТ (комп'ютерна аксіальна томографія)"},{"english":"DPT (Diphtheria, Pertussis, Tetanus)","ukrainian":"АКДП (дифтерія, кашлюк, правець)"},{"english":"PCOS (Polycystic Ovarian Syndrome)","ukrainian":"СПКЯ (синдром полікістозних яєчників)"},{"english":"COPD (Chronic Obstructive Pulmonary Disease)","ukrainian":"ХОЗЛ (хронічне обструктивне захворювання легенів)"},{"english":"EKG/ECG (Electrocardiogram)","ukrainian":"ЕКГ (електрокардіограма)"},{"english":"BMI (Body Mass Index)","ukrainian":"ІМТ (індекс маси тіла)"},{"english":"BP (Blood Pressure)","ukrainian":"АТ (артеріальний тиск)"},{"english":"HR (Heart Rate)","ukrainian":"ЧСС (частота серцевих скорочень)"},{"english":"CBC (Complete Blood Count)","ukrainian":"ЗАК (загальний аналіз крові)"},{"english":"UTI (Urinary Tract Infection)","ukrainian":"ІСШ (інфекція сечовивідних шляхів)"},{"english":"STI (Sexually Transmitted Infection)","ukrainian":"ІПСШ (інфекція, що передається статевим шляхом)"},{"english":"HIV (Human Immunodeficiency Virus)","ukrainian":"ВІЛ (вірус імунодефіциту людини)"},{"english":"AIDS (Acquired Immunodeficiency Syndrome)","ukrainian":"СНІД (синдром набутого імунодефіциту)"},{"english":"TB (Tuberculosis)","ukrainian":"ТБ (туберкульоз)"},{"english":"GI (Gastrointestinal)","ukrainian":"ШКТ (шлунково-кишковий тракт)"},{"english":"OB/GYN (Obstetrics/Gynecology)","ukrainian":"Акушерство/Гінекологія"}
+    {
+      "english": "CAT scan (Computer Axial Tomography)",
+      "ukrainian": "КТ (комп'ютерна аксіальна томографія)",
+      "spanish": "TAC (tomografía axial computarizada)"
+    },
+    {
+      "english": "DPT (Diphtheria, Pertussis, Tetanus)",
+      "ukrainian": "АКДП (дифтерія, кашлюк, правець)",
+      "spanish": "DPT (difteria, tos ferina, tétanos)"
+    },
+    {
+      "english": "PCOS (Polycystic Ovarian Syndrome)",
+      "ukrainian": "СПКЯ (синдром полікістозних яєчників)",
+      "spanish": "SOP (síndrome de ovario poliquístico)"
+    },
+    {
+      "english": "COPD (Chronic Obstructive Pulmonary Disease)",
+      "ukrainian": "ХОЗЛ (хронічне обструктивне захворювання легенів)",
+      "spanish": "EPOC (Enfermedad Pulmonar Obstructiva Crónica)"
+    },
+    {
+      "english": "EKG/ECG (Electrocardiogram)",
+      "ukrainian": "ЕКГ (електрокардіограма)",
+      "spanish": "EKG/ECG (electrocardiograma)"
+    },
+    {
+      "english": "BMI (Body Mass Index)",
+      "ukrainian": "ІМТ (індекс маси тіла)",
+      "spanish": "IMC (índice de masa corporal)"
+    },
+    {
+      "english": "BP (Blood Pressure)",
+      "ukrainian": "АТ (артеріальний тиск)",
+      "spanish": "PA (presión arterial)"
+    },
+    {
+      "english": "HR (Heart Rate)",
+      "ukrainian": "ЧСС (частота серцевих скорочень)",
+      "spanish": "FC (frecuencia cardíaca)"
+    },
+    {
+      "english": "CBC (Complete Blood Count)",
+      "ukrainian": "ЗАК (загальний аналіз крові)",
+      "spanish": "CBC (conteo sanguíneo completo)"
+    },
+    {
+      "english": "UTI (Urinary Tract Infection)",
+      "ukrainian": "ІСШ (інфекція сечовивідних шляхів)",
+      "spanish": "ITU (infección del tracto urinario)"
+    },
+    {
+      "english": "STI (Sexually Transmitted Infection)",
+      "ukrainian": "ІПСШ (інфекція, що передається статевим шляхом)",
+      "spanish": "ITS (Infección de transmisión sexual)"
+    },
+    {
+      "english": "HIV (Human Immunodeficiency Virus)",
+      "ukrainian": "ВІЛ (вірус імунодефіциту людини)",
+      "spanish": "VIH (Virus de Inmunodeficiencia Humana)"
+    },
+    {
+      "english": "AIDS (Acquired Immunodeficiency Syndrome)",
+      "ukrainian": "СНІД (синдром набутого імунодефіциту)",
+      "spanish": "SIDA (Síndrome de Inmunodeficiencia Adquirida)"
+    },
+    {
+      "english": "TB (Tuberculosis)",
+      "ukrainian": "ТБ (туберкульоз)",
+      "spanish": "TB (Tuberculosis)"
+    },
+    {
+      "english": "GI (Gastrointestinal)",
+      "ukrainian": "ШКТ (шлунково-кишковий тракт)",
+      "spanish": "GI (gastrointestinal)"
+    },
+    {
+      "english": "OB/GYN (Obstetrics/Gynecology)",
+      "ukrainian": "Акушерство/Гінекологія",
+      "spanish": "OB/GYN (Obstetricia/Ginecología)"
+    }
   ],
   "MEDICATIONS": [
-    {"english":"Brand Name","ukrainian":"Торгова назва"},{"english":"Generic Name","ukrainian":"Міжнародна непатентована назва"},{"english":"Prescription","ukrainian":"Рецептурний препарат"},{"english":"Over-the-Counter (OTC)","ukrainian":"Безрецептурний препарат"},{"english":"Dosage","ukrainian":"Дозування"},{"english":"Side Effects","ukrainian":"Побічні ефекти"},{"english":"Drug Interactions","ukrainian":"Взаємодія ліків"},{"english":"Refill","ukrainian":"Поповнення рецепту"},{"english":"Pharmacy","ukrainian":"Аптека"},{"english":"Pharmacist","ukrainian":"Фармацевт"},{"english":"Controlled Substance","ukrainian":"Контрольована речовина"},{"english":"Narcotics","ukrainian":"Наркотичні речовини"},{"english":"Supplement","ukrainian":"Харчова добавка"}
+    {
+      "english": "Brand Name",
+      "ukrainian": "Торгова назва",
+      "spanish": "Nombre de la marca"
+    },
+    {
+      "english": "Generic Name",
+      "ukrainian": "Міжнародна непатентована назва",
+      "spanish": "Nombre genérico"
+    },
+    {
+      "english": "Prescription",
+      "ukrainian": "Рецептурний препарат",
+      "spanish": "Prescripción"
+    },
+    {
+      "english": "Over-the-Counter (OTC)",
+      "ukrainian": "Безрецептурний препарат",
+      "spanish": "Venta libre (OTC)"
+    },
+    {
+      "english": "Dosage",
+      "ukrainian": "Дозування",
+      "spanish": "Dosificación"
+    },
+    {
+      "english": "Side Effects",
+      "ukrainian": "Побічні ефекти",
+      "spanish": "Efectos secundarios"
+    },
+    {
+      "english": "Drug Interactions",
+      "ukrainian": "Взаємодія ліків",
+      "spanish": "Interacciones farmacológicas"
+    },
+    {
+      "english": "Refill",
+      "ukrainian": "Поповнення рецепту",
+      "spanish": "Rellenar"
+    },
+    {
+      "english": "Pharmacy",
+      "ukrainian": "Аптека",
+      "spanish": "Farmacia"
+    },
+    {
+      "english": "Pharmacist",
+      "ukrainian": "Фармацевт",
+      "spanish": "Farmacéutico"
+    },
+    {
+      "english": "Controlled Substance",
+      "ukrainian": "Контрольована речовина",
+      "spanish": "Sustancia controlada"
+    },
+    {
+      "english": "Narcotics",
+      "ukrainian": "Наркотичні речовини",
+      "spanish": "Narcóticos"
+    },
+    {
+      "english": "Supplement",
+      "ukrainian": "Харчова добавка",
+      "spanish": "Suplemento"
+    }
   ],
   "ROUTINE VISITS": [
-    {"english":"Annual Check-up","ukrainian":"Щорічний медичний огляд"},{"english":"Physical Exam","ukrainian":"Фізикальний огляд"},{"english":"Pap Smear","ukrainian":"ПАП-тест"},{"english":"Mammogram","ukrainian":"Мамографія"},{"english":"Colonoscopy","ukrainian":"Колоноскопія"},{"english":"Eye Exam","ukrainian":"Огляд очей"},{"english":"Dental Exam","ukrainian":"Стоматологічний огляд"},{"english":"Well-Child Visit","ukrainian":"Плановий педіатричний огляд"},{"english":"Immunization Record","ukrainian":"Карта вакцинації"},{"english":"Height and Weight","ukrainian":"Зріст і вага"},{"english":"Blood Pressure Check","ukrainian":"Вимірювання артеріального тиску"},{"english":"Urinalysis","ukrainian":"Загальний аналіз сечі"},{"english":"Cholesterol Test","ukrainian":"Аналіз на холестерин"},{"english":"Blood Glucose Test","ukrainian":"Аналіз на глюкозу крові"},{"english":"Prostate Exam","ukrainian":"Дослідження простати"},{"english":"Skin Cancer Screening","ukrainian":"Скринінг раку шкіри"},{"english":"STI Screening","ukrainian":"Скринінг ІПСШ"},{"english":"Depression Screening","ukrainian":"Скринінг депресії"},{"english":"Hearing Test","ukrainian":"Тест на слух"},{"english":"Bone Density Test","ukrainian":"Денситометрія (тест на щільність кісток)"},{"english":"Thyroid Function Test","ukrainian":"Аналіз функції щитовидної залози"},{"english":"Vitamin D Level","ukrainian":"Рівень вітаміну D"},{"english":"Iron Level","ukrainian":"Рівень заліза"},{"english":"Liver Function Test","ukrainian":"Аналіз функції печінки"},{"english":"Kidney Function Test","ukrainian":"Аналіз функції нирок"},{"english":"Follow-up Appointment","ukrainian":"Повторний прийом"},{"english":"Referral","ukrainian":"Направлення до спеціаліста"},{"english":"Medical History","ukrainian":"Медична історія"},{"english":"Vital Signs","ukrainian":"Показники життєдіяльності"}
+    {
+      "english": "Annual Check-up",
+      "ukrainian": "Щорічний медичний огляд",
+      "spanish": "Chequeo Anual"
+    },
+    {
+      "english": "Physical Exam",
+      "ukrainian": "Фізикальний огляд",
+      "spanish": "examen fisico"
+    },
+    {
+      "english": "Pap Smear",
+      "ukrainian": "ПАП-тест",
+      "spanish": "prueba de Papanicolaou"
+    },
+    {
+      "english": "Mammogram",
+      "ukrainian": "Мамографія",
+      "spanish": "mamografía"
+    },
+    {
+      "english": "Colonoscopy",
+      "ukrainian": "Колоноскопія",
+      "spanish": "Colonoscopia"
+    },
+    {
+      "english": "Eye Exam",
+      "ukrainian": "Огляд очей",
+      "spanish": "examen de la vista"
+    },
+    {
+      "english": "Dental Exam",
+      "ukrainian": "Стоматологічний огляд",
+      "spanish": "examen dental"
+    },
+    {
+      "english": "Well-Child Visit",
+      "ukrainian": "Плановий педіатричний огляд",
+      "spanish": "Visita de niño sano"
+    },
+    {
+      "english": "Immunization Record",
+      "ukrainian": "Карта вакцинації",
+      "spanish": "Registro de vacunación"
+    },
+    {
+      "english": "Height and Weight",
+      "ukrainian": "Зріст і вага",
+      "spanish": "Altura y peso"
+    },
+    {
+      "english": "Blood Pressure Check",
+      "ukrainian": "Вимірювання артеріального тиску",
+      "spanish": "Control de presión arterial"
+    },
+    {
+      "english": "Urinalysis",
+      "ukrainian": "Загальний аналіз сечі",
+      "spanish": "Análisis de orina"
+    },
+    {
+      "english": "Cholesterol Test",
+      "ukrainian": "Аналіз на холестерин",
+      "spanish": "Prueba de colesterol"
+    },
+    {
+      "english": "Blood Glucose Test",
+      "ukrainian": "Аналіз на глюкозу крові",
+      "spanish": "Prueba de glucosa en sangre"
+    },
+    {
+      "english": "Prostate Exam",
+      "ukrainian": "Дослідження простати",
+      "spanish": "Examen de próstata"
+    },
+    {
+      "english": "Skin Cancer Screening",
+      "ukrainian": "Скринінг раку шкіри",
+      "spanish": "Detección de cáncer de piel"
+    },
+    {
+      "english": "STI Screening",
+      "ukrainian": "Скринінг ІПСШ",
+      "spanish": "Detección de ITS"
+    },
+    {
+      "english": "Depression Screening",
+      "ukrainian": "Скринінг депресії",
+      "spanish": "Detección de depresión"
+    },
+    {
+      "english": "Hearing Test",
+      "ukrainian": "Тест на слух",
+      "spanish": "Prueba de audición"
+    },
+    {
+      "english": "Bone Density Test",
+      "ukrainian": "Денситометрія (тест на щільність кісток)",
+      "spanish": "Prueba de densidad ósea"
+    },
+    {
+      "english": "Thyroid Function Test",
+      "ukrainian": "Аналіз функції щитовидної залози",
+      "spanish": "Nivel de vitamina D"
+    },
+    {
+      "english": "Vitamin D Level",
+      "ukrainian": "Рівень вітаміну D",
+      "spanish": "Nivel de vitamina D"
+    },
+    {
+      "english": "Iron Level",
+      "ukrainian": "Рівень заліза",
+      "spanish": "Nivel de hierro"
+    },
+    {
+      "english": "Liver Function Test",
+      "ukrainian": "Аналіз функції печінки",
+      "spanish": "Prueba de función hepática"
+    },
+    {
+      "english": "Kidney Function Test",
+      "ukrainian": "Аналіз функції нирок",
+      "spanish": "Prueba de función renal"
+    },
+    {
+      "english": "Follow-up Appointment",
+      "ukrainian": "Повторний прийом",
+      "spanish": "Cita de seguimiento"
+    },
+    {
+      "english": "Referral",
+      "ukrainian": "Направлення до спеціаліста",
+      "spanish": "Remisión"
+    },
+    {
+      "english": "Medical History",
+      "ukrainian": "Медична історія",
+      "spanish": "Historia médica"
+    },
+    {
+      "english": "Vital Signs",
+      "ukrainian": "Показники життєдіяльності",
+      "spanish": "Signos Vitales"
+    }
   ],
   "SPECIALTY CARE": [
-    {"english":"Internal medicine doctors","ukrainian":"Лікарі внутрішньої медицини"},{"english":"Pediatricians","ukrainian":"Педіатри"},{"english":"Family medicine doctors","ukrainian":"Лікарі сімейної медицини"},{"english":"Obstetricians and gynecologists","ukrainian":"Акушери-гінекологи"},{"english":"Cardiologists","ukrainian":"Кардіологи"},{"english":"Orthopedic surgeons","ukrainian":"Ортопедичні хірурги"},{"english":"Dermatologists","ukrainian":"Дерматологи"},{"english":"Ophthalmologists","ukrainian":"Офтальмологи"},{"english":"Psychiatrists","ukrainian":"Психіатри"},{"english":"Urologists","ukrainian":"Урологи"},{"english":"Neurologists","ukrainian":"Неврологи"},{"english":"Endocrinologists","ukrainian":"Ендокринологи"},{"english":"Gastroenterologists","ukrainian":"Гастроентерологи"},{"english":"Rheumatologists","ukrainian":"Ревматологи"},{"english":"Pulmonologists","ukrainian":"Пульмонологи"},{"english":"Oncologists","ukrainian":"Онкологи"},{"english":"Hematologists","ukrainian":"Гематологи"},{"english":"Nephrologists","ukrainian":"Нефрологи"},{"english":"Infectious disease specialists","ukrainian":"Спеціалісти з інфекційних хвороб"},{"english":"Allergists","ukrainian":"Алергологи"},{"english":"Immunologists","ukrainian":"Імунологи"},{"english":"Surgeons","ukrainian":"Хірурги"},{"english":"Anesthesiologists","ukrainian":"Анестезіологи"},{"english":"Radiologists","ukrainian":"Радіологи"},{"english":"Pathologists","ukrainian":"Патологоанатоми"},{"english":"Emergency medicine doctors","ukrainian":"Лікарі швидкої допомоги"},{"english":"Physical therapists","ukrainian":"Фізіотерапевти"},{"english":"Occupational therapists","ukrainian":"Ерготерапевти"},{"english":"Speech therapists","ukrainian":"Логопеди"},{"english":"Audiologists","ukrainian":"Аудіологи"},{"english":"Optometrists","ukrainian":"Оптометристи"},{"english":"Dentists","ukrainian":"Стоматологи"},{"english":"Oral surgeons","ukrainian":"Щелепно-лицьові хірурги"},{"english":"Orthodontists","ukrainian":"Ортодонти"},{"english":"Chiropractors","ukrainian":"Мануальні терапевти"},{"english":"Podiatrists","ukrainian":"Подіатри"},{"english":"Dietitians/Nutritionists","ukrainian":"Дієтологи/Нутриціоністи"},{"english":"Social workers","ukrainian":"Соціальні працівники"},{"english":"Psychologists","ukrainian":"Психологи"}
+    {
+      "english": "Internal medicine doctors",
+      "ukrainian": "Лікарі внутрішньої медицини",
+      "spanish": "medicos de medicina interna"
+    },
+    {
+      "english": "Pediatricians",
+      "ukrainian": "Педіатри",
+      "spanish": "Pediatras"
+    },
+    {
+      "english": "Family medicine doctors",
+      "ukrainian": "Лікарі сімейної медицини",
+      "spanish": "medicos de medicina familiar"
+    },
+    {
+      "english": "Obstetricians and gynecologists",
+      "ukrainian": "Акушери-гінекологи",
+      "spanish": "Obstetras y ginecólogos"
+    },
+    {
+      "english": "Cardiologists",
+      "ukrainian": "Кардіологи",
+      "spanish": "Cardiólogos"
+    },
+    {
+      "english": "Orthopedic surgeons",
+      "ukrainian": "Ортопедичні хірурги",
+      "spanish": "Cirujanos ortopédicos"
+    },
+    {
+      "english": "Dermatologists",
+      "ukrainian": "Дерматологи",
+      "spanish": "Dermatólogos"
+    },
+    {
+      "english": "Ophthalmologists",
+      "ukrainian": "Офтальмологи",
+      "spanish": "Oftalmólogos"
+    },
+    {
+      "english": "Psychiatrists",
+      "ukrainian": "Психіатри",
+      "spanish": "psiquiatras"
+    },
+    {
+      "english": "Urologists",
+      "ukrainian": "Урологи",
+      "spanish": "Urólogos"
+    },
+    {
+      "english": "Neurologists",
+      "ukrainian": "Неврологи",
+      "spanish": "Neurólogos"
+    },
+    {
+      "english": "Endocrinologists",
+      "ukrainian": "Ендокринологи",
+      "spanish": "endocrinólogos"
+    },
+    {
+      "english": "Gastroenterologists",
+      "ukrainian": "Гастроентерологи",
+      "spanish": "Gastroenterólogos"
+    },
+    {
+      "english": "Rheumatologists",
+      "ukrainian": "Ревматологи",
+      "spanish": "Reumatólogos"
+    },
+    {
+      "english": "Pulmonologists",
+      "ukrainian": "Пульмонологи",
+      "spanish": "Neumonólogos"
+    },
+    {
+      "english": "Oncologists",
+      "ukrainian": "Онкологи",
+      "spanish": "oncólogos"
+    },
+    {
+      "english": "Hematologists",
+      "ukrainian": "Гематологи",
+      "spanish": "Hematólogos"
+    },
+    {
+      "english": "Nephrologists",
+      "ukrainian": "Нефрологи",
+      "spanish": "Nefrólogos"
+    },
+    {
+      "english": "Infectious disease specialists",
+      "ukrainian": "Спеціалісти з інфекційних хвороб",
+      "spanish": "Especialistas en enfermedades infecciosas"
+    },
+    {
+      "english": "Allergists",
+      "ukrainian": "Алергологи",
+      "spanish": "Alergólogos"
+    },
+    {
+      "english": "Immunologists",
+      "ukrainian": "Імунологи",
+      "spanish": "Inmunólogos"
+    },
+    {
+      "english": "Surgeons",
+      "ukrainian": "Хірурги",
+      "spanish": "cirujanos"
+    },
+    {
+      "english": "Anesthesiologists",
+      "ukrainian": "Анестезіологи",
+      "spanish": "Anestesiólogos"
+    },
+    {
+      "english": "Radiologists",
+      "ukrainian": "Радіологи",
+      "spanish": "Radiólogos"
+    },
+    {
+      "english": "Pathologists",
+      "ukrainian": "Патологоанатоми",
+      "spanish": "patólogos"
+    },
+    {
+      "english": "Emergency medicine doctors",
+      "ukrainian": "Лікарі швидкої допомоги",
+      "spanish": "Médicos de urgencias"
+    },
+    {
+      "english": "Physical therapists",
+      "ukrainian": "Фізіотерапевти",
+      "spanish": "Fisioterapeutas"
+    },
+    {
+      "english": "Occupational therapists",
+      "ukrainian": "Ерготерапевти",
+      "spanish": "Terapeutas ocupacionales"
+    },
+    {
+      "english": "Speech therapists",
+      "ukrainian": "Логопеди",
+      "spanish": "Logopedas"
+    },
+    {
+      "english": "Audiologists",
+      "ukrainian": "Аудіологи",
+      "spanish": "Audiólogos"
+    },
+    {
+      "english": "Optometrists",
+      "ukrainian": "Оптометристи",
+      "spanish": "Optometristas"
+    },
+    {
+      "english": "Dentists",
+      "ukrainian": "Стоматологи",
+      "spanish": "Dentistas"
+    },
+    {
+      "english": "Oral surgeons",
+      "ukrainian": "Щелепно-лицьові хірурги",
+      "spanish": "Cirujanos orales"
+    },
+    {
+      "english": "Orthodontists",
+      "ukrainian": "Ортодонти",
+      "spanish": "Ortodoncistas"
+    },
+    {
+      "english": "Chiropractors",
+      "ukrainian": "Мануальні терапевти",
+      "spanish": "Quiroprácticos"
+    },
+    {
+      "english": "Podiatrists",
+      "ukrainian": "Подіатри",
+      "spanish": "Podólogos"
+    },
+    {
+      "english": "Dietitians/Nutritionists",
+      "ukrainian": "Дієтологи/Нутриціоністи",
+      "spanish": "Dietistas/Nutricionistas"
+    },
+    {
+      "english": "Social workers",
+      "ukrainian": "Соціальні працівники",
+      "spanish": "trabajadores sociales"
+    },
+    {
+      "english": "Psychologists",
+      "ukrainian": "Психологи",
+      "spanish": "Psicólogos"
+    }
   ],
   "PAIN DESCRIPTORS": [
-    {"english":"Abrupt","ukrainian":"Раптовий"},{"english":"Aching","ukrainian":"Той, що болить"},{"english":"Acute","ukrainian":"Гострий"},{"english":"Annoying","ukrainian":"Дратівливий"},{"english":"Bearable","ukrainian":"Терпимий"},{"english":"Blunt","ukrainian":"Тупий"},{"english":"Brief","ukrainian":"Короткочасний"},{"english":"Burning","ukrainian":"Пекучий"},{"english":"Chronic","ukrainian":"Хронічний"},{"english":"Colicky","ukrainian":"Кольковий"},{"english":"Constant","ukrainian":"Постійний"},{"english":"Cramping","ukrainian":"Судомний"},{"english":"Crushing","ukrainian":"Розчавлюючий"},{"english":"Debilitating","ukrainian":"Виснажливий"},{"english":"Deep","ukrainian":"Глибокий"},{"english":"Diffuse","ukrainian":"Розлитий"},{"english":"Dull","ukrainian":"Тупий"},{"english":"Excruciating","ukrainian":"Нестерпний"},{"english":"Fleeting","ukrainian":"Минущий"},{"english":"Gnawing","ukrainian":"Гризучий"},{"english":"Grating","ukrainian":"Скрипучий"},{"english":"Heavy","ukrainian":"Важкий"},{"english":"Intense","ukrainian":"Інтенсивний"},{"english":"Intermittent","ukrainian":"Переривчастий"},{"english":"Intractable","ukrainian":"Нездоланний"},{"english":"Lancinating","ukrainian":"Стріляючий"},{"english":"Localized","ukrainian":"Локалізований"},{"english":"Mild","ukrainian":"Легкий"},{"english":"Moderate","ukrainian":"Помірний"},{"english":"Moving","ukrainian":"Мігруючий"},{"english":"Nagging","ukrainian":"Постійний / Набридливий"},{"english":"Neuropathic","ukrainian":"Нейропатичний"},{"english":"Nociceptive","ukrainian":"Ноцицептивний"},{"english":"Numbness","ukrainian":"Оніміння"},{"english":"Persistent","ukrainian":"Стійкий"},{"english":"Piercing","ukrainian":"Пронизливий"},{"english":"Pins and needles","ukrainian":"Поколювання"},{"english":"Pressure","ukrainian":"Тиснучий"},{"english":"Prickling","ukrainian":"Поколюючий"},{"english":"Pulsating","ukrainian":"Пульсуючий"},{"english":"Radiating","ukrainian":"Іррадіюючий"},{"english":"Raw","ukrainian":"Сирий / Болючий"},{"english":"Recurring","ukrainian":"Повторний"},{"english":"Referred","ukrainian":"Відображений"},{"english":"Relentless","ukrainian":"Невпинний"},{"english":"Severe","ukrainian":"Тяжкий"},{"english":"Sharp","ukrainian":"Гострий"},{"english":"Shooting","ukrainian":"Стріляючий"},{"english":"Sore","ukrainian":"Болючий"},{"english":"Spasmodic","ukrainian":"Спазматичний"},{"english":"Splitting","ukrainian":"Розривний"},{"english":"Sporadic","ukrainian":"Спорадичний"},{"english":"Squeezing","ukrainian":"Стискаючий"},{"english":"Stabbing","ukrainian":"Колючий"},{"english":"Stiff","ukrainian":"Жорсткий"},{"english":"Stinging","ukrainian":"Пекучий"},{"english":"Sudden","ukrainian":"Раптовий"},{"english":"Superficial","ukrainian":"Поверхневий"},{"english":"Tender","ukrainian":"Чутливий до дотику"},{"english":"Throbbing","ukrainian":"Пульсуючий"},{"english":"Tight","ukrainian":"Стискаючий"},{"english":"Tingling","ukrainian":"Поколювання"},{"english":"Tolerable","ukrainian":"Терпимий"},{"english":"Tormenting","ukrainian":"Мучительний"},{"english":"Transient","ukrainian":"Минущий"},{"english":"Unbearable","ukrainian":"Нестерпний"},{"english":"Uncomfortable","ukrainian":"Неприємний"},{"english":"Unrelenting","ukrainian":"Невщухаючий"},{"english":"Vague","ukrainian":"Невизначений"},{"english":"Violent","ukrainian":"Сильний"},{"english":"Wandering","ukrainian":"Блукаючий"},{"english":"Waxing and waning","ukrainian":"Наростаючий і спадаючий"},{"english":"Widespread","ukrainian":"Поширений"},{"english":"Worsening","ukrainian":"Наростаючий"},{"english":"Aching (joints)","ukrainian":"Суглобовий біль"},{"english":"Burning (skin)","ukrainian":"Шкірне печіння"},{"english":"Cold","ukrainian":"Холодний"},{"english":"Electric","ukrainian":"Електричний"},{"english":"Excruciating (severe)","ukrainian":"Вкрай нестерпний"},{"english":"Flare-up","ukrainian":"Загострення"},{"english":"Hypersensitive","ukrainian":"Гіперчутливий"},{"english":"Inflammatory","ukrainian":"Запальний"},{"english":"Nerve pain","ukrainian":"Нервовий біль"},{"english":"Phantom","ukrainian":"Фантомний"},{"english":"Post-operative","ukrainian":"Після операційний"},{"english":"Pressure (headache)","ukrainian":"Тиснучий (головний біль)"},{"english":"Referred (back pain)","ukrainian":"Відображений (біль у спині)"},{"english":"Rheumatic","ukrainian":"Ревматичний"}
+    {
+      "english": "Abrupt",
+      "ukrainian": "Раптовий",
+      "spanish": "Abrupto"
+    },
+    {
+      "english": "Aching",
+      "ukrainian": "Той, що болить",
+      "spanish": "Dolor"
+    },
+    {
+      "english": "Acute",
+      "ukrainian": "Гострий",
+      "spanish": "Agudo"
+    },
+    {
+      "english": "Annoying",
+      "ukrainian": "Дратівливий",
+      "spanish": "Irritante"
+    },
+    {
+      "english": "Bearable",
+      "ukrainian": "Терпимий",
+      "spanish": "Soportable"
+    },
+    {
+      "english": "Blunt",
+      "ukrainian": "Тупий",
+      "spanish": "Desafilado"
+    },
+    {
+      "english": "Brief",
+      "ukrainian": "Короткочасний",
+      "spanish": "Breve"
+    },
+    {
+      "english": "Burning",
+      "ukrainian": "Пекучий",
+      "spanish": "Incendio"
+    },
+    {
+      "english": "Chronic",
+      "ukrainian": "Хронічний",
+      "spanish": "Crónico"
+    },
+    {
+      "english": "Colicky",
+      "ukrainian": "Кольковий",
+      "spanish": "De cólico"
+    },
+    {
+      "english": "Constant",
+      "ukrainian": "Постійний",
+      "spanish": "Constante"
+    },
+    {
+      "english": "Cramping",
+      "ukrainian": "Судомний",
+      "spanish": "calambres"
+    },
+    {
+      "english": "Crushing",
+      "ukrainian": "Розчавлюючий",
+      "spanish": "Aplastante"
+    },
+    {
+      "english": "Debilitating",
+      "ukrainian": "Виснажливий",
+      "spanish": "debilitante"
+    },
+    {
+      "english": "Deep",
+      "ukrainian": "Глибокий",
+      "spanish": "Profundo"
+    },
+    {
+      "english": "Diffuse",
+      "ukrainian": "Розлитий",
+      "spanish": "Difuso"
+    },
+    {
+      "english": "Dull",
+      "ukrainian": "Тупий",
+      "spanish": "Aburrido"
+    },
+    {
+      "english": "Excruciating",
+      "ukrainian": "Нестерпний",
+      "spanish": "Agudísimo"
+    },
+    {
+      "english": "Fleeting",
+      "ukrainian": "Минущий",
+      "spanish": "Fugaz"
+    },
+    {
+      "english": "Gnawing",
+      "ukrainian": "Гризучий",
+      "spanish": "royendo"
+    },
+    {
+      "english": "Grating",
+      "ukrainian": "Скрипучий",
+      "spanish": "Rejilla"
+    },
+    {
+      "english": "Heavy",
+      "ukrainian": "Важкий",
+      "spanish": "Pesado"
+    },
+    {
+      "english": "Intense",
+      "ukrainian": "Інтенсивний",
+      "spanish": "Intenso"
+    },
+    {
+      "english": "Intermittent",
+      "ukrainian": "Переривчастий",
+      "spanish": "Intermitente"
+    },
+    {
+      "english": "Intractable",
+      "ukrainian": "Нездоланний",
+      "spanish": "Intratable"
+    },
+    {
+      "english": "Lancinating",
+      "ukrainian": "Стріляючий",
+      "spanish": "Lancinante"
+    },
+    {
+      "english": "Localized",
+      "ukrainian": "Локалізований",
+      "spanish": "Localizado"
+    },
+    {
+      "english": "Mild",
+      "ukrainian": "Легкий",
+      "spanish": "Leve"
+    },
+    {
+      "english": "Moderate",
+      "ukrainian": "Помірний",
+      "spanish": "Moderado"
+    },
+    {
+      "english": "Moving",
+      "ukrainian": "Мігруючий",
+      "spanish": "Emocionante"
+    },
+    {
+      "english": "Nagging",
+      "ukrainian": "Постійний / Набридливий",
+      "spanish": "Persistente"
+    },
+    {
+      "english": "Neuropathic",
+      "ukrainian": "Нейропатичний",
+      "spanish": "neuropático"
+    },
+    {
+      "english": "Nociceptive",
+      "ukrainian": "Ноцицептивний",
+      "spanish": "nociceptivo"
+    },
+    {
+      "english": "Numbness",
+      "ukrainian": "Оніміння",
+      "spanish": "Entumecimiento"
+    },
+    {
+      "english": "Persistent",
+      "ukrainian": "Стійкий",
+      "spanish": "Persistente"
+    },
+    {
+      "english": "Piercing",
+      "ukrainian": "Пронизливий",
+      "spanish": "Perforación"
+    },
+    {
+      "english": "Pins and needles",
+      "ukrainian": "Поколювання",
+      "spanish": "Hormigueo"
+    },
+    {
+      "english": "Pressure",
+      "ukrainian": "Тиснучий",
+      "spanish": "Presión"
+    },
+    {
+      "english": "Prickling",
+      "ukrainian": "Поколюючий",
+      "spanish": "Picazón"
+    },
+    {
+      "english": "Pulsating",
+      "ukrainian": "Пульсуючий",
+      "spanish": "Pulsante"
+    },
+    {
+      "english": "Radiating",
+      "ukrainian": "Іррадіюючий",
+      "spanish": "irradiando"
+    },
+    {
+      "english": "Raw",
+      "ukrainian": "Сирий / Болючий",
+      "spanish": "Crudo"
+    },
+    {
+      "english": "Recurring",
+      "ukrainian": "Повторний",
+      "spanish": "Periódico"
+    },
+    {
+      "english": "Referred",
+      "ukrainian": "Відображений",
+      "spanish": "Referido"
+    },
+    {
+      "english": "Relentless",
+      "ukrainian": "Невпинний",
+      "spanish": "Implacable"
+    },
+    {
+      "english": "Severe",
+      "ukrainian": "Тяжкий",
+      "spanish": "Severo"
+    },
+    {
+      "english": "Sharp",
+      "ukrainian": "Гострий",
+      "spanish": "Afilado"
+    },
+    {
+      "english": "Shooting",
+      "ukrainian": "Стріляючий",
+      "spanish": "Tiroteo"
+    },
+    {
+      "english": "Sore",
+      "ukrainian": "Болючий",
+      "spanish": "Doloroso"
+    },
+    {
+      "english": "Spasmodic",
+      "ukrainian": "Спазматичний",
+      "spanish": "Espasmódico"
+    },
+    {
+      "english": "Splitting",
+      "ukrainian": "Розривний",
+      "spanish": "Terrible"
+    },
+    {
+      "english": "Sporadic",
+      "ukrainian": "Спорадичний",
+      "spanish": "Esporádico"
+    },
+    {
+      "english": "Squeezing",
+      "ukrainian": "Стискаючий",
+      "spanish": "Apretando"
+    },
+    {
+      "english": "Stabbing",
+      "ukrainian": "Колючий",
+      "spanish": "Puñalada"
+    },
+    {
+      "english": "Stiff",
+      "ukrainian": "Жорсткий",
+      "spanish": "Rígido"
+    },
+    {
+      "english": "Stinging",
+      "ukrainian": "Пекучий",
+      "spanish": "Escozor"
+    },
+    {
+      "english": "Sudden",
+      "ukrainian": "Раптовий",
+      "spanish": "Repentino"
+    },
+    {
+      "english": "Superficial",
+      "ukrainian": "Поверхневий",
+      "spanish": "Superficial"
+    },
+    {
+      "english": "Tender",
+      "ukrainian": "Чутливий до дотику",
+      "spanish": "Licitación"
+    },
+    {
+      "english": "Throbbing",
+      "ukrainian": "Пульсуючий",
+      "spanish": "Palpitante"
+    },
+    {
+      "english": "Tight",
+      "ukrainian": "Стискаючий",
+      "spanish": "Ajustado"
+    },
+    {
+      "english": "Tingling",
+      "ukrainian": "Поколювання",
+      "spanish": "Estremecimiento"
+    },
+    {
+      "english": "Tolerable",
+      "ukrainian": "Терпимий",
+      "spanish": "Tolerable"
+    },
+    {
+      "english": "Tormenting",
+      "ukrainian": "Мучительний",
+      "spanish": "atormentando"
+    },
+    {
+      "english": "Transient",
+      "ukrainian": "Минущий",
+      "spanish": "Transitorio"
+    },
+    {
+      "english": "Unbearable",
+      "ukrainian": "Нестерпний",
+      "spanish": "Inaguantable"
+    },
+    {
+      "english": "Uncomfortable",
+      "ukrainian": "Неприємний",
+      "spanish": "Incómodo"
+    },
+    {
+      "english": "Unrelenting",
+      "ukrainian": "Невщухаючий",
+      "spanish": "Implacable"
+    },
+    {
+      "english": "Vague",
+      "ukrainian": "Невизначений",
+      "spanish": "Impreciso"
+    },
+    {
+      "english": "Violent",
+      "ukrainian": "Сильний",
+      "spanish": "Violento"
+    },
+    {
+      "english": "Wandering",
+      "ukrainian": "Блукаючий",
+      "spanish": "Errante"
+    },
+    {
+      "english": "Waxing and waning",
+      "ukrainian": "Наростаючий і спадаючий",
+      "spanish": "Creciendo y menguando"
+    },
+    {
+      "english": "Widespread",
+      "ukrainian": "Поширений",
+      "spanish": "Generalizado"
+    },
+    {
+      "english": "Worsening",
+      "ukrainian": "Наростаючий",
+      "spanish": "Empeoramiento"
+    },
+    {
+      "english": "Aching (joints)",
+      "ukrainian": "Суглобовий біль",
+      "spanish": "Dolor (articulaciones)"
+    },
+    {
+      "english": "Burning (skin)",
+      "ukrainian": "Шкірне печіння",
+      "spanish": "Ardor (piel)"
+    },
+    {
+      "english": "Cold",
+      "ukrainian": "Холодний",
+      "spanish": "Frío"
+    },
+    {
+      "english": "Electric",
+      "ukrainian": "Електричний",
+      "spanish": "Eléctrico"
+    },
+    {
+      "english": "Excruciating (severe)",
+      "ukrainian": "Вкрай нестерпний",
+      "spanish": "Insoportable (grave)"
+    },
+    {
+      "english": "Flare-up",
+      "ukrainian": "Загострення",
+      "spanish": "brote"
+    },
+    {
+      "english": "Hypersensitive",
+      "ukrainian": "Гіперчутливий",
+      "spanish": "Hipersensible"
+    },
+    {
+      "english": "Inflammatory",
+      "ukrainian": "Запальний",
+      "spanish": "Inflamatorio"
+    },
+    {
+      "english": "Nerve pain",
+      "ukrainian": "Нервовий біль",
+      "spanish": "Neuralgia"
+    },
+    {
+      "english": "Phantom",
+      "ukrainian": "Фантомний",
+      "spanish": "Fantasma"
+    },
+    {
+      "english": "Post-operative",
+      "ukrainian": "Після операційний",
+      "spanish": "Postoperatorio"
+    },
+    {
+      "english": "Pressure (headache)",
+      "ukrainian": "Тиснучий (головний біль)",
+      "spanish": "Presión (dolor de cabeza)"
+    },
+    {
+      "english": "Referred (back pain)",
+      "ukrainian": "Відображений (біль у спині)",
+      "spanish": "Referido (dolor de espalda)"
+    },
+    {
+      "english": "Rheumatic",
+      "ukrainian": "Ревматичний",
+      "spanish": "Reumático"
+    }
   ],
   "ANATOMY": [
-    {"english":"Clavicle","ukrainian":"Ключиця"},{"english":"Femur","ukrainian":"Стегнова кістка"},{"english":"Fibula","ukrainian":"Мала гомілкова кістка"},{"english":"Humerus","ukrainian":"Плечова кістка"},{"english":"Mandible","ukrainian":"Нижня щелепа"},{"english":"Patella","ukrainian":"Колінна чашечка"},{"english":"Pelvis","ukrainian":"Таз"},{"english":"Radius","ukrainian":"Променева кістка"},{"english":"Ribcage","ukrainian":"Грудна клітка"},{"english":"Scapula","ukrainian":"Лопатка"},{"english":"Skull","ukrainian":"Череп"},{"english":"Spine","ukrainian":"Хребет"},{"english":"Sternum","ukrainian":"Грудина"},{"english":"Tibia","ukrainian":"Велика гомілкова кістка"},{"english":"Ulna","ukrainian":"Ліктьова кістка"},{"english":"Vertebra","ukrainian":"Хребець"},{"english":"Biceps","ukrainian":"Двоголовий м'яз (біцепс)"},{"english":"Deltoid","ukrainian":"Дельтоподібний м'яз"},{"english":"Diaphragm","ukrainian":"Діафрагма"},{"english":"Gluteus","ukrainian":"Сідничний м'яз"},{"english":"Hamstring","ukrainian":"Підколінні сухожилля"},{"english":"Quadriceps","ukrainian":"Чотириголовий м'яз стегна"},{"english":"Rotator cuff","ukrainian":"Ротаторна манжета плеча"},{"english":"Achilles tendon","ukrainian":"Ахіллесове сухожилля"},{"english":"Ligament","ukrainian":"Зв'язка"},{"english":"Tendon","ukrainian":"Сухожилля"},{"english":"Aorta","ukrainian":"Аорта"},{"english":"Artery","ukrainian":"Артерія"},{"english":"Capillary","ukrainian":"Капіляр"},{"english":"Vein","ukrainian":"Вена"},{"english":"Atrium","ukrainian":"Передсердя"},{"english":"Ventricle","ukrainian":"Шлуночок"},{"english":"Valve (heart)","ukrainian":"Серцевий клапан"},{"english":"Appendix","ukrainian":"Апендикс"},{"english":"Colon","ukrainian":"Товста кишка"},{"english":"Duodenum","ukrainian":"Дванадцятипала кишка"},{"english":"Esophagus","ukrainian":"Стравохід"},{"english":"Gallbladder","ukrainian":"Жовчний міхур"},{"english":"Intestine (large)","ukrainian":"Товста кишка"},{"english":"Intestine (small)","ukrainian":"Тонка кишка"},{"english":"Liver","ukrainian":"Печінка"},{"english":"Pancreas","ukrainian":"Підшлункова залоза"},{"english":"Rectum","ukrainian":"Пряма кишка"},{"english":"Stomach","ukrainian":"Шлунок"},{"english":"Adrenal gland","ukrainian":"Надниркова залоза"},{"english":"Bladder","ukrainian":"Сечовий міхур"},{"english":"Kidney","ukrainian":"Нирка"},{"english":"Ovary","ukrainian":"Яєчник"},{"english":"Prostate","ukrainian":"Простата"},{"english":"Testicle","ukrainian":"Яєчко"},{"english":"Thyroid","ukrainian":"Щитовидна залоза"},{"english":"Uterus","ukrainian":"Матка"},{"english":"Bronchus","ukrainian":"Бронх"},{"english":"Larynx","ukrainian":"Гортань"},{"english":"Lung","ukrainian":"Легеня"},{"english":"Pharynx","ukrainian":"Глотка"},{"english":"Trachea","ukrainian":"Трахея"},{"english":"Brain","ukrainian":"Мозок"},{"english":"Cerebellum","ukrainian":"Мозочок"},{"english":"Cerebrum","ukrainian":"Великий мозок"},{"english":"Nerve","ukrainian":"Нерв"},{"english":"Spinal cord","ukrainian":"Спинний мозок"},{"english":"Cornea","ukrainian":"Рогівка"},{"english":"Eardrum","ukrainian":"Барабанна перетинка"},{"english":"Eustachian tube","ukrainian":"Євстахієва труба"},{"english":"Iris","ukrainian":"Райдужна оболонка"},{"english":"Lens","ukrainian":"Кришталик"},{"english":"Optic nerve","ukrainian":"Зоровий нерв"},{"english":"Pupil","ukrainian":"Зіниця"},{"english":"Retina","ukrainian":"Сітківка"},{"english":"Lymph node","ukrainian":"Лімфатичний вузол"},{"english":"Lymph vessel","ukrainian":"Лімфатична судина"},{"english":"Spleen","ukrainian":"Селезінка"},{"english":"Thymus","ukrainian":"Тимус (загрудна залоза)"},{"english":"Bone marrow","ukrainian":"Кістковий мозок"},{"english":"Skin (dermis)","ukrainian":"Шкіра (дерма)"},{"english":"Epidermis","ukrainian":"Епідерміс"},{"english":"Hair follicle","ukrainian":"Волосяний фолікул"},{"english":"Nail","ukrainian":"Ніготь"},{"english":"Sebaceous gland","ukrainian":"Сальна залоза"},{"english":"Sweat gland","ukrainian":"Потова залоза"},{"english":"Ankle","ukrainian":"Кісточка"},{"english":"Armpit","ukrainian":"Пахва"},{"english":"Chin","ukrainian":"Підборіддя"},{"english":"Elbow","ukrainian":"Лікоть"},{"english":"Groin","ukrainian":"Пах"},{"english":"Heel","ukrainian":"П'ята"},{"english":"Hip","ukrainian":"Стегно"},{"english":"Knee","ukrainian":"Коліно"},{"english":"Navel","ukrainian":"Пупок"},{"english":"Shoulder","ukrainian":"Плече"},{"english":"Wrist","ukrainian":"Зап'ясток"}
+    {
+      "english": "Clavicle",
+      "ukrainian": "Ключиця",
+      "spanish": "Clavícula"
+    },
+    {
+      "english": "Femur",
+      "ukrainian": "Стегнова кістка",
+      "spanish": "Fémur"
+    },
+    {
+      "english": "Fibula",
+      "ukrainian": "Мала гомілкова кістка",
+      "spanish": "Fíbula"
+    },
+    {
+      "english": "Humerus",
+      "ukrainian": "Плечова кістка",
+      "spanish": "Húmero"
+    },
+    {
+      "english": "Mandible",
+      "ukrainian": "Нижня щелепа",
+      "spanish": "Mandíbula"
+    },
+    {
+      "english": "Patella",
+      "ukrainian": "Колінна чашечка",
+      "spanish": "Rótula"
+    },
+    {
+      "english": "Pelvis",
+      "ukrainian": "Таз",
+      "spanish": "Pelvis"
+    },
+    {
+      "english": "Radius",
+      "ukrainian": "Променева кістка",
+      "spanish": "Radio"
+    },
+    {
+      "english": "Ribcage",
+      "ukrainian": "Грудна клітка",
+      "spanish": "caja torácica"
+    },
+    {
+      "english": "Scapula",
+      "ukrainian": "Лопатка",
+      "spanish": "Escápula"
+    },
+    {
+      "english": "Skull",
+      "ukrainian": "Череп",
+      "spanish": "Cráneo"
+    },
+    {
+      "english": "Spine",
+      "ukrainian": "Хребет",
+      "spanish": "Columna vertebral"
+    },
+    {
+      "english": "Sternum",
+      "ukrainian": "Грудина",
+      "spanish": "Esternón"
+    },
+    {
+      "english": "Tibia",
+      "ukrainian": "Велика гомілкова кістка",
+      "spanish": "Tibia"
+    },
+    {
+      "english": "Ulna",
+      "ukrainian": "Ліктьова кістка",
+      "spanish": "Cubito"
+    },
+    {
+      "english": "Vertebra",
+      "ukrainian": "Хребець",
+      "spanish": "Vértebra"
+    },
+    {
+      "english": "Biceps",
+      "ukrainian": "Двоголовий м'яз (біцепс)",
+      "spanish": "Bíceps"
+    },
+    {
+      "english": "Deltoid",
+      "ukrainian": "Дельтоподібний м'яз",
+      "spanish": "Deltoides"
+    },
+    {
+      "english": "Diaphragm",
+      "ukrainian": "Діафрагма",
+      "spanish": "Diafragma"
+    },
+    {
+      "english": "Gluteus",
+      "ukrainian": "Сідничний м'яз",
+      "spanish": "glúteo"
+    },
+    {
+      "english": "Hamstring",
+      "ukrainian": "Підколінні сухожилля",
+      "spanish": "Tendón de la corva"
+    },
+    {
+      "english": "Quadriceps",
+      "ukrainian": "Чотириголовий м'яз стегна",
+      "spanish": "manguito rotador"
+    },
+    {
+      "english": "Rotator cuff",
+      "ukrainian": "Ротаторна манжета плеча",
+      "spanish": "manguito rotador"
+    },
+    {
+      "english": "Achilles tendon",
+      "ukrainian": "Ахіллесове сухожилля",
+      "spanish": "tendón de Aquiles"
+    },
+    {
+      "english": "Ligament",
+      "ukrainian": "Зв'язка",
+      "spanish": "Ligamento"
+    },
+    {
+      "english": "Tendon",
+      "ukrainian": "Сухожилля",
+      "spanish": "Tendón"
+    },
+    {
+      "english": "Aorta",
+      "ukrainian": "Аорта",
+      "spanish": "Aorta"
+    },
+    {
+      "english": "Artery",
+      "ukrainian": "Артерія",
+      "spanish": "Artería"
+    },
+    {
+      "english": "Capillary",
+      "ukrainian": "Капіляр",
+      "spanish": "Vena"
+    },
+    {
+      "english": "Vein",
+      "ukrainian": "Вена",
+      "spanish": "Vena"
+    },
+    {
+      "english": "Atrium",
+      "ukrainian": "Передсердя",
+      "spanish": "Atrio"
+    },
+    {
+      "english": "Ventricle",
+      "ukrainian": "Шлуночок",
+      "spanish": "Ventrículo"
+    },
+    {
+      "english": "Valve (heart)",
+      "ukrainian": "Серцевий клапан",
+      "spanish": "Válvula (corazón)"
+    },
+    {
+      "english": "Appendix",
+      "ukrainian": "Апендикс",
+      "spanish": "Apéndice"
+    },
+    {
+      "english": "Colon",
+      "ukrainian": "Товста кишка",
+      "spanish": "Colon"
+    },
+    {
+      "english": "Duodenum",
+      "ukrainian": "Дванадцятипала кишка",
+      "spanish": "Duodeno"
+    },
+    {
+      "english": "Esophagus",
+      "ukrainian": "Стравохід",
+      "spanish": "Esófago"
+    },
+    {
+      "english": "Gallbladder",
+      "ukrainian": "Жовчний міхур",
+      "spanish": "Vesícula biliar"
+    },
+    {
+      "english": "Intestine (large)",
+      "ukrainian": "Товста кишка",
+      "spanish": "Intestino (grueso)"
+    },
+    {
+      "english": "Intestine (small)",
+      "ukrainian": "Тонка кишка",
+      "spanish": "Intestino (pequeño)"
+    },
+    {
+      "english": "Liver",
+      "ukrainian": "Печінка",
+      "spanish": "Hígado"
+    },
+    {
+      "english": "Pancreas",
+      "ukrainian": "Підшлункова залоза",
+      "spanish": "Páncreas"
+    },
+    {
+      "english": "Rectum",
+      "ukrainian": "Пряма кишка",
+      "spanish": "Recto"
+    },
+    {
+      "english": "Stomach",
+      "ukrainian": "Шлунок",
+      "spanish": "Estómago"
+    },
+    {
+      "english": "Adrenal gland",
+      "ukrainian": "Надниркова залоза",
+      "spanish": "Glándula suprarrenal"
+    },
+    {
+      "english": "Bladder",
+      "ukrainian": "Сечовий міхур",
+      "spanish": "Vejiga"
+    },
+    {
+      "english": "Kidney",
+      "ukrainian": "Нирка",
+      "spanish": "Riñón"
+    },
+    {
+      "english": "Ovary",
+      "ukrainian": "Яєчник",
+      "spanish": "Ovario"
+    },
+    {
+      "english": "Prostate",
+      "ukrainian": "Простата",
+      "spanish": "Próstata"
+    },
+    {
+      "english": "Testicle",
+      "ukrainian": "Яєчко",
+      "spanish": "Testículo"
+    },
+    {
+      "english": "Thyroid",
+      "ukrainian": "Щитовидна залоза",
+      "spanish": "Tiroides"
+    },
+    {
+      "english": "Uterus",
+      "ukrainian": "Матка",
+      "spanish": "Útero"
+    },
+    {
+      "english": "Bronchus",
+      "ukrainian": "Бронх",
+      "spanish": "Bronquio"
+    },
+    {
+      "english": "Larynx",
+      "ukrainian": "Гортань",
+      "spanish": "Laringe"
+    },
+    {
+      "english": "Lung",
+      "ukrainian": "Легеня",
+      "spanish": "Pulmón"
+    },
+    {
+      "english": "Pharynx",
+      "ukrainian": "Глотка",
+      "spanish": "Faringe"
+    },
+    {
+      "english": "Trachea",
+      "ukrainian": "Трахея",
+      "spanish": "Tráquea"
+    },
+    {
+      "english": "Brain",
+      "ukrainian": "Мозок",
+      "spanish": "Cerebro"
+    },
+    {
+      "english": "Cerebellum",
+      "ukrainian": "Мозочок",
+      "spanish": "Cerebelo"
+    },
+    {
+      "english": "Cerebrum",
+      "ukrainian": "Великий мозок",
+      "spanish": "Cerebro"
+    },
+    {
+      "english": "Nerve",
+      "ukrainian": "Нерв",
+      "spanish": "Nervio"
+    },
+    {
+      "english": "Spinal cord",
+      "ukrainian": "Спинний мозок",
+      "spanish": "Médula espinal"
+    },
+    {
+      "english": "Cornea",
+      "ukrainian": "Рогівка",
+      "spanish": "Córnea"
+    },
+    {
+      "english": "Eardrum",
+      "ukrainian": "Барабанна перетинка",
+      "spanish": "Tímpano"
+    },
+    {
+      "english": "Eustachian tube",
+      "ukrainian": "Євстахієва труба",
+      "spanish": "trompa de Eustaquio"
+    },
+    {
+      "english": "Iris",
+      "ukrainian": "Райдужна оболонка",
+      "spanish": "Iris"
+    },
+    {
+      "english": "Lens",
+      "ukrainian": "Кришталик",
+      "spanish": "Lente"
+    },
+    {
+      "english": "Optic nerve",
+      "ukrainian": "Зоровий нерв",
+      "spanish": "nervio óptico"
+    },
+    {
+      "english": "Pupil",
+      "ukrainian": "Зіниця",
+      "spanish": "Alumno"
+    },
+    {
+      "english": "Retina",
+      "ukrainian": "Сітківка",
+      "spanish": "Retina"
+    },
+    {
+      "english": "Lymph node",
+      "ukrainian": "Лімфатичний вузол",
+      "spanish": "ganglio linfático"
+    },
+    {
+      "english": "Lymph vessel",
+      "ukrainian": "Лімфатична судина",
+      "spanish": "Vaso linfático"
+    },
+    {
+      "english": "Spleen",
+      "ukrainian": "Селезінка",
+      "spanish": "Bazo"
+    },
+    {
+      "english": "Thymus",
+      "ukrainian": "Тимус (загрудна залоза)",
+      "spanish": "timo"
+    },
+    {
+      "english": "Bone marrow",
+      "ukrainian": "Кістковий мозок",
+      "spanish": "médula ósea"
+    },
+    {
+      "english": "Skin (dermis)",
+      "ukrainian": "Шкіра (дерма)",
+      "spanish": "Piel (dermis)"
+    },
+    {
+      "english": "Epidermis",
+      "ukrainian": "Епідерміс",
+      "spanish": "Epidermis"
+    },
+    {
+      "english": "Hair follicle",
+      "ukrainian": "Волосяний фолікул",
+      "spanish": "folículo piloso"
+    },
+    {
+      "english": "Nail",
+      "ukrainian": "Ніготь",
+      "spanish": "Clavo"
+    },
+    {
+      "english": "Sebaceous gland",
+      "ukrainian": "Сальна залоза",
+      "spanish": "Glándula sebácea"
+    },
+    {
+      "english": "Sweat gland",
+      "ukrainian": "Потова залоза",
+      "spanish": "glándula sudorípara"
+    },
+    {
+      "english": "Ankle",
+      "ukrainian": "Кісточка",
+      "spanish": "Tobillo"
+    },
+    {
+      "english": "Armpit",
+      "ukrainian": "Пахва",
+      "spanish": "Axila"
+    },
+    {
+      "english": "Chin",
+      "ukrainian": "Підборіддя",
+      "spanish": "Mentón"
+    },
+    {
+      "english": "Elbow",
+      "ukrainian": "Лікоть",
+      "spanish": "Codo"
+    },
+    {
+      "english": "Groin",
+      "ukrainian": "Пах",
+      "spanish": "Ingle"
+    },
+    {
+      "english": "Heel",
+      "ukrainian": "П'ята",
+      "spanish": "Tacón"
+    },
+    {
+      "english": "Hip",
+      "ukrainian": "Стегно",
+      "spanish": "Cadera"
+    },
+    {
+      "english": "Knee",
+      "ukrainian": "Коліно",
+      "spanish": "Rodilla"
+    },
+    {
+      "english": "Navel",
+      "ukrainian": "Пупок",
+      "spanish": "Ombligo"
+    },
+    {
+      "english": "Shoulder",
+      "ukrainian": "Плече",
+      "spanish": "Hombro"
+    },
+    {
+      "english": "Wrist",
+      "ukrainian": "Зап'ясток",
+      "spanish": "Muñeca"
+    }
   ],
   "MED INSURANCE": [
-    {"english":"ACA (Affordable Care Act)","ukrainian":"Закон про доступну медичну допомогу","section":"General"},{"english":"Allowed Amount","ukrainian":"Дозволена сума","section":"General"},{"english":"Balance Billing","ukrainian":"Виставлення рахунку на залишок","section":"General"},{"english":"Benefit Period","ukrainian":"Пільговий період","section":"General"},{"english":"Coinsurance","ukrainian":"Співстрахування","section":"General"},{"english":"Community Rating","ukrainian":"Рейтинг спільноти","section":"General"},{"english":"Coordination of Benefits (COB)","ukrainian":"Координація виплат","section":"General"},{"english":"Copayment (Copay)","ukrainian":"Співплата","section":"General"},{"english":"Cost Sharing","ukrainian":"Розподіл витрат","section":"General"},{"english":"Deductible","ukrainian":"Франшиза (сума, яку пізніше покриє страхування)","section":"General"},{"english":"Dependent","ukrainian":"Залежний","section":"General"},{"english":"Drug Formulary","ukrainian":"Перелік лікарських препаратів","section":"General"},{"english":"Dual Eligibility","ukrainian":"Подвійна правомочність","section":"General"},{"english":"Durable Medical Equipment (DME)","ukrainian":"Медичне обладнання тривалого користування","section":"General"},{"english":"EOB (Explanation of Benefits)","ukrainian":"Пояснення щодо виплат","section":"General"},{"english":"Essential Health Benefits","ukrainian":"Основні медичні послуги (10 згідно ACA)","section":"General"},{"english":"Exclusions","ukrainian":"Винятки","section":"General"},{"english":"Fee-for-Service (FFS)","ukrainian":"Оплата за надані послуги","section":"General"},{"english":"FSA (Flexible Spending Account)","ukrainian":"Рахунок для гнучких витрат","section":"General"},{"english":"Generic Drug","ukrainian":"Генеричний препарат / Аналог","section":"General"},{"english":"Grace Period","ukrainian":"Пільговий період","section":"General"},{"english":"Group Health Plan","ukrainian":"Груповий план оздоровлення","section":"General"},{"english":"HMO (Health Maintenance Organization)","ukrainian":"Організація з підтримки здоров'я","section":"General"},{"english":"HRA (Health Reimbursement Account)","ukrainian":"Рахунок медичного відшкодування","section":"General"},{"english":"HSA (Health Savings Account)","ukrainian":"Рахунок медичних ощадних витрат","section":"General"},{"english":"In-Network","ukrainian":"Внутрішньомережеві","section":"General"},{"english":"Indemnity Plan","ukrainian":"План відшкодування","section":"General"},{"english":"Individual Mandate","ukrainian":"Індивідуальний мандат","section":"General"},{"english":"Lifetime Limit","ukrainian":"Пожиттєвий ліміт","section":"General"},{"english":"Long-Term Care","ukrainian":"Довгостроковий догляд","section":"General"},{"english":"Managed Care","ukrainian":"Керований догляд","section":"General"},{"english":"Maximum Out-of-Pocket","ukrainian":"Максимальна сума власних витрат","section":"General"},{"english":"Medically Necessary","ukrainian":"Медична необхідність","section":"General"},{"english":"Network","ukrainian":"Мережа","section":"General"},{"english":"Open Enrollment Period","ukrainian":"Період відкритої реєстрації","section":"General"},{"english":"Out-of-Network","ukrainian":"Позамережеві","section":"General"},{"english":"Outpatient Care","ukrainian":"Амбулаторні послуги","section":"General"},{"english":"Patient Assistance Program","ukrainian":"Програма допомоги пацієнтам","section":"General"},{"english":"PCP (Primary Care Provider)","ukrainian":"Постачальник первинної медичної допомоги","section":"General"},{"english":"Payer","ukrainian":"Платник","section":"General"},{"english":"Payer of Last Resort","ukrainian":"Платник останньої інстанції","section":"General"},{"english":"Pediatric Dental Coverage","ukrainian":"Дитяче стоматологічне страхування","section":"General"},{"english":"PPO (Preferred Provider Organization)","ukrainian":"Організація пріоритетного постачальника","section":"General"},{"english":"Preauthorization (Precertification)","ukrainian":"Попередня авторизація / сертифікація","section":"General"},{"english":"Pre-Existing Condition","ukrainian":"Наявний стан здоров'я","section":"General"},{"english":"Premium","ukrainian":"Страховий внесок","section":"General"},{"english":"Preventive Services","ukrainian":"Профілактичні послуги","section":"General"},{"english":"Prior Authorization","ukrainian":"Попередня авторизація","section":"General"},{"english":"Provider","ukrainian":"Постачальник","section":"General"},{"english":"Provider Network","ukrainian":"Мережа постачальників","section":"General"},{"english":"Qualified Health Plan (QHP)","ukrainian":"Кваліфікований план медичного страхування","section":"General"},{"english":"Referral","ukrainian":"Направлення","section":"General"},{"english":"Rehabilitation Services","ukrainian":"Реабілітаційні послуги","section":"General"},{"english":"Rescission","ukrainian":"Розірвання","section":"General"},{"english":"Self-Insured Plan","ukrainian":"План самострахування","section":"General"},{"english":"Service Area","ukrainian":"Зона обслуговування","section":"General"},{"english":"Skilled Nursing Facility (SNF)","ukrainian":"Заклад кваліфікованого догляду","section":"General"},{"english":"Special Enrollment Period","ukrainian":"Спеціальний період реєстрації","section":"General"},{"english":"State Health Insurance Assistance Program (SHIP)","ukrainian":"Програма допомоги державного медичного страхування","section":"General"},{"english":"Subsidy","ukrainian":"Субсидія","section":"General"},{"english":"Summary of Benefits and Coverage (SBC)","ukrainian":"Зведення пільг та покриття","section":"General"},{"english":"Telehealth","ukrainian":"Телемедицина","section":"General"},{"english":"Third-Party Administrator (TPA)","ukrainian":"Сторонній адміністратор","section":"General"},{"english":"Tiered Network","ukrainian":"Рівнева мережа","section":"General"},{"english":"Tricare","ukrainian":"Tricare (програма)","section":"General"},{"english":"Usual, Customary, and Reasonable (UCR)","ukrainian":"Звичайний, простий та розумний","section":"General"},{"english":"Utilization Review (UR)","ukrainian":"Перегляд використання","section":"General"},{"english":"Waiting Period","ukrainian":"Період очікування","section":"General"},{"english":"Wellness Program","ukrainian":"Програма оздоровлення","section":"General"},
-    {"english":"Affordable Care Act (ACA)","ukrainian":"Закон про доступну медичну допомогу","section":"Medicaid"},{"english":"Asset Limit","ukrainian":"Ліміт активів","section":"Medicaid"},{"english":"CHIP (Children's Health Insurance Program)","ukrainian":"CHIP (Програма медичного страхування дітей)","section":"Medicaid"},{"english":"Cost-Sharing Reductions","ukrainian":"Зниження розподілу витрат","section":"Medicaid"},{"english":"Coverage Gap","ukrainian":"Розрив у покритті","section":"Medicaid"},{"english":"Eligibility","ukrainian":"Правомочність","section":"Medicaid"},{"english":"Enrollment","ukrainian":"Реєстрація","section":"Medicaid"},{"english":"Federal Poverty Level (FPL)","ukrainian":"Федеральний рівень бідності","section":"Medicaid"},{"english":"Income Limit","ukrainian":"Ліміт доходу","section":"Medicaid"},{"english":"Inpatient Hospital Services","ukrainian":"Стаціонарні лікарняні послуги","section":"Medicaid"},{"english":"Retroactive Coverage","ukrainian":"Ретроактивне покриття","section":"Medicaid"},
-    {"english":"Beneficiary","ukrainian":"Бенефіціар (вигодонабувач)","section":"Medicare"},{"english":"Coverage","ukrainian":"Обсяг покриття","section":"Medicare"},{"english":"Medicare Part A","ukrainian":"Medicare Частина A (стаціонарне лікування)","section":"Medicare"},{"english":"Medicare Part B","ukrainian":"Medicare Частина B (амбулаторне лікування)","section":"Medicare"},{"english":"Medicare Part C","ukrainian":"Medicare Частина C (Medicare Advantage)","section":"Medicare"},{"english":"Medicare Part D","ukrainian":"Medicare Частина D (ліки за рецептом)","section":"Medicare"},{"english":"Medigap","ukrainian":"Medigap (додаткова страховка)","section":"Medicare"},{"english":"Supplemental Coverage","ukrainian":"Додаткове покриття","section":"Medicare"},{"english":"Premium","ukrainian":"Страховий внесок","section":"Medicare"},{"english":"Preventive Services","ukrainian":"Превентивні послуги","section":"Medicare"},{"english":"Rehabilitation","ukrainian":"Реабілітація","section":"Medicare"},{"english":"Skilled Nursing Facility","ukrainian":"Кваліфікований медсестринський заклад","section":"Medicare"},{"english":"Special Enrollment Period","ukrainian":"Спеціальний період реєстрації","section":"Medicare"},{"english":"Supplemental Insurance (Medigap)","ukrainian":"Додаткове страхування (Medigap)","section":"Medicare"}
+    {
+      "english": "ACA (Affordable Care Act)",
+      "ukrainian": "Закон про доступну медичну допомогу",
+      "section": "General",
+      "spanish": "ACA (Ley de Atención Médica Asequible)"
+    },
+    {
+      "english": "Allowed Amount",
+      "ukrainian": "Дозволена сума",
+      "section": "General",
+      "spanish": "Cantidad permitida"
+    },
+    {
+      "english": "Balance Billing",
+      "ukrainian": "Виставлення рахунку на залишок",
+      "section": "General",
+      "spanish": "Facturación de saldo"
+    },
+    {
+      "english": "Benefit Period",
+      "ukrainian": "Пільговий період",
+      "section": "General",
+      "spanish": "Período de beneficio"
+    },
+    {
+      "english": "Coinsurance",
+      "ukrainian": "Співстрахування",
+      "section": "General",
+      "spanish": "Coseguro"
+    },
+    {
+      "english": "Community Rating",
+      "ukrainian": "Рейтинг спільноти",
+      "section": "General",
+      "spanish": "Calificación de la comunidad"
+    },
+    {
+      "english": "Coordination of Benefits (COB)",
+      "ukrainian": "Координація виплат",
+      "section": "General",
+      "spanish": "Coordinación de Beneficios (COB)"
+    },
+    {
+      "english": "Copayment (Copay)",
+      "ukrainian": "Співплата",
+      "section": "General",
+      "spanish": "Copago (Copago)"
+    },
+    {
+      "english": "Cost Sharing",
+      "ukrainian": "Розподіл витрат",
+      "section": "General",
+      "spanish": "Costo compartido"
+    },
+    {
+      "english": "Deductible",
+      "ukrainian": "Франшиза (сума, яку пізніше покриє страхування)",
+      "section": "General",
+      "spanish": "Dependiente"
+    },
+    {
+      "english": "Dependent",
+      "ukrainian": "Залежний",
+      "section": "General",
+      "spanish": "Dependiente"
+    },
+    {
+      "english": "Drug Formulary",
+      "ukrainian": "Перелік лікарських препаратів",
+      "section": "General",
+      "spanish": "Formulario de medicamentos"
+    },
+    {
+      "english": "Dual Eligibility",
+      "ukrainian": "Подвійна правомочність",
+      "section": "General",
+      "spanish": "Elegibilidad dual"
+    },
+    {
+      "english": "Durable Medical Equipment (DME)",
+      "ukrainian": "Медичне обладнання тривалого користування",
+      "section": "General",
+      "spanish": "Equipo médico duradero (DME)"
+    },
+    {
+      "english": "EOB (Explanation of Benefits)",
+      "ukrainian": "Пояснення щодо виплат",
+      "section": "General",
+      "spanish": "EOB (Explicación de Beneficios)"
+    },
+    {
+      "english": "Essential Health Benefits",
+      "ukrainian": "Основні медичні послуги (10 згідно ACA)",
+      "section": "General",
+      "spanish": "Beneficios esenciales para la salud"
+    },
+    {
+      "english": "Exclusions",
+      "ukrainian": "Винятки",
+      "section": "General",
+      "spanish": "Tarifa por servicio (FFS)"
+    },
+    {
+      "english": "Fee-for-Service (FFS)",
+      "ukrainian": "Оплата за надані послуги",
+      "section": "General",
+      "spanish": "Tarifa por servicio (FFS)"
+    },
+    {
+      "english": "FSA (Flexible Spending Account)",
+      "ukrainian": "Рахунок для гнучких витрат",
+      "section": "General",
+      "spanish": "FSA (Cuenta de Gastos Flexibles)"
+    },
+    {
+      "english": "Generic Drug",
+      "ukrainian": "Генеричний препарат / Аналог",
+      "section": "General",
+      "spanish": "Medicamento genérico"
+    },
+    {
+      "english": "Grace Period",
+      "ukrainian": "Пільговий період",
+      "section": "General",
+      "spanish": "Período de gracia"
+    },
+    {
+      "english": "Group Health Plan",
+      "ukrainian": "Груповий план оздоровлення",
+      "section": "General",
+      "spanish": "Plan de salud grupal"
+    },
+    {
+      "english": "HMO (Health Maintenance Organization)",
+      "ukrainian": "Організація з підтримки здоров'я",
+      "section": "General",
+      "spanish": "HMO (Organización para el mantenimiento de la salud)"
+    },
+    {
+      "english": "HRA (Health Reimbursement Account)",
+      "ukrainian": "Рахунок медичного відшкодування",
+      "section": "General",
+      "spanish": "HRA (Cuenta de Reembolso de Salud)"
+    },
+    {
+      "english": "HSA (Health Savings Account)",
+      "ukrainian": "Рахунок медичних ощадних витрат",
+      "section": "General",
+      "spanish": "HSA (Cuenta de Ahorros para la Salud)"
+    },
+    {
+      "english": "In-Network",
+      "ukrainian": "Внутрішньомережеві",
+      "section": "General",
+      "spanish": "Dentro de la red"
+    },
+    {
+      "english": "Indemnity Plan",
+      "ukrainian": "План відшкодування",
+      "section": "General",
+      "spanish": "Plan de indemnización"
+    },
+    {
+      "english": "Individual Mandate",
+      "ukrainian": "Індивідуальний мандат",
+      "section": "General",
+      "spanish": "Mandato individual"
+    },
+    {
+      "english": "Lifetime Limit",
+      "ukrainian": "Пожиттєвий ліміт",
+      "section": "General",
+      "spanish": "Límite de por vida"
+    },
+    {
+      "english": "Long-Term Care",
+      "ukrainian": "Довгостроковий догляд",
+      "section": "General",
+      "spanish": "Atención a largo plazo"
+    },
+    {
+      "english": "Managed Care",
+      "ukrainian": "Керований догляд",
+      "section": "General",
+      "spanish": "Atención administrada"
+    },
+    {
+      "english": "Maximum Out-of-Pocket",
+      "ukrainian": "Максимальна сума власних витрат",
+      "section": "General",
+      "spanish": "Desembolso máximo"
+    },
+    {
+      "english": "Medically Necessary",
+      "ukrainian": "Медична необхідність",
+      "section": "General",
+      "spanish": "Médicamente necesario"
+    },
+    {
+      "english": "Network",
+      "ukrainian": "Мережа",
+      "section": "General",
+      "spanish": "Red"
+    },
+    {
+      "english": "Open Enrollment Period",
+      "ukrainian": "Період відкритої реєстрації",
+      "section": "General",
+      "spanish": "Período de inscripción abierta"
+    },
+    {
+      "english": "Out-of-Network",
+      "ukrainian": "Позамережеві",
+      "section": "General",
+      "spanish": "Fuera de la red"
+    },
+    {
+      "english": "Outpatient Care",
+      "ukrainian": "Амбулаторні послуги",
+      "section": "General",
+      "spanish": "Atención ambulatoria"
+    },
+    {
+      "english": "Patient Assistance Program",
+      "ukrainian": "Програма допомоги пацієнтам",
+      "section": "General",
+      "spanish": "Programa de asistencia al paciente"
+    },
+    {
+      "english": "PCP (Primary Care Provider)",
+      "ukrainian": "Постачальник первинної медичної допомоги",
+      "section": "General",
+      "spanish": "PCP (proveedor de atención primaria)"
+    },
+    {
+      "english": "Payer",
+      "ukrainian": "Платник",
+      "section": "General",
+      "spanish": "Pagador"
+    },
+    {
+      "english": "Payer of Last Resort",
+      "ukrainian": "Платник останньої інстанції",
+      "section": "General",
+      "spanish": "Pagador de Último Recurso"
+    },
+    {
+      "english": "Pediatric Dental Coverage",
+      "ukrainian": "Дитяче стоматологічне страхування",
+      "section": "General",
+      "spanish": "Cobertura dental pediátrica"
+    },
+    {
+      "english": "PPO (Preferred Provider Organization)",
+      "ukrainian": "Організація пріоритетного постачальника",
+      "section": "General",
+      "spanish": "PPO (Organización de proveedores preferidos)"
+    },
+    {
+      "english": "Preauthorization (Precertification)",
+      "ukrainian": "Попередня авторизація / сертифікація",
+      "section": "General",
+      "spanish": "Preautorización (Precertificación)"
+    },
+    {
+      "english": "Pre-Existing Condition",
+      "ukrainian": "Наявний стан здоров'я",
+      "section": "General",
+      "spanish": "Condición preexistente"
+    },
+    {
+      "english": "Premium",
+      "ukrainian": "Страховий внесок",
+      "section": "General",
+      "spanish": "De primera calidad"
+    },
+    {
+      "english": "Preventive Services",
+      "ukrainian": "Профілактичні послуги",
+      "section": "General",
+      "spanish": "Servicios Preventivos"
+    },
+    {
+      "english": "Prior Authorization",
+      "ukrainian": "Попередня авторизація",
+      "section": "General",
+      "spanish": "Autorización previa"
+    },
+    {
+      "english": "Provider",
+      "ukrainian": "Постачальник",
+      "section": "General",
+      "spanish": "Proveedor"
+    },
+    {
+      "english": "Provider Network",
+      "ukrainian": "Мережа постачальників",
+      "section": "General",
+      "spanish": "Red de proveedores"
+    },
+    {
+      "english": "Qualified Health Plan (QHP)",
+      "ukrainian": "Кваліфікований план медичного страхування",
+      "section": "General",
+      "spanish": "Plan de salud calificado (QHP)"
+    },
+    {
+      "english": "Referral",
+      "ukrainian": "Направлення",
+      "section": "General",
+      "spanish": "Remisión"
+    },
+    {
+      "english": "Rehabilitation Services",
+      "ukrainian": "Реабілітаційні послуги",
+      "section": "General",
+      "spanish": "Servicios de rehabilitación"
+    },
+    {
+      "english": "Rescission",
+      "ukrainian": "Розірвання",
+      "section": "General",
+      "spanish": "Rescisión"
+    },
+    {
+      "english": "Self-Insured Plan",
+      "ukrainian": "План самострахування",
+      "section": "General",
+      "spanish": "Plan autoasegurado"
+    },
+    {
+      "english": "Service Area",
+      "ukrainian": "Зона обслуговування",
+      "section": "General",
+      "spanish": "Vía de Servício"
+    },
+    {
+      "english": "Skilled Nursing Facility (SNF)",
+      "ukrainian": "Заклад кваліфікованого догляду",
+      "section": "General",
+      "spanish": "Centro de enfermería especializada (SNF)"
+    },
+    {
+      "english": "Special Enrollment Period",
+      "ukrainian": "Спеціальний період реєстрації",
+      "section": "General",
+      "spanish": "Período Especial de Inscripción"
+    },
+    {
+      "english": "State Health Insurance Assistance Program (SHIP)",
+      "ukrainian": "Програма допомоги державного медичного страхування",
+      "section": "General",
+      "spanish": "Programa Estatal de Asistencia para Seguros Médicos (SHIP)"
+    },
+    {
+      "english": "Subsidy",
+      "ukrainian": "Субсидія",
+      "section": "General",
+      "spanish": "Subvención"
+    },
+    {
+      "english": "Summary of Benefits and Coverage (SBC)",
+      "ukrainian": "Зведення пільг та покриття",
+      "section": "General",
+      "spanish": "Resumen de Beneficios y Cobertura (SBC)"
+    },
+    {
+      "english": "Telehealth",
+      "ukrainian": "Телемедицина",
+      "section": "General",
+      "spanish": "Telesalud"
+    },
+    {
+      "english": "Third-Party Administrator (TPA)",
+      "ukrainian": "Сторонній адміністратор",
+      "section": "General",
+      "spanish": "Administrador externo (TPA)"
+    },
+    {
+      "english": "Tiered Network",
+      "ukrainian": "Рівнева мережа",
+      "section": "General",
+      "spanish": "Red escalonada"
+    },
+    {
+      "english": "Tricare",
+      "ukrainian": "Tricare (програма)",
+      "section": "General",
+      "spanish": "Tricaré"
+    },
+    {
+      "english": "Usual, Customary, and Reasonable (UCR)",
+      "ukrainian": "Звичайний, простий та розумний",
+      "section": "General",
+      "spanish": "Habitual, Consuetudinario y Razonable (UCR)"
+    },
+    {
+      "english": "Utilization Review (UR)",
+      "ukrainian": "Перегляд використання",
+      "section": "General",
+      "spanish": "Revisión de utilización (UR)"
+    },
+    {
+      "english": "Waiting Period",
+      "ukrainian": "Період очікування",
+      "section": "General",
+      "spanish": "Período de espera"
+    },
+    {
+      "english": "Wellness Program",
+      "ukrainian": "Програма оздоровлення",
+      "section": "General",
+      "spanish": "Programa de Bienestar"
+    },
+    {
+      "english": "Affordable Care Act (ACA)",
+      "ukrainian": "Закон про доступну медичну допомогу",
+      "section": "Medicaid",
+      "spanish": "Ley de Atención Médica Asequible (ACA)"
+    },
+    {
+      "english": "Asset Limit",
+      "ukrainian": "Ліміт активів",
+      "section": "Medicaid",
+      "spanish": "Límite de activos"
+    },
+    {
+      "english": "CHIP (Children's Health Insurance Program)",
+      "ukrainian": "CHIP (Програма медичного страхування дітей)",
+      "section": "Medicaid",
+      "spanish": "CHIP (Programa de seguro médico para niños)"
+    },
+    {
+      "english": "Cost-Sharing Reductions",
+      "ukrainian": "Зниження розподілу витрат",
+      "section": "Medicaid",
+      "spanish": "Reducciones de costos compartidos"
+    },
+    {
+      "english": "Coverage Gap",
+      "ukrainian": "Розрив у покритті",
+      "section": "Medicaid",
+      "spanish": "Brecha de cobertura"
+    },
+    {
+      "english": "Eligibility",
+      "ukrainian": "Правомочність",
+      "section": "Medicaid",
+      "spanish": "Elegibilidad"
+    },
+    {
+      "english": "Enrollment",
+      "ukrainian": "Реєстрація",
+      "section": "Medicaid",
+      "spanish": "Inscripción"
+    },
+    {
+      "english": "Federal Poverty Level (FPL)",
+      "ukrainian": "Федеральний рівень бідності",
+      "section": "Medicaid",
+      "spanish": "Nivel federal de pobreza (FPL)"
+    },
+    {
+      "english": "Income Limit",
+      "ukrainian": "Ліміт доходу",
+      "section": "Medicaid",
+      "spanish": "Límite de ingresos"
+    },
+    {
+      "english": "Inpatient Hospital Services",
+      "ukrainian": "Стаціонарні лікарняні послуги",
+      "section": "Medicaid",
+      "spanish": "Servicios hospitalarios para pacientes internados"
+    },
+    {
+      "english": "Retroactive Coverage",
+      "ukrainian": "Ретроактивне покриття",
+      "section": "Medicaid",
+      "spanish": "Cobertura retroactiva"
+    },
+    {
+      "english": "Beneficiary",
+      "ukrainian": "Бенефіціар (вигодонабувач)",
+      "section": "Medicare",
+      "spanish": "Beneficiario"
+    },
+    {
+      "english": "Coverage",
+      "ukrainian": "Обсяг покриття",
+      "section": "Medicare",
+      "spanish": "Cobertura"
+    },
+    {
+      "english": "Medicare Part A",
+      "ukrainian": "Medicare Частина A (стаціонарне лікування)",
+      "section": "Medicare",
+      "spanish": "Parte A de Medicare"
+    },
+    {
+      "english": "Medicare Part B",
+      "ukrainian": "Medicare Частина B (амбулаторне лікування)",
+      "section": "Medicare",
+      "spanish": "Parte B de Medicare"
+    },
+    {
+      "english": "Medicare Part C",
+      "ukrainian": "Medicare Частина C (Medicare Advantage)",
+      "section": "Medicare",
+      "spanish": "Parte C de Medicare"
+    },
+    {
+      "english": "Medicare Part D",
+      "ukrainian": "Medicare Частина D (ліки за рецептом)",
+      "section": "Medicare",
+      "spanish": "Parte D de Medicare"
+    },
+    {
+      "english": "Medigap",
+      "ukrainian": "Medigap (додаткова страховка)",
+      "section": "Medicare",
+      "spanish": "Medigap"
+    },
+    {
+      "english": "Supplemental Coverage",
+      "ukrainian": "Додаткове покриття",
+      "section": "Medicare",
+      "spanish": "Cobertura suplementaria"
+    },
+    {
+      "english": "Premium",
+      "ukrainian": "Страховий внесок",
+      "section": "Medicare",
+      "spanish": "De primera calidad"
+    },
+    {
+      "english": "Preventive Services",
+      "ukrainian": "Превентивні послуги",
+      "section": "Medicare",
+      "spanish": "Servicios Preventivos"
+    },
+    {
+      "english": "Rehabilitation",
+      "ukrainian": "Реабілітація",
+      "section": "Medicare",
+      "spanish": "Rehabilitación"
+    },
+    {
+      "english": "Skilled Nursing Facility",
+      "ukrainian": "Кваліфікований медсестринський заклад",
+      "section": "Medicare",
+      "spanish": "Centro de enfermería especializada"
+    },
+    {
+      "english": "Special Enrollment Period",
+      "ukrainian": "Спеціальний період реєстрації",
+      "section": "Medicare",
+      "spanish": "Período Especial de Inscripción"
+    },
+    {
+      "english": "Supplemental Insurance (Medigap)",
+      "ukrainian": "Додаткове страхування (Medigap)",
+      "section": "Medicare",
+      "spanish": "Seguro Suplementario (Medigap)"
+    }
   ]
 };
 
@@ -2086,6 +4418,83 @@ let quizAnswered = false;
 let progress = {};
 
 // ══════════════════════════════════════════════
+
+// MULTI-LANGUAGE & SEARCH SYSTEM
+let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+document.getElementById('langToggle').value = currentAppLang;
+
+function changeLanguage(lang) {
+  currentAppLang = lang;
+  localStorage.setItem('ges_lang', lang);
+  
+  // Update Protocols UI
+  document.querySelectorAll('.script-box.ukraine, .script-box.spanish').forEach(el => {
+    el.style.display = 'none';
+  });
+  document.querySelectorAll(`.script-box.${lang === 'ukrainian' ? 'ukraine' : 'spanish'}`).forEach(el => {
+    el.style.display = 'block';
+  });
+
+  // Re-render active tab content
+  loadFlashcard();
+  renderGlossary();
+  buildQuiz();
+}
+
+// Initial setup of protocols
+changeLanguage(currentAppLang);
+
+function handleSearch(e) {
+  const q = e.target.value.toLowerCase().trim();
+  const resContainer = document.getElementById('searchResults') || createSearchContainer();
+  
+  if (q.length < 2) {
+    resContainer.style.display = 'none';
+    document.querySelectorAll('.tab-content').forEach(el => {
+      if(el.id === 'content-' + document.querySelector('.nav-btn.active').id.split('-')[1]) el.style.display = 'block';
+    });
+    return;
+  }
+  
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  resContainer.style.display = 'block';
+  
+  let html = `<h3>🔍 Search Results for "${q}"</h3><div class="glossary-list">`;
+  
+  // Search Glossary
+  let found = 0;
+  for (const [cat, terms] of Object.entries(GLOSSARY_DATA)) {
+    for (const item of terms) {
+      if (item.english.toLowerCase().includes(q) || 
+          item[currentAppLang].toLowerCase().includes(q) || 
+          (item.spanish && item.spanish.toLowerCase().includes(q))) {
+        html += `
+          <div class="glos-item">
+            <div class="glos-en">${item.english.replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
+            <div class="glos-uk">${item[currentAppLang].replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
+          </div>`;
+        found++;
+      }
+    }
+  }
+  
+  if (found === 0) html += `<p>No matches found in glossary.</p>`;
+  html += `</div>`;
+  resContainer.innerHTML = html;
+}
+
+function createSearchContainer() {
+  const main = document.querySelector('main');
+  const div = document.createElement('div');
+  div.id = 'searchResults';
+  main.prepend(div);
+  return div;
+}
+
+// Overrides for existing functions to use currentAppLang
+
+
 // INIT
 // ══════════════════════════════════════════════
 function init() {
@@ -2158,13 +4567,13 @@ function showCard() {
   const dir = document.getElementById('fcDirection').value;
   const isEnToUk = dir === 'en-uk' || (dir === 'random' && Math.random() > 0.5);
 
-  const frontWord = isEnToUk ? card.english : card.ukrainian;
-  const backWord = isEnToUk ? card.ukrainian : card.english;
+  const frontWord = isEnToUk ? card.english : card[currentAppLang];
+  const backWord = isEnToUk ? card[currentAppLang] : card.english;
 
   document.getElementById('fcFrontWord').textContent = frontWord;
   document.getElementById('fcBackWord').textContent = backWord;
   document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : 'UKRAINIAN';
-  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? 'UKRAINIAN' : 'ENGLISH';
+  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? currentAppLang.toUpperCase() : 'ENGLISH';
 
   cardFlipped = false;
   document.getElementById('flashcard').classList.remove('flipped');
@@ -2241,8 +4650,8 @@ function startQuiz() {
       const wrongPool = terms.filter(t => t.english !== term.english);
       if (wrongPool.length < 3) continue;
       const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t.ukrainian);
-      const options = [...wrongs, term.ukrainian].sort(() => Math.random() - 0.5);
-      const correct = options.indexOf(term.ukrainian);
+      const options = [...wrongs, term[currentAppLang]].sort(() => Math.random() - 0.5);
+      const correct = options.indexOf(term[currentAppLang]);
       pool.push({
         type: 'vocab',
         q: `What is the Ukrainian translation of "${term.english}"?`,
