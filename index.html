@@ -48,7 +48,7 @@
   }
 
   /* ── HEADER ── */
-  header { display: flex; align-items: center; justify-content: space-between;
+  header {
     position: sticky;
     top: 0;
     z-index: 100;
@@ -292,7 +292,7 @@
   }
 
   /* ── FLASHCARD MODE ── */
-  .fc-header { display: flex; align-items: center; justify-content: space-between;
+  .fc-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -574,7 +574,7 @@
 
   .protocol-card:hover { border-color: var(--accent2); }
 
-  .protocol-header { display: flex; align-items: center; justify-content: space-between;
+  .protocol-header {
     padding: 20px 24px;
     cursor: pointer;
     display: flex;
@@ -711,7 +711,7 @@
   .timing-badge.ok { border-color: var(--green); color: var(--green); }
 
   /* ── GLOSSARY TABLE ── */
-  .glossary-header { display: flex; align-items: center; justify-content: space-between;
+  .glossary-header {
     display: flex;
     gap: 12px;
     margin-bottom: 20px;
@@ -998,39 +998,24 @@
     .cheatsheet-grid { grid-template-columns: 1fr; }
     .dash-grid { grid-template-columns: 1fr; }
     .progress-grid { grid-template-columns: repeat(2, 1fr); }
-    header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    header { padding: 0 16px; }
     main { padding: 20px 16px; }
   }
-
-  .header-right { display: flex; align-items: center; gap: 16px; }
-  .header-search input { padding: 8px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; width: 300px; outline: none; }
-  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
-  #langToggle { padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; }
-  #langToggle option { color: black; }
-  #searchResults { display: none; padding: 20px; background: var(--bg2); border-radius: 12px; margin-top: 20px; }
-  .search-highlight { background: rgba(255,215,0,0.3); font-weight: bold; }
-
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <div class="logo-icon">🇺🇦</div>
+    <div class="logo-icon">🌍</div>
     Medical Interpreter Study Guide
   </div>
-  
-  <div class="header-search">
-    <input type="text" id="globalSearch" placeholder="🔍 Search glossary & protocols..." onkeyup="handleSearch(event)">
-  </div>
-  <div class="header-right">
-    <select id="langToggle" onchange="changeLanguage(this.value)">
-      <option value="ukrainian">🇺🇦 Ukrainian</option>
-      <option value="spanish">🇪🇸 Spanish</option>
-    </select>
-    <div class="header-stats" style="display:flex;gap:12px;">
-    <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
-    <div class="stat-pill">Quiz score: <span id="quizBest">—</span></div>
+  <div style="display:flex; gap:16px; align-items:center;">
+    <div id="google_translate_element"></div>
+    <div class="header-stats">
+      <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
+      <div class="stat-pill">Quiz score: <span id="quizBest">—</span></div>
+    </div>
   </div>
 </header>
 
@@ -1796,6 +1781,7 @@
           <tr>
             <th>English</th>
             <th>Ukrainian</th>
+            <th>Spanish</th>
             <th>Category</th>
           </tr>
         </thead>
@@ -2038,22 +2024,22 @@ const GLOSSARY_DATA = {
     {
       "english": "Bloodwork",
       "ukrainian": "Аналіз крові",
-      "spanish": "Hipertensión"
+      "spanish": "análisis de sangre"
     },
     {
       "english": "Anemia",
       "ukrainian": "Анемія",
-      "spanish": "Hipertensión"
+      "spanish": "Anemia"
     },
     {
       "english": "Weight gain",
       "ukrainian": "Набір ваги",
-      "spanish": "Hipertensión"
+      "spanish": "aumento de peso"
     },
     {
       "english": "Weight loss",
       "ukrainian": "Втрата ваги",
-      "spanish": "Hipertensión"
+      "spanish": "Pérdida de peso"
     },
     {
       "english": "High blood pressure",
@@ -2664,7 +2650,7 @@ const GLOSSARY_DATA = {
     {
       "english": "Thyroid Function Test",
       "ukrainian": "Аналіз функції щитовидної залози",
-      "spanish": "Nivel de vitamina D"
+      "spanish": "Prueba de función tiroidea"
     },
     {
       "english": "Vitamin D Level",
@@ -3455,7 +3441,7 @@ const GLOSSARY_DATA = {
     {
       "english": "Quadriceps",
       "ukrainian": "Чотириголовий м'яз стегна",
-      "spanish": "manguito rotador"
+      "spanish": "Cuadríceps"
     },
     {
       "english": "Rotator cuff",
@@ -3490,7 +3476,7 @@ const GLOSSARY_DATA = {
     {
       "english": "Capillary",
       "ukrainian": "Капіляр",
-      "spanish": "Vena"
+      "spanish": "Capilar"
     },
     {
       "english": "Vein",
@@ -3867,7 +3853,7 @@ const GLOSSARY_DATA = {
       "english": "Deductible",
       "ukrainian": "Франшиза (сума, яку пізніше покриє страхування)",
       "section": "General",
-      "spanish": "Dependiente"
+      "spanish": "Deducible"
     },
     {
       "english": "Dependent",
@@ -3909,7 +3895,7 @@ const GLOSSARY_DATA = {
       "english": "Exclusions",
       "ukrainian": "Винятки",
       "section": "General",
-      "spanish": "Tarifa por servicio (FFS)"
+      "spanish": "Exclusiones"
     },
     {
       "english": "Fee-for-Service (FFS)",
@@ -4418,83 +4404,6 @@ let quizAnswered = false;
 let progress = {};
 
 // ══════════════════════════════════════════════
-
-// MULTI-LANGUAGE & SEARCH SYSTEM
-let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
-document.getElementById('langToggle').value = currentAppLang;
-
-function changeLanguage(lang) {
-  currentAppLang = lang;
-  localStorage.setItem('ges_lang', lang);
-  
-  // Update Protocols UI
-  document.querySelectorAll('.script-box.ukraine, .script-box.spanish').forEach(el => {
-    el.style.display = 'none';
-  });
-  document.querySelectorAll(`.script-box.${lang === 'ukrainian' ? 'ukraine' : 'spanish'}`).forEach(el => {
-    el.style.display = 'block';
-  });
-
-  // Re-render active tab content
-  loadFlashcard();
-  renderGlossary();
-  buildQuiz();
-}
-
-// Initial setup of protocols
-changeLanguage(currentAppLang);
-
-function handleSearch(e) {
-  const q = e.target.value.toLowerCase().trim();
-  const resContainer = document.getElementById('searchResults') || createSearchContainer();
-  
-  if (q.length < 2) {
-    resContainer.style.display = 'none';
-    document.querySelectorAll('.tab-content').forEach(el => {
-      if(el.id === 'content-' + document.querySelector('.nav-btn.active').id.split('-')[1]) el.style.display = 'block';
-    });
-    return;
-  }
-  
-  // Hide all tabs
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  resContainer.style.display = 'block';
-  
-  let html = `<h3>🔍 Search Results for "${q}"</h3><div class="glossary-list">`;
-  
-  // Search Glossary
-  let found = 0;
-  for (const [cat, terms] of Object.entries(GLOSSARY_DATA)) {
-    for (const item of terms) {
-      if (item.english.toLowerCase().includes(q) || 
-          item[currentAppLang].toLowerCase().includes(q) || 
-          (item.spanish && item.spanish.toLowerCase().includes(q))) {
-        html += `
-          <div class="glos-item">
-            <div class="glos-en">${item.english.replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
-            <div class="glos-uk">${item[currentAppLang].replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
-          </div>`;
-        found++;
-      }
-    }
-  }
-  
-  if (found === 0) html += `<p>No matches found in glossary.</p>`;
-  html += `</div>`;
-  resContainer.innerHTML = html;
-}
-
-function createSearchContainer() {
-  const main = document.querySelector('main');
-  const div = document.createElement('div');
-  div.id = 'searchResults';
-  main.prepend(div);
-  return div;
-}
-
-// Overrides for existing functions to use currentAppLang
-
-
 // INIT
 // ══════════════════════════════════════════════
 function init() {
@@ -4567,13 +4476,13 @@ function showCard() {
   const dir = document.getElementById('fcDirection').value;
   const isEnToUk = dir === 'en-uk' || (dir === 'random' && Math.random() > 0.5);
 
-  const frontWord = isEnToUk ? card.english : card[currentAppLang];
-  const backWord = isEnToUk ? card[currentAppLang] : card.english;
+  const frontWord = isEnToUk ? card.english : card.ukrainian;
+  const backWord = isEnToUk ? card.ukrainian : card.english;
 
   document.getElementById('fcFrontWord').textContent = frontWord;
   document.getElementById('fcBackWord').textContent = backWord;
   document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : 'UKRAINIAN';
-  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? currentAppLang.toUpperCase() : 'ENGLISH';
+  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? 'UKRAINIAN' : 'ENGLISH';
 
   cardFlipped = false;
   document.getElementById('flashcard').classList.remove('flipped');
@@ -4650,8 +4559,8 @@ function startQuiz() {
       const wrongPool = terms.filter(t => t.english !== term.english);
       if (wrongPool.length < 3) continue;
       const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t.ukrainian);
-      const options = [...wrongs, term[currentAppLang]].sort(() => Math.random() - 0.5);
-      const correct = options.indexOf(term[currentAppLang]);
+      const options = [...wrongs, term.ukrainian].sort(() => Math.random() - 0.5);
+      const correct = options.indexOf(term.ukrainian);
       pool.push({
         type: 'vocab',
         q: `What is the Ukrainian translation of "${term.english}"?`,
@@ -4783,6 +4692,7 @@ function renderGlossary(filtered) {
   tbody.innerHTML = terms.map(t => {
     const safeEn = t.english.replace(/"/g, '&quot;').replace(/'/g, '\\\'');
     const safeUk = t.ukrainian.replace(/"/g, '&quot;').replace(/'/g, '\\\'');
+    const safeEs = (t.spanish || '').replace(/"/g, '&quot;').replace(/'/g, '\\\'');
     return `
     <tr>
       <td>
@@ -4795,6 +4705,12 @@ function renderGlossary(filtered) {
         <div style="display:flex; align-items:center; gap:8px;">
           ${t.ukrainian}
           <button onclick="speakGlossary('${safeUk}', 'uk-UA')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Listen in Ukrainian">🔊</button>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex; align-items:center; gap:8px;">
+          ${t.spanish || ''}
+          ${t.spanish ? `<button onclick="speakGlossary('${safeEs}', 'es-ES')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Listen in Spanish">🔊</button>` : ''}
         </div>
       </td>
       <td><span class="sheet-badge">${catLabels[t.category] || t.category}</span></td>
@@ -4810,7 +4726,8 @@ function filterGlossary() {
   if (cat !== 'all') filtered = filtered.filter(t => t.category === cat);
   if (query) filtered = filtered.filter(t =>
     t.english.toLowerCase().includes(query) ||
-    t.ukrainian.toLowerCase().includes(query)
+    t.ukrainian.toLowerCase().includes(query) ||
+    (t.spanish && t.spanish.toLowerCase().includes(query))
   );
   renderGlossary(filtered);
 }
@@ -5177,5 +5094,11 @@ document.addEventListener('keydown', (e) => {
 // ══════════════════════════════════════════════
 init();
 </script>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
