@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EQT Ukrainian Interpreter — Study System</title>
+<title>Medical Interpreter Study Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1008,7 +1008,7 @@
 <header>
   <div class="logo">
     <div class="logo-icon">🇺🇦</div>
-    EQT Study System
+    Medical Interpreter Study Guide
   </div>
   <div class="header-stats">
     <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
@@ -1031,7 +1031,7 @@
   <!-- ══════════════════ DASHBOARD ══════════════════ -->
   <div class="tab-content active" id="content-dashboard">
     <div class="section-title">Welcome back! 👋</div>
-    <div class="section-subtitle">Your complete EQT Ukrainian Interpreter training system — all protocols, all vocabulary, one place.</div>
+    <div class="section-subtitle">Your complete General Education System Ukrainian Interpreter training system — all protocols, all vocabulary, one place.</div>
 
     <div class="dash-grid">
       <div class="dash-card" onclick="showTab('protocols')" style="--accent-color: #f87171;">
@@ -1119,7 +1119,7 @@
   <!-- ══════════════════ PROTOCOLS ══════════════════ -->
   <div class="tab-content" id="content-protocols">
     <div class="section-title">📋 Protocol Mastery Guide</div>
-    <div class="section-subtitle">Click any protocol to expand the full script, steps, and rules. All content directly from EQT Protocols 2025.</div>
+    <div class="section-subtitle">Click any protocol to expand the full script, steps, and rules. All content directly from General Education System Protocols 2025.</div>
 
     <div class="protocol-grid" id="protocolGrid">
 
@@ -2098,10 +2098,10 @@ function init() {
   }
 
   // Load progress from localStorage
-  const saved = localStorage.getItem('eqt_progress');
+  const saved = localStorage.getItem('ges_progress');
   if (saved) {
     progress = JSON.parse(saved);
-    knownCards = new Set(JSON.parse(localStorage.getItem('eqt_known') || '[]'));
+    knownCards = new Set(JSON.parse(localStorage.getItem('ges_known') || '[]'));
   }
 
   initFlashcards();
@@ -2206,7 +2206,7 @@ function markCard(known) {
     unknownCards.add(key);
     knownCards.delete(key);
   }
-  localStorage.setItem('eqt_known', JSON.stringify([...knownCards]));
+  localStorage.setItem('ges_known', JSON.stringify([...knownCards]));
   updateStats();
   nextCard();
 }
@@ -2339,9 +2339,9 @@ function showQuizResult() {
   else if (pct >= 60) { emoji = '📚'; title = 'Almost There!'; }
 
   // Save best score
-  const prev = parseInt(localStorage.getItem('eqt_quiz_best') || '0');
+  const prev = parseInt(localStorage.getItem('ges_quiz_best') || '0');
   if (pct > prev) {
-    localStorage.setItem('eqt_quiz_best', pct);
+    localStorage.setItem('ges_quiz_best', pct);
     document.getElementById('quizBest').textContent = pct + '%';
   }
 
@@ -2745,7 +2745,7 @@ function speakGlossary(text, lang) {
 // ══════════════════════════════════════════════
 function updateStats() {
   document.getElementById('masteredCount').textContent = knownCards.size;
-  const best = localStorage.getItem('eqt_quiz_best');
+  const best = localStorage.getItem('ges_quiz_best');
   if (best) document.getElementById('quizBest').textContent = best + '%';
   renderProgressRings();
 }

@@ -1,9 +1,9 @@
 # 🤖 Antigravity IDE Context
 
-> **ATTENTION AI AGENTS:** Read this file before modifying the codebase. It explains the architecture, constraints, and current state of the EQT Medical Interpreter Study System.
+> **ATTENTION AI AGENTS:** Read this file before modifying the codebase. It explains the architecture, constraints, and current state of the General Education System Medical Interpreter Study System.
 
 ## 🎯 Project Purpose
-This is a self-contained study application for a Ukrainian-English medical interpreter preparing for their certification exam at EQT. It covers two main areas:
+This is a self-contained study application for a Ukrainian-English medical interpreter preparing for their certification exam at General Education System. It covers two main areas:
 1. **12 Call-Handling Protocols:** Strict rules, scripts, and timelines for medical calls.
 2. **Medical Vocabulary:** 469 terms across 8 categories (Anatomy, Medications, Insurance, etc.).
 
@@ -17,7 +17,7 @@ The entire study application is designed to be **hyper-portable** and hosted on 
 
 ## 📁 Critical Files
 *   `study.html` (and its exact copy `index.html`): The main application. Contains all CSS, JS, and Data.
-*   `_EQT - Protocols 2025 UKR.pdf`: Source of truth for the 12 protocols.
+*   `_General Education System - Protocols 2025 UKR.pdf`: Source of truth for the 12 protocols.
 *   `Interpreters Glossary.xlsx`: Source of truth for the 469 medical terms.
 *   `README.md`: Human-readable study guide summarizing all the medical rules and vocabulary.
 

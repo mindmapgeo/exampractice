@@ -365,7 +365,7 @@ async def main():
     
     total = sum(len(terms) for _, terms in SECTIONS)
     
-    intro_text = f"EQT Ukrainian Interpreter Glossary. Dual-Language Audio Edition. {total} terms across 8 sections. Each entry is read in English, then natively in Ukrainian, followed by a brief description in English."
+    intro_text = f"General Education System Ukrainian Interpreter Glossary. Dual-Language Audio Edition. {total} terms across 8 sections. Each entry is read in English, then natively in Ukrainian, followed by a brief description in English."
     intro_path = os.path.join(temp_dir, "00000_intro.mp3")
     tasks.append(generate_file(intro_text, VOICE_EN, intro_path, sem))
     file_list.append(intro_path)

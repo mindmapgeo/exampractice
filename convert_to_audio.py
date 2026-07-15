@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-EQT Audiobook TTS Converter
+General Education System Audiobook TTS Converter
 ============================
 Converts audiobook_script.txt → audiobook_output.mp3
 Uses Microsoft Edge TTS (free, no API key required).
@@ -94,7 +94,7 @@ async def synthesize(text: str, output_file: str, voice: str = VOICE):
 
 async def main():
     print("=" * 60)
-    print("  EQT Audiobook TTS Converter")
+    print("  General Education System Audiobook TTS Converter")
     print("  Voice:", VOICE)
     print("  Rate:", RATE)
     print("=" * 60)

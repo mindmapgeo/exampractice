@@ -1074,7 +1074,7 @@ def build_script():
     total = sum(len(terms) for _, terms in SECTIONS)
     lines = []
     lines.append(
-        "EQT Ukrainian Interpreter Glossary. Audio Edition. "
+        "General Education System Ukrainian Interpreter Glossary. Audio Edition. "
         f"{total} terms across 8 sections. "
         "Each entry is read in English, then Ukrainian, followed by a brief description. "
         "Use this to build automatic recall while on the go."

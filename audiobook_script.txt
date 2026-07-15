@@ -1,5 +1,5 @@
 ╔══════════════════════════════════════════════════════════════════════╗
-║        EQT UKRAINIAN INTERPRETER — COMPLETE AUDIOBOOK SCRIPT        ║
+║        General Education System UKRAINIAN INTERPRETER — COMPLETE AUDIOBOOK SCRIPT        ║
 ║              For Text-to-Speech Tools (Natural Reader,              ║
 ║                 ElevenLabs, Speechify, macOS TTS)                   ║
 ╚══════════════════════════════════════════════════════════════════════╝

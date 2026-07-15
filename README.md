@@ -1,6 +1,6 @@
-# EQT Ukrainian Interpreter — Training Exam Study System
+# General Education System Ukrainian Interpreter — Training Exam Study System
 
-> **Quick context for any AI assistant:** This workspace contains a complete self-study system built for an employee preparing for their EQT (Equiti) Ukrainian medical interpreter certification exam. The exam tests knowledge of (1) call-handling protocols and (2) English ↔ Ukrainian medical vocabulary. Everything needed to understand the content, extend the system, or answer questions about it is in this file.
+> **Quick context for any AI assistant:** This workspace contains a complete self-study system built for an employee preparing for their General Education System Ukrainian medical interpreter certification exam. The exam tests knowledge of (1) call-handling protocols and (2) English ↔ Ukrainian medical vocabulary. Everything needed to understand the content, extend the system, or answer questions about it is in this file.
 
 ---
 
@@ -11,7 +11,7 @@
 | `study.html` | Interactive study app — flashcards, quiz, protocols, glossary, cheat sheet, audiobook |
 | `audiobook_script.txt` | Full narration-ready script (47 KB, 810 lines) for TTS conversion |
 | `convert_to_audio.py` | Python script to convert the audiobook to MP3 using Microsoft Edge TTS (free, no API key) |
-| `_EQT - Protocols 2025 UKR.pdf` | **Source file 1** — 8-page PDF of all interpreter protocols |
+| `_General Education System - Protocols 2025 UKR.pdf` | **Source file 1** — 8-page PDF of all interpreter protocols |
 | `Interpreters Glossary.xlsx` | **Source file 2** — Excel workbook with 8 sheets of English ↔ Ukrainian vocabulary |
 | `README.md` | This file |
 
@@ -21,7 +21,7 @@
 
 The exam covers two areas:
 
-### 1. Protocols (`_EQT - Protocols 2025 UKR.pdf`)
+### 1. Protocols (`_General Education System - Protocols 2025 UKR.pdf`)
 Twelve specific call-handling protocols that interpreters must follow precisely. Each has mandatory scripts, step sequences, and timing rules.
 
 ### 2. Vocabulary (`Interpreters Glossary.xlsx`)
@@ -283,4 +283,4 @@ The source files were parsed with:
 
 ---
 
-*Last generated: 2026-07-15 | Source: EQT Protocols 2025 UKR.pdf + Interpreters Glossary.xlsx*
+*Last generated: 2026-07-15 | Source: General Education System Protocols 2025 UKR.pdf + Interpreters Glossary.xlsx*
