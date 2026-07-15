@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQT Ukrainian Interpreter — Study System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg2: #111520;
+    --bg3: #181d2c;
+    --card: #1a2035;
+    --card2: #1f2640;
+    --border: #2a3350;
+    --accent: #4f8ef7;
+    --accent2: #7c5af7;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --purple: #a78bfa;
+    --pink: #f472b6;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --glow: 0 0 40px rgba(79,142,247,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ANIMATION ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,142,247,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(124,90,247,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,13,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    -webkit-text-fill-color: white;
+    box-shadow: 0 0 20px rgba(79,142,247,0.4);
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .stat-pill span { color: var(--accent); font-weight: 700; }
+
+  /* ── NAV TABS ── */
+  .nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    padding: 14px 20px;
+    border: none;
+    background: none;
+    color: var(--text3);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-btn:hover { color: var(--text); }
+
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .nav-badge {
+    background: var(--accent);
+    color: white;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── DASHBOARD ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .dash-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dash-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-color, var(--accent)) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .dash-card:hover {
+    border-color: var(--accent-color, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  .dash-card:hover::before { opacity: 0.05; }
+
+  .dash-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .dash-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .dash-card-desc {
+    font-size: 13px;
+    color: var(--text3);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .dash-card-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .meta-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* ── PROGRESS RINGS ── */
+  .progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .progress-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .progress-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .progress-ring-wrap {
+    position: relative;
+    width: 80px; height: 80px;
+  }
+
+  .progress-ring-wrap svg { transform: rotate(-90deg); }
+
+  .progress-ring-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+  .progress-ring-fill {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .progress-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .progress-name {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+  }
+
+  /* ── FLASHCARD MODE ── */
+  .fc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .fc-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .select-styled {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 14px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .select-styled:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(79,142,247,0.45); }
+
+  .btn-ghost {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-green { background: rgba(52,211,153,0.15); border: 1px solid var(--green); color: var(--green); }
+  .btn-green:hover { background: rgba(52,211,153,0.25); }
+
+  .btn-red { background: rgba(248,113,113,0.15); border: 1px solid var(--red); color: var(--red); }
+  .btn-red:hover { background: rgba(248,113,113,0.25); }
+
+  /* Flashcard */
+  .flashcard-container {
+    perspective: 1200px;
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+
+  .flashcard {
+    position: relative;
+    height: 280px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px;
+    text-align: center;
+    border: 2px solid var(--border);
+  }
+
+  .fc-front {
+    background: linear-gradient(135deg, var(--card2) 0%, var(--card) 100%);
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(79,142,247,0.1);
+  }
+
+  .fc-back {
+    background: linear-gradient(135deg, #1a2a1a 0%, #1a2520 100%);
+    border-color: var(--green);
+    transform: rotateY(180deg);
+    box-shadow: 0 0 40px rgba(52,211,153,0.1);
+  }
+
+  .fc-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+  }
+
+  .fc-word {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .fc-back .fc-word { color: var(--green); }
+
+  .fc-hint { font-size: 13px; color: var(--text3); }
+
+  .fc-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .fc-counter {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text2);
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .fc-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s;
+  }
+
+  /* ── QUIZ MODE ── */
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 720px;
+    margin: 0 auto 24px;
+  }
+
+  .quiz-question {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .quiz-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 32px;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .quiz-option {
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .quiz-option:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.08);
+  }
+
+  .quiz-option.correct {
+    border-color: var(--green) !important;
+    background: rgba(52,211,153,0.15) !important;
+    color: var(--green);
+  }
+
+  .quiz-option.wrong {
+    border-color: var(--red) !important;
+    background: rgba(248,113,113,0.12) !important;
+    color: var(--red);
+  }
+
+  .quiz-option:disabled { cursor: not-allowed; }
+
+  .quiz-feedback {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 28px;
+  }
+
+  .quiz-score-board {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 24px;
+  }
+
+  .score-item {
+    text-align: center;
+  }
+
+  .score-num {
+    font-size: 32px;
+    font-weight: 900;
+    display: block;
+  }
+
+  .score-label {
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── PROTOCOLS STUDY ── */
+  .protocol-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .protocol-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .protocol-card:hover { border-color: var(--accent2); }
+
+  .protocol-header {
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+
+  .protocol-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .protocol-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .protocol-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .protocol-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .tag-critical { background: rgba(248,113,113,0.2); color: var(--red); }
+  .tag-mandatory { background: rgba(251,191,36,0.2); color: var(--yellow); }
+  .tag-scripted { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .tag-timing { background: rgba(52,211,153,0.2); color: var(--green); }
+
+  .protocol-chevron { transition: transform 0.3s; color: var(--text3); font-size: 18px; }
+  .protocol-card.open .protocol-chevron { transform: rotate(180deg); }
+
+  .protocol-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .protocol-card.open .protocol-body { display: block; }
+
+  .script-box {
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-style: italic;
+    color: #c7d8ff;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .script-box.ukraine {
+    background: rgba(124,90,247,0.08);
+    border-color: rgba(124,90,247,0.25);
+    border-left-color: var(--accent2);
+    color: #d4c7ff;
+  }
+
+  .script-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 8px;
+    font-style: normal;
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text2);
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .check-icon.req { background: rgba(248,113,113,0.2); color: var(--red); }
+  .check-icon.opt { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .check-icon.note { background: rgba(251,191,36,0.2); color: var(--yellow); }
+
+  .timing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 8px 6px 8px 0;
+  }
+
+  .timing-badge.warn { border-color: var(--yellow); color: var(--yellow); }
+  .timing-badge.danger { border-color: var(--red); color: var(--red); }
+  .timing-badge.ok { border-color: var(--green); color: var(--green); }
+
+  /* ── GLOSSARY TABLE ── */
+  .glossary-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 10px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text3); }
+
+  .glossary-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .glossary-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .glossary-table th {
+    background: var(--card2);
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+  }
+
+  .glossary-table td {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    line-height: 1.4;
+  }
+
+  .glossary-table tr:last-child td { border-bottom: none; }
+
+  .glossary-table tr:hover td {
+    background: rgba(79,142,247,0.05);
+  }
+
+  .glossary-table td:first-child { color: var(--text); font-weight: 500; }
+  .glossary-table td:last-child { color: var(--purple); }
+
+  .sheet-badge {
+    display: inline-block;
+    background: rgba(167,139,250,0.15);
+    border: 1px solid rgba(167,139,250,0.3);
+    color: var(--purple);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* ── CHEAT SHEET ── */
+  .cheatsheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .cs-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .cs-card-head {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cs-card-body { padding: 0 20px 20px; }
+
+  .numbered-list {
+    counter-reset: item;
+    list-style: none;
+    margin: 0;
+  }
+
+  .numbered-list li {
+    counter-increment: item;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .numbered-list li:last-child { border-bottom: none; }
+
+  .numbered-list li::before {
+    content: counter(item);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── AUDIOBOOK SECTION ── */
+  .audio-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .audio-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .audio-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .audio-card p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .audio-script {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    max-height: 340px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .copy-btn {
+    margin-top: 12px;
+  }
+
+  /* ── SPEAKER ── */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.3);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .speak-btn:hover { background: rgba(79,142,247,0.25); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tab-content.active { animation: fadeIn 0.3s ease; }
+
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(79,142,247,0); }
+    100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
+  }
+
+  .pulsing { animation: pulse-ring 2s infinite; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* ── RESULT MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.show .modal { transform: scale(1); }
+
+  .modal-emoji { font-size: 64px; margin-bottom: 16px; }
+  .modal-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .modal-score { font-size: 48px; font-weight: 900; margin-bottom: 8px; }
+  .modal-desc { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── MISC ── */
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text3);
+    margin-bottom: 28px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  @media (max-width: 640px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .cheatsheet-grid { grid-template-columns: 1fr; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .progress-grid { grid-template-columns: repeat(2, 1fr); }
+    header { padding: 0 16px; }
+    main { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🇺🇦</div>
+    EQT Study System
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
+    <div class="stat-pill">Quiz score: <span id="quizBest">—</span></div>
+  </div>
+</header>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('dashboard')" id="tab-dashboard">🏠 Dashboard</button>
+  <button class="nav-btn" onclick="showTab('protocols')" id="tab-protocols">📋 Protocols <span class="nav-badge">8</span></button>
+  <button class="nav-btn" onclick="showTab('flashcards')" id="tab-flashcards">🃏 Flashcards <span class="nav-badge" id="fc-badge">469</span></button>
+  <button class="nav-btn" onclick="showTab('quiz')" id="tab-quiz">🎯 Quiz</button>
+  <button class="nav-btn" onclick="showTab('glossary')" id="tab-glossary">📖 Full Glossary</button>
+  <button class="nav-btn" onclick="showTab('cheatsheet')" id="tab-cheatsheet">⚡ Cheat Sheet</button>
+  <button class="nav-btn" onclick="showTab('audiobook')" id="tab-audiobook">🎧 Audiobook</button>
+</nav>
+
+<main>
+
+  <!-- ══════════════════ DASHBOARD ══════════════════ -->
+  <div class="tab-content active" id="content-dashboard">
+    <div class="section-title">Welcome back! 👋</div>
+    <div class="section-subtitle">Your complete EQT Ukrainian Interpreter training system — all protocols, all vocabulary, one place.</div>
+
+    <div class="dash-grid">
+      <div class="dash-card" onclick="showTab('protocols')" style="--accent-color: #f87171;">
+        <span class="dash-card-icon">📋</span>
+        <div class="dash-card-title">Protocol Mastery</div>
+        <div class="dash-card-desc">Greeting, closing, intervention, hold, troubleshoot, dial-out, dual interpretation & more.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">8 Protocols</span>
+          <span class="meta-tag">All Scripts</span>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="showTab('flashcards')" style="--accent-color: #4f8ef7;">
+        <span class="dash-card-icon">🃏</span>
+        <div class="dash-card-title">Vocabulary Flashcards</div>
+        <div class="dash-card-desc">469 English ↔ Ukrainian terms across all 8 categories. Spaced repetition powered.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">469 Cards</span>
+          <span class="meta-tag">8 Categories</span>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="showTab('quiz')" style="--accent-color: #34d399;">
+        <span class="dash-card-icon">🎯</span>
+        <div class="dash-card-title">Practice Quiz</div>
+        <div class="dash-card-desc">Multiple-choice questions on both vocabulary and protocols. Randomized every time.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">Multiple Choice</span>
+          <span class="meta-tag">Timed Mode</span>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="showTab('cheatsheet')" style="--accent-color: #fbbf24;">
+        <span class="dash-card-icon">⚡</span>
+        <div class="dash-card-title">Quick Cheat Sheet</div>
+        <div class="dash-card-desc">One-page rapid review: all key numbers, scripts, sequences, and rules at a glance.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">Key Numbers</span>
+          <span class="meta-tag">Scripts</span>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="showTab('glossary')" style="--accent-color: #a78bfa;">
+        <span class="dash-card-icon">📖</span>
+        <div class="dash-card-title">Full Glossary</div>
+        <div class="dash-card-desc">Searchable database of all terms. Filter by category, search by English or Ukrainian.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">Searchable</span>
+          <span class="meta-tag">469 Terms</span>
+        </div>
+      </div>
+
+      <div class="dash-card" onclick="showTab('audiobook')" style="--accent-color: #f472b6;">
+        <span class="dash-card-icon">🎧</span>
+        <div class="dash-card-title">Audiobook Script</div>
+        <div class="dash-card-desc">Ready-to-paste scripts for text-to-speech tools. Study while commuting or exercising.</div>
+        <div class="dash-card-meta">
+          <span class="meta-tag">TTS Ready</span>
+          <span class="meta-tag">Copy & Paste</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <h3>📊 Your Mastery Progress</h3>
+      <div class="progress-grid" id="progressGrid">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <h3>🔑 Critical Numbers to Memorize</h3>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:8px;">
+        <div class="timing-badge warn">⏱️ 10 min — Standard hold</div>
+        <div class="timing-badge warn">⏱️ 20 min — Unspecified hold</div>
+        <div class="timing-badge warn">⏱️ 60 sec — Blue/black screen</div>
+        <div class="timing-badge ok">📞 1-866-449-4428 — Tech Support</div>
+        <div class="timing-badge danger">⏱️ 90 min — Consider transfer</div>
+        <div class="timing-badge danger">⏱️ 120 min — Must transfer</div>
+        <div class="timing-badge ok">♾️ Life/death — Hold indefinitely</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ PROTOCOLS ══════════════════ -->
+  <div class="tab-content" id="content-protocols">
+    <div class="section-title">📋 Protocol Mastery Guide</div>
+    <div class="section-subtitle">Click any protocol to expand the full script, steps, and rules. All content directly from EQT Protocols 2025.</div>
+
+    <div class="protocol-grid" id="protocolGrid">
+
+      <!-- GREETING PROTOCOL -->
+      <div class="protocol-card" id="pc-greeting">
+        <div class="protocol-header" onclick="toggleProtocol('greeting')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(79,142,247,0.15);">👋</div>
+            <div>
+              <div class="protocol-title">Greeting Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-mandatory">Mandatory</span>
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:16px;">The Equiti Standards VMI Assessment requires these exact elements at the start of every call.</p>
+
+          <strong style="font-size:13px;color:var(--accent);">MANDATORY elements for the PROVIDER:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon req">✓</div> Interpreter's name</li>
+            <li><div class="check-icon req">✓</div> Language you interpret in</li>
+            <li><div class="check-icon req">✓</div> Interpreter's ID #</li>
+            <li><div class="check-icon req">✓</div> Everything will be interpreted</li>
+          </ul>
+
+          <strong style="font-size:13px;color:var(--accent);">MANDATORY elements for the LEP (patient):</strong>
+          <ul class="checklist">
+            <li><div class="check-icon req">✓</div> Interpreter's name</li>
+            <li><div class="check-icon req">✓</div> Language being interpreted into</li>
+            <li><div class="check-icon req">✓</div> Everything will be kept confidential</li>
+            <li><div class="check-icon req">✓</div> Everything in the session will be interpreted</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 To Provider (English)</div>
+            "Hello, this is _______, your Ukrainian interpreter, ID XXXXX. Everything in the session will be interpreted. How can I help you? / Is there anything I need to know about the session?"
+          </div>
+
+          <div class="script-box ukraine">
+            <div class="script-label">🇺🇦 To Patient (Ukrainian)</div>
+            "Добрий день, мене звати ___, я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним."
+          </div>
+
+          <strong style="font-size:13px;color:var(--text3);display:block;margin:16px 0 8px;">Optional Add-ons:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon opt">+</div> "Address questions to each other, not to you."</li>
+            <li><div class="check-icon opt">+</div> "I may ask end users to re-position the device for optimal setup."</li>
+            <li><div class="check-icon opt">+</div> "Speak in short sentences."</li>
+            <li><div class="check-icon opt">+</div> "Speak in a loud and clear tone, pausing often."</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CLOSING PROTOCOL -->
+      <div class="protocol-card" id="pc-closing">
+        <div class="protocol-header" onclick="toggleProtocol('closing')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(52,211,153,0.15);">🏁</div>
+            <div>
+              <div class="protocol-title">Closing Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-mandatory">Mandatory</span>
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:16px;">Different steps for AUDIO vs VIDEO calls. Both end with farewell to LEP in Ukrainian.</p>
+
+          <strong style="font-size:13px;color:var(--yellow);">📞 AUDIO Call (4 steps):</strong>
+          <ul class="numbered-list" style="margin-top:10px;">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>State Interpreter's ID #</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to the LEP</li>
+          </ul>
+
+          <strong style="font-size:13px;color:var(--accent);display:block;margin:16px 0 8px;">📹 VIDEO Call (4 steps):</strong>
+          <ul class="numbered-list">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>Remind doctor to rate the call</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to the LEP</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Audio Closing Script</div>
+            (1) "Is there anything else I can help you with? / Do you need help with something else?"<br>
+            (2) "This is interpreter ID# __________."<br>
+            (3) "Thank you for calling / Thank you for using our services. Have a great day!"<br>
+            (4) "Гарного вам дня, пане / пані."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">📹 Video Closing Script</div>
+            (1) "Is there anything else I can help you with? / Do you need help with something else?"<br>
+            (2) "Please remember to rate the call after we hang up. Your feedback is valuable and appreciated."<br>
+            (3) "Thank you for calling. Have a great day!"<br>
+            (4) "Гарного вам дня, пане / пані."
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERVENTION / 3-STEP -->
+      <div class="protocol-card" id="pc-intervention">
+        <div class="protocol-header" onclick="toggleProtocol('intervention')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(251,191,36,0.15);">🔔</div>
+            <div>
+              <div class="protocol-title">Intervention Protocol (3-Step)</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:16px;">When you need to ask for repetition, clarification, or verification. Use this 3-step process.</p>
+
+          <ul class="numbered-list">
+            <li>Identify yourself as the interpreter. Speak first to the party that will be waiting.</li>
+            <li>Identify yourself as the interpreter to the other party. Request clarification/repetition/etc.</li>
+            <li>Resume interpreting.</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Intervention Script (to opposite party)</div>
+            "This is the interpreter speaking / Excuse me, the interpreter needs to clarify / a repetition / etc."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Then to required party</div>
+            "Interpreter speaking, can you please repeat/clarify....?"
+          </div>
+        </div>
+      </div>
+
+      <!-- 3RD PERSON PROTOCOL -->
+      <div class="protocol-card" id="pc-thirdperson">
+        <div class="protocol-header" onclick="toggleProtocol('thirdperson')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(167,139,250,0.15);">👤</div>
+            <div>
+              <div class="protocol-title">3rd Person Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-critical">Critical</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">When parties speak to you directly instead of each other, intervene and remind them. Note reason in Call Notes.</p>
+
+          <strong style="font-size:13px;color:var(--red);">⚠️ EXCEPTIONS — When 3rd person IS allowed:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon req">!</div> Very young children (age 7 or younger)</li>
+            <li><div class="check-icon req">!</div> Emergencies (summarizing)</li>
+            <li><div class="check-icon req">!</div> Anyone who is confused (dementia / substance abuse / post surgery)</li>
+            <li><div class="check-icon req">!</div> Mentally ill patients</li>
+            <li><div class="check-icon req">!</div> Trauma triggered by situations in the call</li>
+          </ul>
+
+          <div class="script-box ukraine">
+            <div class="script-label">🇺🇦 To Patient (Ukrainian)</div>
+            "Пане / пані, я перекладач. Будь ласка, звертайтеся безпосередньо до лікаря, щоб уникнути двозначностей і забезпечити точність повідомлення."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 To Provider (English)</div>
+            "This is the interpreter, [provider], may I please ask you to speak directly to your patient so that we can ensure accuracy and avoid confusion?"
+          </div>
+
+          <div class="divider"></div>
+          <div class="script-box" style="border-left-color:var(--red);">
+            <div class="script-label">📝 RULE</div>
+            If they CONTINUE speaking to you — continue to interpret in FIRST person regardless. Specify reason in Call Notes.
+          </div>
+        </div>
+      </div>
+
+      <!-- HOLD PROTOCOL -->
+      <div class="protocol-card" id="pc-hold">
+        <div class="protocol-header" onclick="toggleProtocol('hold')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(248,113,113,0.15);">⏸️</div>
+            <div>
+              <div class="protocol-title">Hold Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-timing">Timing Critical</span>
+                <span class="tag tag-critical">Critical</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+            <div class="timing-badge ok">✅ Standard = 10 min</div>
+            <div class="timing-badge warn">⚡ Provider gives specific time = honor it</div>
+            <div class="timing-badge warn">❓ Unspecified time = 20 min</div>
+            <div class="timing-badge danger">🚨 Life or death = hold indefinitely</div>
+            <div class="timing-badge ok">🔵 Blue/black screen = 60 seconds</div>
+          </div>
+
+          <strong style="font-size:13px;color:var(--accent);">Standard 10-Minute Hold — 5 Steps:</strong>
+          <ul class="numbered-list" style="margin-top:10px;">
+            <li>Let the provider know we can only wait up to 10 minutes.</li>
+            <li>Inform the LEP of the hold.</li>
+            <li>Turn the camera off and mute audio.</li>
+            <li>Make a notation on Call Notes.</li>
+            <li>Report on Discord.</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 To Provider</div>
+            "This is the interpreter; I need to let you know that I have a 10-minute hold policy. I'll be here with my camera off until you come back."
+          </div>
+
+          <div class="script-box ukraine">
+            <div class="script-label">🇺🇦 To Patient</div>
+            "Пане / пані, з вами говорить перекладач. Я вимкну свою камеру з міркувань безпеки до повернення лікаря. Я слухатиму все, що буде сказано (за потреби)."
+          </div>
+
+          <strong style="font-size:13px;color:var(--yellow);display:block;margin:16px 0 8px;">🔵 Blue/Black Screen (1-Minute Hold):</strong>
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Step 1 — Check for response (60 sec window)</div>
+            "Hello, this is your Ukrainian interpreter. Is there anybody on the line?"
+          </div>
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Step 2 — If no response</div>
+            "This is your Ukrainian interpreter. I'm unable to hear anyone on the line. I will disconnect from the call. I apologize for the inconvenience. Goodbye."
+          </div>
+        </div>
+      </div>
+
+      <!-- TROUBLESHOOTING PROTOCOL -->
+      <div class="protocol-card" id="pc-troubleshoot">
+        <div class="protocol-header" onclick="toggleProtocol('troubleshoot')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(251,191,36,0.15);">🔧</div>
+            <div>
+              <div class="protocol-title">Troubleshooting Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:16px;">For poor audio/video quality. Follow these 3 steps in order.</p>
+
+          <ul class="numbered-list">
+            <li>Ask provider to move device closer / change positioning OR turn camera off then back on.</li>
+            <li>If unresolved: keep camera off and continue interpretation.</li>
+            <li>If still unresolved: ask if you may connect to another interpreter. Provide Tech Support: <strong style="color:var(--green);">1-866-449-4428</strong></li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Step 1 Script</div>
+            "This is the interpreter, [provider], there are some technical issues. Allow me to troubleshoot."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Step 3 Script</div>
+            "This is the interpreter, [provider], we are still experiencing some technical issues. May I connect you with another interpreter to see if this helps? I apologize for the inconvenience."
+          </div>
+
+          <div class="timing-badge ok" style="margin-top:12px;">📞 Tech Support: 1-866-449-4428</div>
+        </div>
+      </div>
+
+      <!-- DIAL-OUT PROTOCOL -->
+      <div class="protocol-card" id="pc-dialout">
+        <div class="protocol-header" onclick="toggleProtocol('dialout')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(52,211,153,0.15);">📲</div>
+            <div>
+              <div class="protocol-title">Dial-Out Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">Before dialing out, always collect this information from the provider:</p>
+
+          <ul class="numbered-list">
+            <li>"What is the phone number you need me to dial?"</li>
+            <li>"Who should I say is calling?"</li>
+            <li>"May I please have the name of the person / patient we're calling?"</li>
+            <li>"Should I leave a message in case we reach a voicemail box?"</li>
+            <li>"Is there a callback number? (In case not stated before)"</li>
+          </ul>
+
+          <div class="script-box" style="margin-top:16px;border-left-color:var(--yellow);">
+            <div class="script-label">📝 DAL NOTE</div>
+            Direct Access Line (DAL) calls appear as standard audio calls. Check the Account field for "Direct Access Line" or "DAL". If the LEP offers a phone number, take it and proceed with dial-out.
+          </div>
+        </div>
+      </div>
+
+      <!-- LONG CALLS / WITHDRAWAL -->
+      <div class="protocol-card" id="pc-longcalls">
+        <div class="protocol-header" onclick="toggleProtocol('longcalls')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(248,113,113,0.15);">⏰</div>
+            <div>
+              <div class="protocol-title">Long Calls & Withdrawal Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-timing">Timing Critical</span>
+                <span class="tag tag-critical">Critical</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+            <div class="timing-badge warn">⚠️ 90 min → Self-monitor, consider transfer</div>
+            <div class="timing-badge danger">🚨 120 min → Expected to transfer</div>
+          </div>
+
+          <strong style="font-size:13px;color:var(--yellow);">Signs you need to transfer (90 min):</strong>
+          <ul class="checklist">
+            <li><div class="check-icon req">!</div> Increased fatigue</li>
+            <li><div class="check-icon req">!</div> Performance concerns</li>
+            <li><div class="check-icon req">!</div> Emotional distress responses</li>
+            <li><div class="check-icon req">!</div> Need to use restroom or drink water</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 To Provider (90+ min transfer)</div>
+            "[Provider], as the interpreter, I think we've reached a point in the conversation to switch out interpreters. Please remain on the line and you'll be connected to one of my colleagues momentarily. Thank you."
+          </div>
+
+          <div class="script-box ukraine">
+            <div class="script-label">🇺🇦 To Patient</div>
+            "Як перекладач, вважаю, що ми дійшли до моменту розмови, коли доцільно змінити перекладача. Будь ласка, залишайтеся на лінії — вас негайно з'єднають з одним із моїх колег. Дякую."
+          </div>
+
+          <strong style="font-size:13px;color:var(--text2);display:block;margin:16px 0 8px;">⚠️ Key Rules:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon note">!</div> End of shift alone is NOT a valid reason to withdraw</li>
+            <li><div class="check-icon note">!</div> If not tired at 120 min, you CAN remain</li>
+            <li><div class="check-icon note">!</div> Always note in Call Notes box</li>
+            <li><div class="check-icon note">!</div> Report on Discord; keep TL informed</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DUAL INTERPRETATION -->
+      <div class="protocol-card" id="pc-dual">
+        <div class="protocol-header" onclick="toggleProtocol('dual')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(244,114,182,0.15);">👥</div>
+            <div>
+              <div class="protocol-title">Dual Interpretation Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">When the patient (typically a minor) uses ASL while the parent speaks another language.</p>
+
+          <ul class="numbered-list">
+            <li>Whoever connects first adds the other needed language interpreter.</li>
+            <li>Put provider on brief hold to brief your team on the session.</li>
+            <li>The ASL interpreter takes the lead on interpretation and call flow.</li>
+          </ul>
+
+          <strong style="font-size:13px;color:var(--accent);display:block;margin:16px 0 8px;">Key Rules:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon opt">✓</div> If provider interacts with deaf patient — allow interaction, take notes before asking to pause.</li>
+            <li><div class="check-icon opt">✓</div> Identify yourself as "this is the (Ukrainian) interpreter" when clarifying.</li>
+            <li><div class="check-icon opt">✓</div> Always interpret each other's interpretation.</li>
+            <li><div class="check-icon opt">✓</div> Be transparent about all interactions.</li>
+            <li><div class="check-icon note">!</div> Make a note in Call Notes that this was a dual team interpretation.</li>
+            <li><div class="check-icon note">!</div> Report it on Discord.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SAY NO MODEL -->
+      <div class="protocol-card" id="pc-sayno">
+        <div class="protocol-header" onclick="toggleProtocol('sayno')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(248,113,113,0.15);">🚫</div>
+            <div>
+              <div class="protocol-title">"Say No" Model & Inappropriate Requests</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+                <span class="tag tag-critical">Critical</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">When someone makes an inappropriate request (gifts, personal hours, sight translation, etc.):</p>
+
+          <strong style="font-size:13px;color:var(--accent);">3 Steps:</strong>
+          <ul class="numbered-list" style="margin-top:10px;">
+            <li>Be gracious</li>
+            <li>Offer 2 or 3 alternatives</li>
+            <li>Give a reason</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Gift Scenario</div>
+            Caller: "Interpreter you have been amazing... can I send you a gift?"<br><br>
+            You: "Thank you for your appreciation of my service. Maybe you can donate this to the hospital, and they can make better use of it / maybe you can call customer service and let them know about my performance. Your appreciation for my job and kind words are more than enough for me."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Working Hours Scenario</div>
+            Caller: "What are your working hours?"<br><br>
+            You: "Thank you for your appreciation of my service. All of our interpreters are qualified, and you can call the line at any time since we have service 24/7. My hours can be changed so it wouldn't be something certain. I do appreciate your words, and you can always leave feedback about my performance."
+          </div>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 Sight Translation Scenario</div>
+            Caller: "Could you please do a sight translation of this document?"<br><br>
+            You: "Thank you for trusting my language skills and I understand that you need the information on this document to be transmitted. As an interpreter I can help you read it out loud and I'll interpret as you do, or maybe you can give me a summary of the document orally and I can interpret it as well. I'm stating this due to company policy."
+          </div>
+        </div>
+      </div>
+
+      <!-- SHADOWING -->
+      <div class="protocol-card" id="pc-shadowing">
+        <div class="protocol-header" onclick="toggleProtocol('shadowing')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(124,90,247,0.15);">👁️</div>
+            <div>
+              <div class="protocol-title">Shadowing Between Languages</div>
+              <div class="protocol-tags">
+                <span class="tag tag-scripted">Scripted</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">When the provider speaks Ukrainian or the patient starts speaking English, you can stay on the line shadowing.</p>
+
+          <div class="script-box">
+            <div class="script-label">🇺🇸 To Provider</div>
+            "This is the interpreter, I can tell you speak Ukrainian / your patient speaks some English. I will stay here shadowing in case you need me. I'll be paying attention and will jump in if there's any piece of information you deem very important."
+          </div>
+
+          <div class="script-box ukraine">
+            <div class="script-label">🇺🇦 To Patient</div>
+            "З вами говорить перекладач. Оскільки лікар розмовляє українською мовою / ви можете спілкуватися англійською, я залишатимусь на лінії та спостерігатиму на випадок, якщо буду потрібен(потрібна). Я уважно стежитиму за розмовою та втручатимусь, якщо буде повідомлено важливу інформацію."
+          </div>
+
+          <strong style="font-size:13px;color:var(--text2);display:block;margin:16px 0 8px;">Key Rules:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon opt">✓</div> Remain alert, keep taking notes as if interpreting.</li>
+            <li><div class="check-icon opt">✓</div> Be ready if summoned.</li>
+            <li><div class="check-icon opt">✓</div> Be proactive if a misunderstanding occurs.</li>
+            <li><div class="check-icon opt">✓</div> Make sure all parties know your presence.</li>
+            <li><div class="check-icon opt">✓</div> Be transparent at all times.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CALL NOTES -->
+      <div class="protocol-card" id="pc-callnotes">
+        <div class="protocol-header" onclick="toggleProtocol('callnotes')">
+          <div class="protocol-header-left">
+            <div class="protocol-icon" style="background:rgba(251,191,36,0.15);">📝</div>
+            <div>
+              <div class="protocol-title">Call Notes Protocol</div>
+              <div class="protocol-tags">
+                <span class="tag tag-mandatory">Mandatory</span>
+              </div>
+            </div>
+          </div>
+          <span class="protocol-chevron">▼</span>
+        </div>
+        <div class="protocol-body">
+          <p style="color:var(--text2);font-size:14px;margin-bottom:12px;">Always leave a note during your call, even if nothing eventful happened.</p>
+
+          <ul class="checklist">
+            <li><div class="check-icon req">✓</div> Information must be accurate and grammatically correct.</li>
+            <li><div class="check-icon req">✓</div> Don't be afraid to ask for spelling.</li>
+            <li><div class="check-icon req">✓</div> Names use CAPITAL LETTERS / UPPER CASE for initials.</li>
+          </ul>
+
+          <strong style="font-size:13px;color:var(--yellow);display:block;margin:16px 0 8px;">When data is refused:</strong>
+          <ul class="checklist">
+            <li><div class="check-icon note">!</div> If they provide initials → type the initials.</li>
+            <li><div class="check-icon req">!</div> If they still refuse → type <strong>N/A</strong> in CAPITALS.</li>
+            <li><div class="check-icon req">!</div> Leave a note that they refused to provide information.</li>
+          </ul>
+
+          <div class="script-box" style="border-left-color:var(--yellow);">
+            <div class="script-label">📋 Always Note These Events on Discord</div>
+            • Any hold over 10 minutes<br>
+            • Long calls approaching/exceeding 90 or 120 minutes<br>
+            • Dual interpretation sessions<br>
+            • Flexible hold situations<br>
+            • Life/death situations
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════ FLASHCARDS ══════════════════ -->
+  <div class="tab-content" id="content-flashcards">
+    <div class="fc-header">
+      <div>
+        <div class="section-title">🃏 Vocabulary Flashcards</div>
+        <div class="section-subtitle">Click the card to flip. Mark as known or unknown.</div>
+      </div>
+      <div class="fc-controls">
+        <select class="select-styled" id="fcCategory" onchange="initFlashcards()">
+          <option value="all">All Categories (469)</option>
+          <option value="VOCAB">General Medical Vocab (75)</option>
+          <option value="PROC ACRONYMS">Procedures & Acronyms (16)</option>
+          <option value="MEDICATIONS">Medications (13)</option>
+          <option value="ROUTINE VISITS">Routine Visits (29)</option>
+          <option value="SPECIALTY CARE">Specialty Care (39)</option>
+          <option value="PAIN DESCRIPTORS">Pain Descriptors (93)</option>
+          <option value="ANATOMY">Anatomy (96)</option>
+          <option value="MED INSURANCE">Medical Insurance (108)</option>
+        </select>
+        <select class="select-styled" id="fcDirection">
+          <option value="en-uk">English → Ukrainian</option>
+          <option value="uk-en">Ukrainian → English</option>
+          <option value="random">Random Direction</option>
+        </select>
+        <button class="btn btn-ghost" onclick="shuffleCards()">🔀 Shuffle</button>
+        <button class="btn btn-primary" onclick="initFlashcards()">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="fcProgressBar" style="width:0%"></div>
+    </div>
+
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-face fc-front" id="fcFront">
+          <div class="fc-label">ENGLISH</div>
+          <div class="fc-word" id="fcFrontWord">Loading...</div>
+          <div class="fc-hint">Click to reveal Ukrainian</div>
+        </div>
+        <div class="fc-face fc-back" id="fcBack">
+          <div class="fc-label">UKRAINIAN</div>
+          <div class="fc-word" id="fcBackWord"></div>
+          <button class="speak-btn" onclick="event.stopPropagation(); speakWord()" id="speakBtn">🔊 Hear it</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-nav">
+      <button class="btn btn-ghost" onclick="prevCard()">← Prev</button>
+      <div class="fc-counter" id="fcCounter">1 / 0</div>
+      <button class="btn btn-ghost" onclick="nextCard()">Next →</button>
+    </div>
+
+    <div class="fc-actions">
+      <button class="btn btn-red" onclick="markCard(false)">✗ Don't Know</button>
+      <button class="btn btn-green" onclick="markCard(true)">✓ Got It!</button>
+    </div>
+
+    <div id="fcStats" style="text-align:center;font-size:14px;color:var(--text3);">
+      Known: <span id="fcKnown" style="color:var(--green);font-weight:700;">0</span> &nbsp;|&nbsp;
+      Unknown: <span id="fcUnknown" style="color:var(--red);font-weight:700;">0</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════ QUIZ ══════════════════ -->
+  <div class="tab-content" id="content-quiz">
+    <div class="fc-header">
+      <div>
+        <div class="section-title">🎯 Practice Quiz</div>
+        <div class="section-subtitle">Test your knowledge with randomized multiple-choice questions.</div>
+      </div>
+      <div class="fc-controls">
+        <select class="select-styled" id="quizCategory">
+          <option value="all">All Categories</option>
+          <option value="VOCAB">General Medical Vocab</option>
+          <option value="PROC ACRONYMS">Procedures & Acronyms</option>
+          <option value="MEDICATIONS">Medications</option>
+          <option value="ROUTINE VISITS">Routine Visits</option>
+          <option value="SPECIALTY CARE">Specialty Care</option>
+          <option value="PAIN DESCRIPTORS">Pain Descriptors</option>
+          <option value="ANATOMY">Anatomy</option>
+          <option value="MED INSURANCE">Medical Insurance</option>
+          <option value="protocols">Protocols</option>
+        </select>
+        <select class="select-styled" id="quizCount">
+          <option value="10">10 Questions</option>
+          <option value="20" selected>20 Questions</option>
+          <option value="30">30 Questions</option>
+          <option value="50">50 Questions</option>
+        </select>
+        <button class="btn btn-primary" onclick="startQuiz()">▶ Start Quiz</button>
+      </div>
+    </div>
+
+    <div id="quizContainer">
+      <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:64px;margin-bottom:20px;">🎯</div>
+        <div style="font-size:20px;font-weight:700;margin-bottom:12px;">Ready to be tested?</div>
+        <div style="color:var(--text3);margin-bottom:28px;">Select a category and question count, then hit Start Quiz.</div>
+        <button class="btn btn-primary pulsing" onclick="startQuiz()" style="font-size:16px;padding:14px 32px;">▶ Start Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ GLOSSARY ══════════════════ -->
+  <div class="tab-content" id="content-glossary">
+    <div class="section-title">📖 Full Glossary</div>
+    <div class="section-subtitle">All 469 terms from the Interpreters Glossary. Search in English or Ukrainian.</div>
+
+    <div class="glossary-header">
+      <input type="text" class="search-input" id="glossarySearch" placeholder="🔍 Search English or Ukrainian..." oninput="filterGlossary()">
+      <select class="select-styled" id="glossaryFilter" onchange="filterGlossary()">
+        <option value="all">All Categories</option>
+        <option value="VOCAB">General Vocab</option>
+        <option value="PROC ACRONYMS">Proc Acronyms</option>
+        <option value="MEDICATIONS">Medications</option>
+        <option value="ROUTINE VISITS">Routine Visits</option>
+        <option value="SPECIALTY CARE">Specialty Care</option>
+        <option value="PAIN DESCRIPTORS">Pain Descriptors</option>
+        <option value="ANATOMY">Anatomy</option>
+        <option value="MED INSURANCE">Med Insurance</option>
+      </select>
+    </div>
+
+    <div class="glossary-table-wrap" style="max-height:65vh;overflow-y:auto;">
+      <table class="glossary-table">
+        <thead>
+          <tr>
+            <th>English</th>
+            <th>Ukrainian</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="glossaryBody"></tbody>
+      </table>
+    </div>
+    <div id="glossaryCount" style="text-align:right;font-size:13px;color:var(--text3);margin-top:12px;"></div>
+  </div>
+
+  <!-- ══════════════════ CHEAT SHEET ══════════════════ -->
+  <div class="tab-content" id="content-cheatsheet">
+    <div class="section-title">⚡ Quick Cheat Sheet</div>
+    <div class="section-subtitle">Everything critical on one page. Memorize these cold.</div>
+
+    <div class="cheatsheet-grid">
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">⏱️ Critical Timings</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <table style="width:100%;font-size:13px;border-collapse:collapse;">
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Blue/black screen hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--red);font-weight:700;text-align:right;">60 seconds</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Standard hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">10 minutes</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Unspecified flexible hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">20 minutes</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Life/death hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--green);font-weight:700;text-align:right;">Indefinitely</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Self-monitor & consider transfer</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">90 min</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:var(--text2);">Must transfer</td>
+              <td style="padding:8px 0;color:var(--red);font-weight:700;text-align:right;">120 min</td>
+            </tr>
+          </table>
+          <div style="margin-top:16px;padding:12px;background:rgba(52,211,153,0.1);border-radius:8px;border:1px solid rgba(52,211,153,0.2);">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">📞 TECH SUPPORT NUMBER</div>
+            <div style="font-size:20px;font-weight:800;color:var(--green);">1-866-449-4428</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(79,142,247,0.1);color:var(--accent);">👋 Greeting — Provider (Mandatory)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Your name</li>
+            <li>Language (Ukrainian)</li>
+            <li>ID number</li>
+            <li>"Everything will be interpreted"</li>
+          </ol>
+          <div style="margin-top:16px;padding:12px;background:rgba(79,142,247,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
+            "Hello, this is _____, your Ukrainian interpreter, ID XXXXX. Everything in the session will be interpreted. How can I help you?"
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(167,139,250,0.1);color:var(--purple);">🇺🇦 Greeting — Patient (Mandatory)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Your name</li>
+            <li>Language being interpreted into</li>
+            <li>Everything will be kept confidential</li>
+            <li>Everything will be interpreted</li>
+          </ol>
+          <div style="margin-top:16px;padding:12px;background:rgba(167,139,250,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
+            "Добрий день, мене звати ___, я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним."
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">🏁 Closing — Audio (4 steps)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>State Interpreter's ID #</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to LEP (in Ukrainian)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">📹 Closing — Video (4 steps)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>Remind doctor to rate the call</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to LEP (in Ukrainian)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(251,191,36,0.1);color:var(--yellow);">⏸️ Hold — 5 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Inform provider of 10-min policy</li>
+            <li>Inform LEP of the hold</li>
+            <li>Turn camera off + mute audio</li>
+            <li>Note in Call Notes</li>
+            <li>Report on Discord</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">📲 Dial-Out — 5 Questions</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>What phone number to dial?</li>
+            <li>Who should I say is calling?</li>
+            <li>Name of person/patient?</li>
+            <li>Leave a voicemail message?</li>
+            <li>Callback number?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">🔧 Troubleshoot — 3 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Ask provider to reposition / toggle camera</li>
+            <li>If unresolved: camera off, continue</li>
+            <li>If still unresolved: connect to another interpreter + give Tech Support # (1-866-449-4428)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(124,90,247,0.1);color:var(--accent2);">🔔 Intervention — 3 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Identify self as interpreter to waiting party</li>
+            <li>Identify self to the other party, request clarification</li>
+            <li>Resume interpreting</li>
+          </ol>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">Script: "This is the interpreter speaking / Excuse me, the interpreter needs to clarify..."</div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">👤 3rd Person Exceptions</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:12px;">3rd person is ALLOWED for:</div>
+          <ul style="list-style:none;font-size:13px;color:var(--text2);">
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Children ≤ 7 years old</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Emergencies (summarizing)</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Dementia / substance abuse / post-surgery</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Mentally ill patients</li>
+            <li style="padding:6px 0;">• Trauma-triggered during call</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(251,191,36,0.1);color:var(--yellow);">📝 Call Notes Rules</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ul style="list-style:none;font-size:13px;color:var(--text2);">
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• ALWAYS leave a note, even if nothing happened</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Names → CAPITAL LETTERS</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Refused initials → type initials given</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Full refusal → type <strong>N/A</strong> in caps</li>
+            <li style="padding:6px 0;">• Note reason for refusal</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(244,114,182,0.1);color:var(--pink);">🚫 "Say No" Model</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Be gracious</li>
+            <li>Offer 2-3 alternatives</li>
+            <li>Give a reason (e.g., company policy)</li>
+          </ol>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">Use for: gift offers, working hours questions, sight translation requests</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════ AUDIOBOOK ══════════════════ -->
+  <div class="tab-content" id="content-audiobook">
+    <div class="section-title">🎧 Audiobook Scripts</div>
+    <div class="section-subtitle">Copy these scripts into any text-to-speech tool (e.g., Natural Reader, Speechify, ElevenLabs, or even Google's TTS). Listen while commuting, exercising, or before bed.</div>
+
+    <div style="background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:12px;padding:16px 20px;margin-bottom:28px;font-size:14px;color:var(--text2);">
+      <strong style="color:var(--accent);">💡 Recommended TTS Tools:</strong><br>
+      • <strong>Natural Reader</strong> (naturaltts.com) — Free, good voices<br>
+      • <strong>ElevenLabs</strong> (elevenlabs.io) — Premium quality, free tier available<br>
+      • <strong>Speechify</strong> (speechify.com) — Great mobile app<br>
+      • <strong>Google TTS</strong> — Built into Chrome: Settings → Accessibility → Read Aloud<br>
+      • <strong>macOS</strong>: System Settings → Accessibility → Spoken Content → Speak selection
+    </div>
+
+    <div class="audio-grid" id="audiobookGrid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+</main>
+
+<!-- ── RESULT MODAL ── -->
+<div class="modal-overlay" id="quizResultModal">
+  <div class="modal">
+    <div class="modal-emoji" id="resultEmoji">🏆</div>
+    <div class="modal-title" id="resultTitle">Quiz Complete!</div>
+    <div class="modal-score" id="resultScore"></div>
+    <div class="modal-desc" id="resultDesc"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="startQuiz()">Try Again</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Review Results</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA — All 469 glossary terms
+// ══════════════════════════════════════════════
+
+const GLOSSARY_DATA = {
+  "VOCAB": [
+    {"english":"Bloodwork","ukrainian":"Аналіз крові"},{"english":"Anemia","ukrainian":"Анемія"},{"english":"Weight gain","ukrainian":"Набір ваги"},{"english":"Weight loss","ukrainian":"Втрата ваги"},{"english":"High blood pressure","ukrainian":"Високий кров'яний тиск"},{"english":"Low blood pressure","ukrainian":"Низький кров'яний тиск"},{"english":"Diabetes","ukrainian":"Діабет"},{"english":"Cholesterol","ukrainian":"Холестерин"},{"english":"Blood sugar","ukrainian":"Рівень цукру в крові"},{"english":"Heart rate","ukrainian":"Частота серцевих скорочень"},{"english":"Pulse","ukrainian":"Пульс"},{"english":"Fever","ukrainian":"Лихоманка"},{"english":"Nausea","ukrainian":"Нудота"},{"english":"Vomiting","ukrainian":"Блювання"},{"english":"Diarrhea","ukrainian":"Діарея"},{"english":"Constipation","ukrainian":"Запор"},{"english":"Fatigue","ukrainian":"Втома"},{"english":"Shortness of breath","ukrainian":"Задишка"},{"english":"Chest pain","ukrainian":"Біль у грудях"},{"english":"Rash","ukrainian":"Висип"},{"english":"Swelling","ukrainian":"Набряк"},{"english":"Infection","ukrainian":"Інфекція"},{"english":"Inflammation","ukrainian":"Запалення"},{"english":"Fracture","ukrainian":"Перелом"},{"english":"Sprain","ukrainian":"Розтягнення"},{"english":"Allergy","ukrainian":"Алергія"},{"english":"Asthma","ukrainian":"Астма"},{"english":"Cancer","ukrainian":"Рак"},{"english":"Stroke","ukrainian":"Інсульт"},{"english":"Heart attack","ukrainian":"Серцевий напад"},{"english":"Seizure","ukrainian":"Судоми"},{"english":"Migraine","ukrainian":"Мігрень"},{"english":"Arthritis","ukrainian":"Артрит"},{"english":"Pregnancy","ukrainian":"Вагітність"},{"english":"Miscarriage","ukrainian":"Викидень"},{"english":"Discharge","ukrainian":"Виділення"},{"english":"Urine","ukrainian":"Сеча"},{"english":"Stool","ukrainian":"Кал"},{"english":"X-ray","ukrainian":"Рентген"},{"english":"MRI","ukrainian":"МРТ"},{"english":"Ultrasound","ukrainian":"УЗД"},{"english":"Biopsy","ukrainian":"Біопсія"},{"english":"Surgery","ukrainian":"Хірургічна операція"},{"english":"Anesthesia","ukrainian":"Анестезія"},{"english":"Wound","ukrainian":"Рана"},{"english":"Sutures","ukrainian":"Шви"},{"english":"Catheter","ukrainian":"Катетер"},{"english":"IV (Intravenous)","ukrainian":"Внутрішньовенне введення"},{"english":"Vaccination","ukrainian":"Вакцинація"},{"english":"Immunization","ukrainian":"Імунізація"},{"english":"Blood type","ukrainian":"Група крові"},{"english":"Platelet","ukrainian":"Тромбоцит"},{"english":"White blood cell","ukrainian":"Лейкоцит"},{"english":"Red blood cell","ukrainian":"Еритроцит"},{"english":"Hemoglobin","ukrainian":"Гемоглобін"},{"english":"Antibiotic","ukrainian":"Антибіотик"},{"english":"Antiviral","ukrainian":"Противірусний препарат"},{"english":"Anti-inflammatory","ukrainian":"Протизапальний препарат"},{"english":"Painkiller","ukrainian":"Знеболюючий препарат"},{"english":"Insulin","ukrainian":"Інсулін"},{"english":"Blood pressure cuff","ukrainian":"Тонометр"},{"english":"Stethoscope","ukrainian":"Стетоскоп"},{"english":"Thermometer","ukrainian":"Термометр"},{"english":"Oxygen","ukrainian":"Кисень"},{"english":"Ventilator","ukrainian":"Апарат штучної вентиляції легенів"},{"english":"Intubation","ukrainian":"Інтубація"},{"english":"CPR","ukrainian":"Серцево-легенева реанімація"},{"english":"AED","ukrainian":"Автоматичний зовнішній дефібрилятор"},{"english":"Emergency","ukrainian":"Невідкладна допомога"},{"english":"ICU","ukrainian":"Відділення інтенсивної терапії"},{"english":"ER (Emergency Room)","ukrainian":"Відділення швидкої допомоги"},{"english":"Ambulance","ukrainian":"Швидка допомога"},{"english":"Discharge (hospital)","ukrainian":"Виписка зі стаціонару"},{"english":"Referral","ukrainian":"Направлення"},{"english":"Prescription","ukrainian":"Рецепт"}
+  ],
+  "PROC ACRONYMS": [
+    {"english":"CAT scan (Computer Axial Tomography)","ukrainian":"КТ (комп'ютерна аксіальна томографія)"},{"english":"DPT (Diphtheria, Pertussis, Tetanus)","ukrainian":"АКДП (дифтерія, кашлюк, правець)"},{"english":"PCOS (Polycystic Ovarian Syndrome)","ukrainian":"СПКЯ (синдром полікістозних яєчників)"},{"english":"COPD (Chronic Obstructive Pulmonary Disease)","ukrainian":"ХОЗЛ (хронічне обструктивне захворювання легенів)"},{"english":"EKG/ECG (Electrocardiogram)","ukrainian":"ЕКГ (електрокардіограма)"},{"english":"BMI (Body Mass Index)","ukrainian":"ІМТ (індекс маси тіла)"},{"english":"BP (Blood Pressure)","ukrainian":"АТ (артеріальний тиск)"},{"english":"HR (Heart Rate)","ukrainian":"ЧСС (частота серцевих скорочень)"},{"english":"CBC (Complete Blood Count)","ukrainian":"ЗАК (загальний аналіз крові)"},{"english":"UTI (Urinary Tract Infection)","ukrainian":"ІСШ (інфекція сечовивідних шляхів)"},{"english":"STI (Sexually Transmitted Infection)","ukrainian":"ІПСШ (інфекція, що передається статевим шляхом)"},{"english":"HIV (Human Immunodeficiency Virus)","ukrainian":"ВІЛ (вірус імунодефіциту людини)"},{"english":"AIDS (Acquired Immunodeficiency Syndrome)","ukrainian":"СНІД (синдром набутого імунодефіциту)"},{"english":"TB (Tuberculosis)","ukrainian":"ТБ (туберкульоз)"},{"english":"GI (Gastrointestinal)","ukrainian":"ШКТ (шлунково-кишковий тракт)"},{"english":"OB/GYN (Obstetrics/Gynecology)","ukrainian":"Акушерство/Гінекологія"}
+  ],
+  "MEDICATIONS": [
+    {"english":"Brand Name","ukrainian":"Торгова назва"},{"english":"Generic Name","ukrainian":"Міжнародна непатентована назва"},{"english":"Prescription","ukrainian":"Рецептурний препарат"},{"english":"Over-the-Counter (OTC)","ukrainian":"Безрецептурний препарат"},{"english":"Dosage","ukrainian":"Дозування"},{"english":"Side Effects","ukrainian":"Побічні ефекти"},{"english":"Drug Interactions","ukrainian":"Взаємодія ліків"},{"english":"Refill","ukrainian":"Поповнення рецепту"},{"english":"Pharmacy","ukrainian":"Аптека"},{"english":"Pharmacist","ukrainian":"Фармацевт"},{"english":"Controlled Substance","ukrainian":"Контрольована речовина"},{"english":"Narcotics","ukrainian":"Наркотичні речовини"},{"english":"Supplement","ukrainian":"Харчова добавка"}
+  ],
+  "ROUTINE VISITS": [
+    {"english":"Annual Check-up","ukrainian":"Щорічний медичний огляд"},{"english":"Physical Exam","ukrainian":"Фізикальний огляд"},{"english":"Pap Smear","ukrainian":"ПАП-тест"},{"english":"Mammogram","ukrainian":"Мамографія"},{"english":"Colonoscopy","ukrainian":"Колоноскопія"},{"english":"Eye Exam","ukrainian":"Огляд очей"},{"english":"Dental Exam","ukrainian":"Стоматологічний огляд"},{"english":"Well-Child Visit","ukrainian":"Плановий педіатричний огляд"},{"english":"Immunization Record","ukrainian":"Карта вакцинації"},{"english":"Height and Weight","ukrainian":"Зріст і вага"},{"english":"Blood Pressure Check","ukrainian":"Вимірювання артеріального тиску"},{"english":"Urinalysis","ukrainian":"Загальний аналіз сечі"},{"english":"Cholesterol Test","ukrainian":"Аналіз на холестерин"},{"english":"Blood Glucose Test","ukrainian":"Аналіз на глюкозу крові"},{"english":"Prostate Exam","ukrainian":"Дослідження простати"},{"english":"Skin Cancer Screening","ukrainian":"Скринінг раку шкіри"},{"english":"STI Screening","ukrainian":"Скринінг ІПСШ"},{"english":"Depression Screening","ukrainian":"Скринінг депресії"},{"english":"Hearing Test","ukrainian":"Тест на слух"},{"english":"Bone Density Test","ukrainian":"Денситометрія (тест на щільність кісток)"},{"english":"Thyroid Function Test","ukrainian":"Аналіз функції щитовидної залози"},{"english":"Vitamin D Level","ukrainian":"Рівень вітаміну D"},{"english":"Iron Level","ukrainian":"Рівень заліза"},{"english":"Liver Function Test","ukrainian":"Аналіз функції печінки"},{"english":"Kidney Function Test","ukrainian":"Аналіз функції нирок"},{"english":"Follow-up Appointment","ukrainian":"Повторний прийом"},{"english":"Referral","ukrainian":"Направлення до спеціаліста"},{"english":"Medical History","ukrainian":"Медична історія"},{"english":"Vital Signs","ukrainian":"Показники життєдіяльності"}
+  ],
+  "SPECIALTY CARE": [
+    {"english":"Internal medicine doctors","ukrainian":"Лікарі внутрішньої медицини"},{"english":"Pediatricians","ukrainian":"Педіатри"},{"english":"Family medicine doctors","ukrainian":"Лікарі сімейної медицини"},{"english":"Obstetricians and gynecologists","ukrainian":"Акушери-гінекологи"},{"english":"Cardiologists","ukrainian":"Кардіологи"},{"english":"Orthopedic surgeons","ukrainian":"Ортопедичні хірурги"},{"english":"Dermatologists","ukrainian":"Дерматологи"},{"english":"Ophthalmologists","ukrainian":"Офтальмологи"},{"english":"Psychiatrists","ukrainian":"Психіатри"},{"english":"Urologists","ukrainian":"Урологи"},{"english":"Neurologists","ukrainian":"Неврологи"},{"english":"Endocrinologists","ukrainian":"Ендокринологи"},{"english":"Gastroenterologists","ukrainian":"Гастроентерологи"},{"english":"Rheumatologists","ukrainian":"Ревматологи"},{"english":"Pulmonologists","ukrainian":"Пульмонологи"},{"english":"Oncologists","ukrainian":"Онкологи"},{"english":"Hematologists","ukrainian":"Гематологи"},{"english":"Nephrologists","ukrainian":"Нефрологи"},{"english":"Infectious disease specialists","ukrainian":"Спеціалісти з інфекційних хвороб"},{"english":"Allergists","ukrainian":"Алергологи"},{"english":"Immunologists","ukrainian":"Імунологи"},{"english":"Surgeons","ukrainian":"Хірурги"},{"english":"Anesthesiologists","ukrainian":"Анестезіологи"},{"english":"Radiologists","ukrainian":"Радіологи"},{"english":"Pathologists","ukrainian":"Патологоанатоми"},{"english":"Emergency medicine doctors","ukrainian":"Лікарі швидкої допомоги"},{"english":"Physical therapists","ukrainian":"Фізіотерапевти"},{"english":"Occupational therapists","ukrainian":"Ерготерапевти"},{"english":"Speech therapists","ukrainian":"Логопеди"},{"english":"Audiologists","ukrainian":"Аудіологи"},{"english":"Optometrists","ukrainian":"Оптометристи"},{"english":"Dentists","ukrainian":"Стоматологи"},{"english":"Oral surgeons","ukrainian":"Щелепно-лицьові хірурги"},{"english":"Orthodontists","ukrainian":"Ортодонти"},{"english":"Chiropractors","ukrainian":"Мануальні терапевти"},{"english":"Podiatrists","ukrainian":"Подіатри"},{"english":"Dietitians/Nutritionists","ukrainian":"Дієтологи/Нутриціоністи"},{"english":"Social workers","ukrainian":"Соціальні працівники"},{"english":"Psychologists","ukrainian":"Психологи"}
+  ],
+  "PAIN DESCRIPTORS": [
+    {"english":"Abrupt","ukrainian":"Раптовий"},{"english":"Aching","ukrainian":"Той, що болить"},{"english":"Acute","ukrainian":"Гострий"},{"english":"Annoying","ukrainian":"Дратівливий"},{"english":"Bearable","ukrainian":"Терпимий"},{"english":"Blunt","ukrainian":"Тупий"},{"english":"Brief","ukrainian":"Короткочасний"},{"english":"Burning","ukrainian":"Пекучий"},{"english":"Chronic","ukrainian":"Хронічний"},{"english":"Colicky","ukrainian":"Кольковий"},{"english":"Constant","ukrainian":"Постійний"},{"english":"Cramping","ukrainian":"Судомний"},{"english":"Crushing","ukrainian":"Розчавлюючий"},{"english":"Debilitating","ukrainian":"Виснажливий"},{"english":"Deep","ukrainian":"Глибокий"},{"english":"Diffuse","ukrainian":"Розлитий"},{"english":"Dull","ukrainian":"Тупий"},{"english":"Excruciating","ukrainian":"Нестерпний"},{"english":"Fleeting","ukrainian":"Минущий"},{"english":"Gnawing","ukrainian":"Гризучий"},{"english":"Grating","ukrainian":"Скрипучий"},{"english":"Heavy","ukrainian":"Важкий"},{"english":"Intense","ukrainian":"Інтенсивний"},{"english":"Intermittent","ukrainian":"Переривчастий"},{"english":"Intractable","ukrainian":"Нездоланний"},{"english":"Lancinating","ukrainian":"Стріляючий"},{"english":"Localized","ukrainian":"Локалізований"},{"english":"Mild","ukrainian":"Легкий"},{"english":"Moderate","ukrainian":"Помірний"},{"english":"Moving","ukrainian":"Мігруючий"},{"english":"Nagging","ukrainian":"Постійний / Набридливий"},{"english":"Neuropathic","ukrainian":"Нейропатичний"},{"english":"Nociceptive","ukrainian":"Ноцицептивний"},{"english":"Numbness","ukrainian":"Оніміння"},{"english":"Persistent","ukrainian":"Стійкий"},{"english":"Piercing","ukrainian":"Пронизливий"},{"english":"Pins and needles","ukrainian":"Поколювання"},{"english":"Pressure","ukrainian":"Тиснучий"},{"english":"Prickling","ukrainian":"Поколюючий"},{"english":"Pulsating","ukrainian":"Пульсуючий"},{"english":"Radiating","ukrainian":"Іррадіюючий"},{"english":"Raw","ukrainian":"Сирий / Болючий"},{"english":"Recurring","ukrainian":"Повторний"},{"english":"Referred","ukrainian":"Відображений"},{"english":"Relentless","ukrainian":"Невпинний"},{"english":"Severe","ukrainian":"Тяжкий"},{"english":"Sharp","ukrainian":"Гострий"},{"english":"Shooting","ukrainian":"Стріляючий"},{"english":"Sore","ukrainian":"Болючий"},{"english":"Spasmodic","ukrainian":"Спазматичний"},{"english":"Splitting","ukrainian":"Розривний"},{"english":"Sporadic","ukrainian":"Спорадичний"},{"english":"Squeezing","ukrainian":"Стискаючий"},{"english":"Stabbing","ukrainian":"Колючий"},{"english":"Stiff","ukrainian":"Жорсткий"},{"english":"Stinging","ukrainian":"Пекучий"},{"english":"Sudden","ukrainian":"Раптовий"},{"english":"Superficial","ukrainian":"Поверхневий"},{"english":"Tender","ukrainian":"Чутливий до дотику"},{"english":"Throbbing","ukrainian":"Пульсуючий"},{"english":"Tight","ukrainian":"Стискаючий"},{"english":"Tingling","ukrainian":"Поколювання"},{"english":"Tolerable","ukrainian":"Терпимий"},{"english":"Tormenting","ukrainian":"Мучительний"},{"english":"Transient","ukrainian":"Минущий"},{"english":"Unbearable","ukrainian":"Нестерпний"},{"english":"Uncomfortable","ukrainian":"Неприємний"},{"english":"Unrelenting","ukrainian":"Невщухаючий"},{"english":"Vague","ukrainian":"Невизначений"},{"english":"Violent","ukrainian":"Сильний"},{"english":"Wandering","ukrainian":"Блукаючий"},{"english":"Waxing and waning","ukrainian":"Наростаючий і спадаючий"},{"english":"Widespread","ukrainian":"Поширений"},{"english":"Worsening","ukrainian":"Наростаючий"},{"english":"Aching (joints)","ukrainian":"Суглобовий біль"},{"english":"Burning (skin)","ukrainian":"Шкірне печіння"},{"english":"Cold","ukrainian":"Холодний"},{"english":"Electric","ukrainian":"Електричний"},{"english":"Excruciating (severe)","ukrainian":"Вкрай нестерпний"},{"english":"Flare-up","ukrainian":"Загострення"},{"english":"Hypersensitive","ukrainian":"Гіперчутливий"},{"english":"Inflammatory","ukrainian":"Запальний"},{"english":"Nerve pain","ukrainian":"Нервовий біль"},{"english":"Phantom","ukrainian":"Фантомний"},{"english":"Post-operative","ukrainian":"Після операційний"},{"english":"Pressure (headache)","ukrainian":"Тиснучий (головний біль)"},{"english":"Referred (back pain)","ukrainian":"Відображений (біль у спині)"},{"english":"Rheumatic","ukrainian":"Ревматичний"}
+  ],
+  "ANATOMY": [
+    {"english":"Clavicle","ukrainian":"Ключиця"},{"english":"Femur","ukrainian":"Стегнова кістка"},{"english":"Fibula","ukrainian":"Мала гомілкова кістка"},{"english":"Humerus","ukrainian":"Плечова кістка"},{"english":"Mandible","ukrainian":"Нижня щелепа"},{"english":"Patella","ukrainian":"Колінна чашечка"},{"english":"Pelvis","ukrainian":"Таз"},{"english":"Radius","ukrainian":"Променева кістка"},{"english":"Ribcage","ukrainian":"Грудна клітка"},{"english":"Scapula","ukrainian":"Лопатка"},{"english":"Skull","ukrainian":"Череп"},{"english":"Spine","ukrainian":"Хребет"},{"english":"Sternum","ukrainian":"Грудина"},{"english":"Tibia","ukrainian":"Велика гомілкова кістка"},{"english":"Ulna","ukrainian":"Ліктьова кістка"},{"english":"Vertebra","ukrainian":"Хребець"},{"english":"Biceps","ukrainian":"Двоголовий м'яз (біцепс)"},{"english":"Deltoid","ukrainian":"Дельтоподібний м'яз"},{"english":"Diaphragm","ukrainian":"Діафрагма"},{"english":"Gluteus","ukrainian":"Сідничний м'яз"},{"english":"Hamstring","ukrainian":"Підколінні сухожилля"},{"english":"Quadriceps","ukrainian":"Чотириголовий м'яз стегна"},{"english":"Rotator cuff","ukrainian":"Ротаторна манжета плеча"},{"english":"Achilles tendon","ukrainian":"Ахіллесове сухожилля"},{"english":"Ligament","ukrainian":"Зв'язка"},{"english":"Tendon","ukrainian":"Сухожилля"},{"english":"Aorta","ukrainian":"Аорта"},{"english":"Artery","ukrainian":"Артерія"},{"english":"Capillary","ukrainian":"Капіляр"},{"english":"Vein","ukrainian":"Вена"},{"english":"Atrium","ukrainian":"Передсердя"},{"english":"Ventricle","ukrainian":"Шлуночок"},{"english":"Valve (heart)","ukrainian":"Серцевий клапан"},{"english":"Appendix","ukrainian":"Апендикс"},{"english":"Colon","ukrainian":"Товста кишка"},{"english":"Duodenum","ukrainian":"Дванадцятипала кишка"},{"english":"Esophagus","ukrainian":"Стравохід"},{"english":"Gallbladder","ukrainian":"Жовчний міхур"},{"english":"Intestine (large)","ukrainian":"Товста кишка"},{"english":"Intestine (small)","ukrainian":"Тонка кишка"},{"english":"Liver","ukrainian":"Печінка"},{"english":"Pancreas","ukrainian":"Підшлункова залоза"},{"english":"Rectum","ukrainian":"Пряма кишка"},{"english":"Stomach","ukrainian":"Шлунок"},{"english":"Adrenal gland","ukrainian":"Надниркова залоза"},{"english":"Bladder","ukrainian":"Сечовий міхур"},{"english":"Kidney","ukrainian":"Нирка"},{"english":"Ovary","ukrainian":"Яєчник"},{"english":"Prostate","ukrainian":"Простата"},{"english":"Testicle","ukrainian":"Яєчко"},{"english":"Thyroid","ukrainian":"Щитовидна залоза"},{"english":"Uterus","ukrainian":"Матка"},{"english":"Bronchus","ukrainian":"Бронх"},{"english":"Larynx","ukrainian":"Гортань"},{"english":"Lung","ukrainian":"Легеня"},{"english":"Pharynx","ukrainian":"Глотка"},{"english":"Trachea","ukrainian":"Трахея"},{"english":"Brain","ukrainian":"Мозок"},{"english":"Cerebellum","ukrainian":"Мозочок"},{"english":"Cerebrum","ukrainian":"Великий мозок"},{"english":"Nerve","ukrainian":"Нерв"},{"english":"Spinal cord","ukrainian":"Спинний мозок"},{"english":"Cornea","ukrainian":"Рогівка"},{"english":"Eardrum","ukrainian":"Барабанна перетинка"},{"english":"Eustachian tube","ukrainian":"Євстахієва труба"},{"english":"Iris","ukrainian":"Райдужна оболонка"},{"english":"Lens","ukrainian":"Кришталик"},{"english":"Optic nerve","ukrainian":"Зоровий нерв"},{"english":"Pupil","ukrainian":"Зіниця"},{"english":"Retina","ukrainian":"Сітківка"},{"english":"Lymph node","ukrainian":"Лімфатичний вузол"},{"english":"Lymph vessel","ukrainian":"Лімфатична судина"},{"english":"Spleen","ukrainian":"Селезінка"},{"english":"Thymus","ukrainian":"Тимус (загрудна залоза)"},{"english":"Bone marrow","ukrainian":"Кістковий мозок"},{"english":"Skin (dermis)","ukrainian":"Шкіра (дерма)"},{"english":"Epidermis","ukrainian":"Епідерміс"},{"english":"Hair follicle","ukrainian":"Волосяний фолікул"},{"english":"Nail","ukrainian":"Ніготь"},{"english":"Sebaceous gland","ukrainian":"Сальна залоза"},{"english":"Sweat gland","ukrainian":"Потова залоза"},{"english":"Ankle","ukrainian":"Кісточка"},{"english":"Armpit","ukrainian":"Пахва"},{"english":"Chin","ukrainian":"Підборіддя"},{"english":"Elbow","ukrainian":"Лікоть"},{"english":"Groin","ukrainian":"Пах"},{"english":"Heel","ukrainian":"П'ята"},{"english":"Hip","ukrainian":"Стегно"},{"english":"Knee","ukrainian":"Коліно"},{"english":"Navel","ukrainian":"Пупок"},{"english":"Shoulder","ukrainian":"Плече"},{"english":"Wrist","ukrainian":"Зап'ясток"}
+  ],
+  "MED INSURANCE": [
+    {"english":"ACA (Affordable Care Act)","ukrainian":"Закон про доступну медичну допомогу","section":"General"},{"english":"Allowed Amount","ukrainian":"Дозволена сума","section":"General"},{"english":"Balance Billing","ukrainian":"Виставлення рахунку на залишок","section":"General"},{"english":"Benefit Period","ukrainian":"Пільговий період","section":"General"},{"english":"Coinsurance","ukrainian":"Співстрахування","section":"General"},{"english":"Community Rating","ukrainian":"Рейтинг спільноти","section":"General"},{"english":"Coordination of Benefits (COB)","ukrainian":"Координація виплат","section":"General"},{"english":"Copayment (Copay)","ukrainian":"Співплата","section":"General"},{"english":"Cost Sharing","ukrainian":"Розподіл витрат","section":"General"},{"english":"Deductible","ukrainian":"Франшиза (сума, яку пізніше покриє страхування)","section":"General"},{"english":"Dependent","ukrainian":"Залежний","section":"General"},{"english":"Drug Formulary","ukrainian":"Перелік лікарських препаратів","section":"General"},{"english":"Dual Eligibility","ukrainian":"Подвійна правомочність","section":"General"},{"english":"Durable Medical Equipment (DME)","ukrainian":"Медичне обладнання тривалого користування","section":"General"},{"english":"EOB (Explanation of Benefits)","ukrainian":"Пояснення щодо виплат","section":"General"},{"english":"Essential Health Benefits","ukrainian":"Основні медичні послуги (10 згідно ACA)","section":"General"},{"english":"Exclusions","ukrainian":"Винятки","section":"General"},{"english":"Fee-for-Service (FFS)","ukrainian":"Оплата за надані послуги","section":"General"},{"english":"FSA (Flexible Spending Account)","ukrainian":"Рахунок для гнучких витрат","section":"General"},{"english":"Generic Drug","ukrainian":"Генеричний препарат / Аналог","section":"General"},{"english":"Grace Period","ukrainian":"Пільговий період","section":"General"},{"english":"Group Health Plan","ukrainian":"Груповий план оздоровлення","section":"General"},{"english":"HMO (Health Maintenance Organization)","ukrainian":"Організація з підтримки здоров'я","section":"General"},{"english":"HRA (Health Reimbursement Account)","ukrainian":"Рахунок медичного відшкодування","section":"General"},{"english":"HSA (Health Savings Account)","ukrainian":"Рахунок медичних ощадних витрат","section":"General"},{"english":"In-Network","ukrainian":"Внутрішньомережеві","section":"General"},{"english":"Indemnity Plan","ukrainian":"План відшкодування","section":"General"},{"english":"Individual Mandate","ukrainian":"Індивідуальний мандат","section":"General"},{"english":"Lifetime Limit","ukrainian":"Пожиттєвий ліміт","section":"General"},{"english":"Long-Term Care","ukrainian":"Довгостроковий догляд","section":"General"},{"english":"Managed Care","ukrainian":"Керований догляд","section":"General"},{"english":"Maximum Out-of-Pocket","ukrainian":"Максимальна сума власних витрат","section":"General"},{"english":"Medically Necessary","ukrainian":"Медична необхідність","section":"General"},{"english":"Network","ukrainian":"Мережа","section":"General"},{"english":"Open Enrollment Period","ukrainian":"Період відкритої реєстрації","section":"General"},{"english":"Out-of-Network","ukrainian":"Позамережеві","section":"General"},{"english":"Outpatient Care","ukrainian":"Амбулаторні послуги","section":"General"},{"english":"Patient Assistance Program","ukrainian":"Програма допомоги пацієнтам","section":"General"},{"english":"PCP (Primary Care Provider)","ukrainian":"Постачальник первинної медичної допомоги","section":"General"},{"english":"Payer","ukrainian":"Платник","section":"General"},{"english":"Payer of Last Resort","ukrainian":"Платник останньої інстанції","section":"General"},{"english":"Pediatric Dental Coverage","ukrainian":"Дитяче стоматологічне страхування","section":"General"},{"english":"PPO (Preferred Provider Organization)","ukrainian":"Організація пріоритетного постачальника","section":"General"},{"english":"Preauthorization (Precertification)","ukrainian":"Попередня авторизація / сертифікація","section":"General"},{"english":"Pre-Existing Condition","ukrainian":"Наявний стан здоров'я","section":"General"},{"english":"Premium","ukrainian":"Страховий внесок","section":"General"},{"english":"Preventive Services","ukrainian":"Профілактичні послуги","section":"General"},{"english":"Prior Authorization","ukrainian":"Попередня авторизація","section":"General"},{"english":"Provider","ukrainian":"Постачальник","section":"General"},{"english":"Provider Network","ukrainian":"Мережа постачальників","section":"General"},{"english":"Qualified Health Plan (QHP)","ukrainian":"Кваліфікований план медичного страхування","section":"General"},{"english":"Referral","ukrainian":"Направлення","section":"General"},{"english":"Rehabilitation Services","ukrainian":"Реабілітаційні послуги","section":"General"},{"english":"Rescission","ukrainian":"Розірвання","section":"General"},{"english":"Self-Insured Plan","ukrainian":"План самострахування","section":"General"},{"english":"Service Area","ukrainian":"Зона обслуговування","section":"General"},{"english":"Skilled Nursing Facility (SNF)","ukrainian":"Заклад кваліфікованого догляду","section":"General"},{"english":"Special Enrollment Period","ukrainian":"Спеціальний період реєстрації","section":"General"},{"english":"State Health Insurance Assistance Program (SHIP)","ukrainian":"Програма допомоги державного медичного страхування","section":"General"},{"english":"Subsidy","ukrainian":"Субсидія","section":"General"},{"english":"Summary of Benefits and Coverage (SBC)","ukrainian":"Зведення пільг та покриття","section":"General"},{"english":"Telehealth","ukrainian":"Телемедицина","section":"General"},{"english":"Third-Party Administrator (TPA)","ukrainian":"Сторонній адміністратор","section":"General"},{"english":"Tiered Network","ukrainian":"Рівнева мережа","section":"General"},{"english":"Tricare","ukrainian":"Tricare (програма)","section":"General"},{"english":"Usual, Customary, and Reasonable (UCR)","ukrainian":"Звичайний, простий та розумний","section":"General"},{"english":"Utilization Review (UR)","ukrainian":"Перегляд використання","section":"General"},{"english":"Waiting Period","ukrainian":"Період очікування","section":"General"},{"english":"Wellness Program","ukrainian":"Програма оздоровлення","section":"General"},
+    {"english":"Affordable Care Act (ACA)","ukrainian":"Закон про доступну медичну допомогу","section":"Medicaid"},{"english":"Asset Limit","ukrainian":"Ліміт активів","section":"Medicaid"},{"english":"CHIP (Children's Health Insurance Program)","ukrainian":"CHIP (Програма медичного страхування дітей)","section":"Medicaid"},{"english":"Cost-Sharing Reductions","ukrainian":"Зниження розподілу витрат","section":"Medicaid"},{"english":"Coverage Gap","ukrainian":"Розрив у покритті","section":"Medicaid"},{"english":"Eligibility","ukrainian":"Правомочність","section":"Medicaid"},{"english":"Enrollment","ukrainian":"Реєстрація","section":"Medicaid"},{"english":"Federal Poverty Level (FPL)","ukrainian":"Федеральний рівень бідності","section":"Medicaid"},{"english":"Income Limit","ukrainian":"Ліміт доходу","section":"Medicaid"},{"english":"Inpatient Hospital Services","ukrainian":"Стаціонарні лікарняні послуги","section":"Medicaid"},{"english":"Retroactive Coverage","ukrainian":"Ретроактивне покриття","section":"Medicaid"},
+    {"english":"Beneficiary","ukrainian":"Бенефіціар (вигодонабувач)","section":"Medicare"},{"english":"Coverage","ukrainian":"Обсяг покриття","section":"Medicare"},{"english":"Medicare Part A","ukrainian":"Medicare Частина A (стаціонарне лікування)","section":"Medicare"},{"english":"Medicare Part B","ukrainian":"Medicare Частина B (амбулаторне лікування)","section":"Medicare"},{"english":"Medicare Part C","ukrainian":"Medicare Частина C (Medicare Advantage)","section":"Medicare"},{"english":"Medicare Part D","ukrainian":"Medicare Частина D (ліки за рецептом)","section":"Medicare"},{"english":"Medigap","ukrainian":"Medigap (додаткова страховка)","section":"Medicare"},{"english":"Supplemental Coverage","ukrainian":"Додаткове покриття","section":"Medicare"},{"english":"Premium","ukrainian":"Страховий внесок","section":"Medicare"},{"english":"Preventive Services","ukrainian":"Превентивні послуги","section":"Medicare"},{"english":"Rehabilitation","ukrainian":"Реабілітація","section":"Medicare"},{"english":"Skilled Nursing Facility","ukrainian":"Кваліфікований медсестринський заклад","section":"Medicare"},{"english":"Special Enrollment Period","ukrainian":"Спеціальний період реєстрації","section":"Medicare"},{"english":"Supplemental Insurance (Medigap)","ukrainian":"Додаткове страхування (Medigap)","section":"Medicare"}
+  ]
+};
+
+// Protocol quiz questions
+const PROTOCOL_QUESTIONS = [
+  {q:"How long is the standard hold time?", options:["5 minutes","10 minutes","15 minutes","20 minutes"], correct:1},
+  {q:"What is the hold time when a provider gives an unspecified amount of time?", options:["10 minutes","15 minutes","20 minutes","30 minutes"], correct:2},
+  {q:"How long do you wait if you get a blue or black screen at the start of a call?", options:["30 seconds","60 seconds","2 minutes","5 minutes"], correct:1},
+  {q:"At what call duration should you START considering transferring?", options:["60 minutes","90 minutes","120 minutes","150 minutes"], correct:1},
+  {q:"At what call duration are you EXPECTED to transfer?", options:["90 minutes","100 minutes","120 minutes","150 minutes"], correct:2},
+  {q:"What is the Tech Support number?", options:["1-800-449-4428","1-866-449-4428","1-877-449-4428","1-888-449-4428"], correct:1},
+  {q:"Which is NOT a mandatory element of the greeting for the provider?", options:["Interpreter's name","Interpreter's ID #","Language interpreted","Patient's diagnosis"], correct:3},
+  {q:"In the audio closing, what is step 2?", options:["Say goodbye to LEP","State Interpreter's ID #","Remind to rate the call","Offer assistance"], correct:1},
+  {q:"In the video closing, what replaces 'State ID #' compared to audio?", options:["Offer assistance","Say goodbye","Remind to rate the call","Give disclaimer"], correct:2},
+  {q:"When can you use 3rd person interpretation?", options:["When provider requests it","For children 7 or younger","During all sessions","When patient requests it"], correct:1},
+  {q:"How many steps are in the Dial-Out Protocol?", options:["3 questions","4 questions","5 questions","6 questions"], correct:2},
+  {q:"In the 'Say No' model, what are the 3 steps?", options:["Refuse, Explain, End call","Be gracious, offer alternatives, give reason","Apologize, transfer, note","Clarify, redirect, interpret"], correct:1},
+  {q:"Which is a sign you need to transfer a long call?", options:["Call is exactly 90 min","Increased fatigue","Provider requested it","Session is almost done"], correct:1},
+  {q:"What must you ALWAYS do when a provider holds longer than 10 min?", options:["Hang up immediately","Note in Call Notes AND report on Discord","Transfer to colleague","Ask for overtime"], correct:1},
+  {q:"In the Troubleshooting Protocol, step 1 is:", options:["Call Tech Support","Transfer to another interpreter","Ask provider to reposition device","End the call"], correct:2},
+  {q:"During a 10-min hold, you should:", options:["Stay on camera","Turn camera off and mute","Continue interpreting","Hang up after 5 min"], correct:1},
+  {q:"Who takes the lead in Dual Interpretation?", options:["The Ukrainian interpreter","The ASL interpreter","The provider","The client"], correct:1},
+  {q:"What do you type if a patient fully refuses to provide their name?", options:["Anonymous","Unknown","N/A (capitals)","Left blank"], correct:2},
+  {q:"Is end-of-shift alone a valid reason to withdraw from a call?", options:["Yes, always","Only after 90 min","No, never","Only the TL decides"], correct:2},
+  {q:"During Shadowing, what must you always do?", options:["Stay silent and wait","Remain alert, take notes, be ready to jump in","Disconnect after 5 min","Only shadow if provider requests"], correct:1},
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let allCards = [];
+let currentCards = [];
+let currentCardIdx = 0;
+let cardFlipped = false;
+let knownCards = new Set();
+let unknownCards = new Set();
+
+let quizQuestions = [];
+let quizIdx = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+let progress = {};
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+function init() {
+  // Build flat list
+  allCards = [];
+  for (const [cat, terms] of Object.entries(GLOSSARY_DATA)) {
+    for (const t of terms) {
+      allCards.push({...t, category: cat});
+    }
+  }
+
+  // Load progress from localStorage
+  const saved = localStorage.getItem('eqt_progress');
+  if (saved) {
+    progress = JSON.parse(saved);
+    knownCards = new Set(JSON.parse(localStorage.getItem('eqt_known') || '[]'));
+  }
+
+  initFlashcards();
+  renderGlossary();
+  renderProgressRings();
+  renderAudiobook();
+  updateStats();
+}
+
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('content-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// PROTOCOLS
+// ══════════════════════════════════════════════
+function toggleProtocol(id) {
+  const card = document.getElementById('pc-' + id);
+  card.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// FLASHCARDS
+// ══════════════════════════════════════════════
+function initFlashcards() {
+  const cat = document.getElementById('fcCategory').value;
+  currentCards = cat === 'all' ? [...allCards] : allCards.filter(c => c.category === cat);
+  currentCardIdx = 0;
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  showCard();
+}
+
+function shuffleCards() {
+  for (let i = currentCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentCards[i], currentCards[j]] = [currentCards[j], currentCards[i]];
+  }
+  currentCardIdx = 0;
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  showCard();
+}
+
+function showCard() {
+  if (currentCards.length === 0) return;
+  const card = currentCards[currentCardIdx];
+  const dir = document.getElementById('fcDirection').value;
+  const isEnToUk = dir === 'en-uk' || (dir === 'random' && Math.random() > 0.5);
+
+  const frontWord = isEnToUk ? card.english : card.ukrainian;
+  const backWord = isEnToUk ? card.ukrainian : card.english;
+
+  document.getElementById('fcFrontWord').textContent = frontWord;
+  document.getElementById('fcBackWord').textContent = backWord;
+  document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : 'UKRAINIAN';
+  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? 'UKRAINIAN' : 'ENGLISH';
+
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+
+  const total = currentCards.length;
+  const done = knownCards.size + unknownCards.size;
+  document.getElementById('fcCounter').textContent = `${currentCardIdx + 1} / ${total}`;
+  document.getElementById('fcProgressBar').style.width = `${(currentCardIdx / total) * 100}%`;
+  document.getElementById('fcKnown').textContent = knownCards.size;
+  document.getElementById('fcUnknown').textContent = unknownCards.size;
+}
+
+function flipCard() {
+  cardFlipped = !cardFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', cardFlipped);
+}
+
+function prevCard() {
+  if (currentCardIdx > 0) {
+    currentCardIdx--;
+    showCard();
+  }
+}
+
+function nextCard() {
+  if (currentCardIdx < currentCards.length - 1) {
+    currentCardIdx++;
+    showCard();
+  }
+}
+
+function markCard(known) {
+  const card = currentCards[currentCardIdx];
+  const key = card.english;
+  if (known) {
+    knownCards.add(key);
+    unknownCards.delete(key);
+  } else {
+    unknownCards.add(key);
+    knownCards.delete(key);
+  }
+  localStorage.setItem('eqt_known', JSON.stringify([...knownCards]));
+  updateStats();
+  nextCard();
+}
+
+function speakWord() {
+  const word = document.getElementById('fcBackWord').textContent;
+  if ('speechSynthesis' in window) {
+    const utt = new SpeechSynthesisUtterance(word);
+    utt.lang = 'uk-UA';
+    window.speechSynthesis.speak(utt);
+  }
+}
+
+// ══════════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════════
+function startQuiz() {
+  const cat = document.getElementById('quizCategory').value;
+  const count = parseInt(document.getElementById('quizCount').value);
+
+  let pool = [];
+  if (cat === 'protocols' || cat === 'all') {
+    pool.push(...PROTOCOL_QUESTIONS.map(q => ({
+      type: 'protocol', ...q
+    })));
+  }
+
+  if (cat !== 'protocols') {
+    const terms = cat === 'all' ? allCards : allCards.filter(c => c.category === cat);
+    const shuffled = [...terms].sort(() => Math.random() - 0.5).slice(0, 80);
+    for (const term of shuffled) {
+      const wrongPool = terms.filter(t => t.english !== term.english);
+      if (wrongPool.length < 3) continue;
+      const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t.ukrainian);
+      const options = [...wrongs, term.ukrainian].sort(() => Math.random() - 0.5);
+      const correct = options.indexOf(term.ukrainian);
+      pool.push({
+        type: 'vocab',
+        q: `What is the Ukrainian translation of "${term.english}"?`,
+        options, correct
+      });
+    }
+  }
+
+  quizQuestions = pool.sort(() => Math.random() - 0.5).slice(0, count);
+  quizIdx = 0;
+  quizScore = 0;
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  if (quizIdx >= quizQuestions.length) {
+    showQuizResult();
+    return;
+  }
+
+  const q = quizQuestions[quizIdx];
+  quizAnswered = false;
+  const total = quizQuestions.length;
+  const pct = (quizIdx / total) * 100;
+
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="quiz-score-board">
+      <div class="score-item">
+        <span class="score-num" style="color:var(--green)">${quizScore}</span>
+        <span class="score-label">Correct</span>
+      </div>
+      <div class="score-item">
+        <span class="score-num" style="color:var(--text2)">${quizIdx + 1}/${total}</span>
+        <span class="score-label">Question</span>
+      </div>
+      <div class="score-item">
+        <span class="score-num" style="color:var(--red)">${quizIdx - quizScore}</span>
+        <span class="score-label">Wrong</span>
+      </div>
+    </div>
+    <div class="progress-bar-wrap" style="margin-bottom:24px;">
+      <div class="progress-bar" style="width:${pct}%"></div>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-subtitle">Question ${quizIdx + 1} of ${total}</div>
+      <div class="quiz-options" id="quizOptions">
+        ${q.options.map((opt, i) => `
+          <button class="quiz-option" id="qopt-${i}" onclick="answerQuiz(${i})">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+    </div>
+    <div style="text-align:center;margin-top:16px;">
+      <button class="btn btn-ghost" id="nextQuizBtn" onclick="nextQuizQ()" style="display:none;font-size:16px;padding:12px 28px;">Next Question →</button>
+    </div>
+  `;
+}
+
+function answerQuiz(idx) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+
+  const q = quizQuestions[quizIdx];
+  const opts = document.querySelectorAll('.quiz-option');
+  opts.forEach(o => o.disabled = true);
+
+  if (idx === q.correct) {
+    quizScore++;
+    opts[idx].classList.add('correct');
+    document.getElementById('quizFeedback').innerHTML = '<span style="color:var(--green)">✓ Correct!</span>';
+  } else {
+    opts[idx].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+    document.getElementById('quizFeedback').innerHTML = `<span style="color:var(--red)">✗ Wrong.</span> Correct: <strong style="color:var(--green)">${q.options[q.correct]}</strong>`;
+  }
+
+  document.getElementById('nextQuizBtn').style.display = 'inline-flex';
+}
+
+function nextQuizQ() {
+  quizIdx++;
+  renderQuizQuestion();
+}
+
+function showQuizResult() {
+  const total = quizQuestions.length;
+  const pct = Math.round((quizScore / total) * 100);
+
+  let emoji = '😰', title = 'Keep Studying!';
+  if (pct >= 90) { emoji = '🏆'; title = 'Outstanding!'; }
+  else if (pct >= 80) { emoji = '🎉'; title = 'Great Job!'; }
+  else if (pct >= 70) { emoji = '👍'; title = 'Good Progress!'; }
+  else if (pct >= 60) { emoji = '📚'; title = 'Almost There!'; }
+
+  // Save best score
+  const prev = parseInt(localStorage.getItem('eqt_quiz_best') || '0');
+  if (pct > prev) {
+    localStorage.setItem('eqt_quiz_best', pct);
+    document.getElementById('quizBest').textContent = pct + '%';
+  }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultScore').textContent = `${quizScore}/${total} (${pct}%)`;
+  const desc = pct >= 80
+    ? "Excellent performance! You're well prepared for the exam. Keep reviewing to stay sharp."
+    : "Review the protocols and vocabulary in the weak areas, then try again. You've got this!";
+  document.getElementById('resultDesc').textContent = desc;
+
+  document.getElementById('quizResultModal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('quizResultModal').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════
+// GLOSSARY
+// ══════════════════════════════════════════════
+function renderGlossary(filtered) {
+  const terms = filtered !== undefined ? filtered : allCards;
+  const tbody = document.getElementById('glossaryBody');
+  const catLabels = {
+    'VOCAB': 'Vocab', 'PROC ACRONYMS': 'Acronyms', 'MEDICATIONS': 'Medications',
+    'ROUTINE VISITS': 'Routine Visits', 'SPECIALTY CARE': 'Specialty', 'PAIN DESCRIPTORS': 'Pain',
+    'ANATOMY': 'Anatomy', 'MED INSURANCE': 'Insurance'
+  };
+  tbody.innerHTML = terms.map(t => `
+    <tr>
+      <td>${t.english}</td>
+      <td>${t.ukrainian}</td>
+      <td><span class="sheet-badge">${catLabels[t.category] || t.category}</span></td>
+    </tr>
+  `).join('');
+  document.getElementById('glossaryCount').textContent = `Showing ${terms.length} of ${allCards.length} terms`;
+}
+
+function filterGlossary() {
+  const query = document.getElementById('glossarySearch').value.toLowerCase();
+  const cat = document.getElementById('glossaryFilter').value;
+  let filtered = allCards;
+  if (cat !== 'all') filtered = filtered.filter(t => t.category === cat);
+  if (query) filtered = filtered.filter(t =>
+    t.english.toLowerCase().includes(query) ||
+    t.ukrainian.toLowerCase().includes(query)
+  );
+  renderGlossary(filtered);
+}
+
+// ══════════════════════════════════════════════
+// PROGRESS RINGS
+// ══════════════════════════════════════════════
+function renderProgressRings() {
+  const categories = [
+    {key:'VOCAB', label:'General Vocab', color:'#4f8ef7'},
+    {key:'PROC ACRONYMS', label:'Acronyms', color:'#34d399'},
+    {key:'MEDICATIONS', label:'Medications', color:'#fbbf24'},
+    {key:'ROUTINE VISITS', label:'Routine Visits', color:'#a78bfa'},
+    {key:'SPECIALTY CARE', label:'Specialty Care', color:'#f472b6'},
+    {key:'PAIN DESCRIPTORS', label:'Pain', color:'#f87171'},
+    {key:'ANATOMY', label:'Anatomy', color:'#7c5af7'},
+    {key:'MED INSURANCE', label:'Insurance', color:'#22d3ee'},
+  ];
+
+  const r = 34, circ = 2 * Math.PI * r;
+  const grid = document.getElementById('progressGrid');
+  grid.innerHTML = categories.map(cat => {
+    const terms = GLOSSARY_DATA[cat.key] || [];
+    const total = terms.length;
+    const known = terms.filter(t => knownCards.has(t.english)).length;
+    const pct = total > 0 ? Math.round((known / total) * 100) : 0;
+    const offset = circ - (pct / 100) * circ;
+    return `
+      <div class="progress-item">
+        <div class="progress-ring-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle class="progress-ring-bg" cx="40" cy="40" r="${r}"/>
+            <circle class="progress-ring-fill" cx="40" cy="40" r="${r}"
+              stroke="${cat.color}"
+              stroke-dasharray="${circ}"
+              stroke-dashoffset="${offset}"/>
+          </svg>
+          <div class="progress-ring-label" style="color:${cat.color}">${pct}%</div>
+        </div>
+        <div class="progress-name">${cat.label}<br><span style="color:var(--text3);font-size:11px;">${known}/${total}</span></div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// AUDIOBOOK SCRIPTS
+// ══════════════════════════════════════════════
+function renderAudiobook() {
+  const grid = document.getElementById('audiobookGrid');
+
+  const protocolScript = `
+CHAPTER 1: GREETING PROTOCOL
+
+When you answer a call, you must introduce yourself to the provider and to the patient separately.
+
+To the PROVIDER, you must say: Hello, this is [your name], your Ukrainian interpreter, ID [your number]. Everything in the session will be interpreted. How can I help you?
+
+To the PATIENT in Ukrainian: Добрий день, мене звати [ваше ім'я], я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним.
+
+Mandatory elements for the provider: your name, the language you interpret, your interpreter ID number, and the statement that everything will be interpreted.
+
+Mandatory elements for the patient: your name, the language being interpreted into, that everything will be kept confidential, and that everything in the session will be interpreted.
+
+---
+
+CHAPTER 2: CLOSING PROTOCOL
+
+For AUDIO calls, you close in this order:
+Step 1: Offer additional assistance — this is mandatory. Say: Is there anything else I can help you with?
+Step 2: State your interpreter ID number.
+Step 3: Say goodbye to the doctor.
+Step 4: Say goodbye to the patient in Ukrainian: Гарного вам дня, пане або пані.
+
+For VIDEO calls, you close in this order:
+Step 1: Offer additional assistance — this is mandatory.
+Step 2: Remind the doctor to rate the call. Say: Please remember to rate the call after we hang up. Your feedback is valuable and appreciated.
+Step 3: Say goodbye to the doctor.
+Step 4: Say goodbye to the patient in Ukrainian.
+
+---
+
+CHAPTER 3: INTERVENTION — THE 3-STEP PROCESS
+
+When you need to intervene to ask for repetition, clarification, or verification, follow these 3 steps:
+
+Step 1: Identify yourself as the interpreter. Speak first to the party that will be waiting for you to get clarification.
+
+Step 2: Identify yourself to the other party. Request clarification, repetition, or whatever you need. Say: Interpreter speaking, can you please repeat or clarify?
+
+Step 3: Resume interpreting.
+
+When speaking to the opposite party, say: This is the interpreter speaking. Excuse me, the interpreter needs to clarify.
+
+---
+
+CHAPTER 4: THE 3RD PERSON PROTOCOL
+
+Normally you must interpret in FIRST PERSON. If the provider or patient speaks to you directly instead of each other, you must intervene.
+
+To the patient in Ukrainian: Пане або пані, я перекладач. Будь ласка, звертайтеся безпосередньо до лікаря, щоб уникнути двозначностей і забезпечити точність повідомлення.
+
+To the provider: This is the interpreter. May I please ask you to speak directly to your patient so that we can ensure accuracy and avoid confusion?
+
+EXCEPTIONS — when 3rd person IS allowed:
+One: Very young children — aged 7 or younger.
+Two: Emergencies when summarizing.
+Three: Anyone who is confused — such as dementia, substance abuse, or post-surgery patients.
+Four: Mentally ill patients.
+Five: Trauma triggered by situations during the call.
+
+If they continue speaking to you after your reminder, continue to interpret in first person. Always note the reason for using 3rd person in the call notes.
+
+---
+
+CHAPTER 5: HOLD PROTOCOL — CRITICAL TIMINGS
+
+Standard hold: 10 minutes. You can hold up to 10 minutes for a provider to return.
+
+Flexible hold: If the provider gives you a SPECIFIC amount of time, honor it. If the provider gives an UNSPECIFIED amount of time, hold for 20 minutes. If it is a life or death situation, hold indefinitely.
+
+Blue or black screen: You have 60 seconds to try to get a response. Say: Hello, this is your Ukrainian interpreter. Is there anybody on the line? If no response: This is your Ukrainian interpreter. I'm unable to hear anyone on the line. I will disconnect from the call. I apologize for the inconvenience. Goodbye.
+
+During a standard hold, you must follow 5 steps:
+Step 1: Let the provider know you can only wait 10 minutes.
+Step 2: Inform the patient of the hold.
+Step 3: Turn your camera off and mute your audio.
+Step 4: Make a notation in Call Notes.
+Step 5: Report on Discord.
+
+---
+
+CHAPTER 6: TROUBLESHOOTING PROTOCOL
+
+If there are technical issues, follow these 3 steps:
+
+Step 1: Ask the provider to move the device closer or change positioning. Or, turn your camera off and immediately back on to see if the problem resolves.
+
+Script: This is the interpreter, [provider name], there are some technical issues. Allow me to troubleshoot.
+
+Step 2: If the problem is not resolved, keep the camera off and continue with the interpretation.
+
+Step 3: If these steps are not successful, ask the provider if you may connect them to another interpreter. Provide the Technical Support number: 1-866-449-4428. That number again is 1-866-449-4428.
+
+Script: This is the interpreter, [provider name], we are still experiencing some technical issues. May I connect you with another interpreter to see if this helps? I apologize for the inconvenience.
+
+---
+
+CHAPTER 7: DIAL-OUT PROTOCOL
+
+Before you dial any number, you must collect these 5 pieces of information:
+
+Question 1: What is the phone number you need me to dial?
+Question 2: Who should I say is calling?
+Question 3: May I please have the name of the person or patient we are calling?
+Question 4: Should I leave a message in case we reach a voicemail box?
+Question 5: Is there a callback number?
+
+---
+
+CHAPTER 8: LONG CALLS — WITHDRAWAL PROTOCOL
+
+At 90 minutes: It is recommended that you self-monitor your performance and decide if you need to transfer the call.
+
+Signs you need to transfer include: increased fatigue, performance concerns, emotional distress, or needing to use the restroom or drink water.
+
+To the provider: [Provider name], as the interpreter, I think we've reached a point in the conversation to switch out interpreters. Please remain on the line and you'll be connected to one of my colleagues momentarily. Thank you.
+
+To the patient in Ukrainian: Як перекладач, вважаю, що ми дійшли до моменту розмови, коли доцільно змінити перекладача. Будь ласка, залишайтеся на лінії — вас негайно з'єднають з одним із моїх колег. Дякую.
+
+At 120 minutes: You are expected to transfer the call.
+
+IMPORTANT RULES:
+The end of your shift alone is NOT a valid reason to withdraw.
+If you don't feel tired at 120 minutes, you may remain on the call.
+Always note in the Call Notes box and report to your TL on Discord.
+`.trim();
+
+  const vocabScript = buildVocabScript();
+
+  grid.innerHTML = `
+    <div class="audio-card">
+      <h3>📋 Chapter 1–8: All Protocols</h3>
+      <p>A complete narrated walkthrough of all 10 interpreter protocols — greeting, closing, intervention, 3rd person, hold, troubleshooting, dial-out, long calls, shadowing, dual interpretation, say-no model, and call notes. Paste this into your TTS tool and listen.</p>
+      <div class="audio-script">${protocolScript}</div>
+      <button class="btn btn-ghost copy-btn" onclick="copyText(this, \`${escapeBackticks(protocolScript)}\`)">📋 Copy Protocol Script</button>
+      <button class="btn btn-primary copy-btn" style="margin-left:10px;" onclick="speakSection(\`${escapeBackticks(protocolScript)}\`)">▶ Play in Browser</button>
+    </div>
+
+    <div class="audio-card">
+      <h3>📖 Chapter 9: Vocabulary Drill</h3>
+      <p>All 469 English → Ukrainian terms read aloud in sequence. Format: "[English term] ... [Ukrainian translation]". Ideal for listening while multitasking. The repetitive format helps build recall.</p>
+      <div class="audio-script" id="vocabScriptBox">${vocabScript.slice(0,2000)}...\n\n[Full script: ${allCards.length} terms — click Copy to get everything]</div>
+      <button class="btn btn-ghost copy-btn" onclick="copyText(this, \`${escapeBackticks(vocabScript)}\`)">📋 Copy Full Vocabulary Script</button>
+      <button class="btn btn-primary copy-btn" style="margin-left:10px;" onclick="speakSection(\`${escapeBackticks(vocabScript.slice(0,3000))}\`)">▶ Preview in Browser</button>
+    </div>
+
+    <div class="audio-card">
+      <h3>⚡ Chapter 10: Numbers & Critical Facts Drill</h3>
+      <p>A quick-fire repetition drill of the most critical numbers, rules, and facts. Listen to this repeatedly until it becomes automatic.</p>
+      <div class="audio-script">${getCriticalFactsScript()}</div>
+      <button class="btn btn-ghost copy-btn" onclick="copyText(this, \`${escapeBackticks(getCriticalFactsScript())}\`)">📋 Copy Critical Facts Script</button>
+      <button class="btn btn-primary copy-btn" style="margin-left:10px;" onclick="speakSection(\`${escapeBackticks(getCriticalFactsScript())}\`)">▶ Play in Browser</button>
+    </div>
+  `;
+}
+
+function buildVocabScript() {
+  const cats = [
+    {key:'VOCAB', label:'SECTION 1: General Medical Vocabulary'},
+    {key:'PROC ACRONYMS', label:'SECTION 2: Medical Procedure Acronyms'},
+    {key:'MEDICATIONS', label:'SECTION 3: Medications'},
+    {key:'ROUTINE VISITS', label:'SECTION 4: Routine Visits'},
+    {key:'SPECIALTY CARE', label:'SECTION 5: Medical Specialists'},
+    {key:'PAIN DESCRIPTORS', label:'SECTION 6: Pain Descriptors'},
+    {key:'ANATOMY', label:'SECTION 7: Human Anatomy'},
+    {key:'MED INSURANCE', label:'SECTION 8: Medical Insurance Terms'},
+  ];
+
+  let script = 'CHAPTER 9: VOCABULARY DRILL\nAll terms read in English, then Ukrainian.\n\n';
+  for (const cat of cats) {
+    script += `\n${cat.label}\n${'─'.repeat(50)}\n`;
+    const terms = GLOSSARY_DATA[cat.key] || [];
+    for (const t of terms) {
+      script += `${t.english} ... ${t.ukrainian}\n`;
+    }
+  }
+  return script;
+}
+
+function getCriticalFactsScript() {
+  return `CHAPTER 10: CRITICAL FACTS RAPID DRILL
+
+Listen to this section repeatedly until every answer is automatic.
+
+Question: How long is the standard hold time?
+Answer: 10 minutes.
+
+Question: What if the provider gives an unspecified amount of time?
+Answer: Hold for 20 minutes.
+
+Question: What if it is a life or death situation?
+Answer: Hold indefinitely, for as long as needed.
+
+Question: How long do you wait if you get a blue or black screen?
+Answer: 60 seconds.
+
+Question: At what duration should you start considering transferring a call?
+Answer: 90 minutes.
+
+Question: At what duration are you expected to transfer?
+Answer: 120 minutes.
+
+Question: What is the Technical Support number?
+Answer: 1-866-449-4428. Again: 1-866-449-4428.
+
+Question: Is end of shift a valid reason to withdraw from a call?
+Answer: No. End of shift alone is NOT a valid reason to withdraw.
+
+Question: If a patient refuses to provide their name, what do you write?
+Answer: N/A in capital letters.
+
+Question: What 4 things are mandatory in the greeting to the provider?
+Answer: Your name, the language you interpret, your interpreter ID number, and that everything will be interpreted.
+
+Question: What 4 things are mandatory in the greeting to the patient?
+Answer: Your name, the language being interpreted into, that everything will be kept confidential, and that everything will be interpreted.
+
+Question: For the 3-step intervention protocol, what are the steps?
+Answer: Step 1: Identify yourself and speak to the waiting party. Step 2: Identify yourself to the other party and request clarification. Step 3: Resume interpreting.
+
+Question: For the 5-step hold protocol, what are the steps?
+Answer: Step 1: Inform provider of 10-minute policy. Step 2: Inform patient of the hold. Step 3: Turn camera off and mute. Step 4: Note in Call Notes. Step 5: Report on Discord.
+
+Question: For the dial-out protocol, what are the 5 questions?
+Answer: One: What is the phone number? Two: Who is calling? Three: Name of the patient? Four: Leave a voicemail? Five: Callback number?
+
+Question: What are the 3 steps of the Say No model?
+Answer: One: Be gracious. Two: Offer 2 or 3 alternatives. Three: Give a reason.
+
+Question: When is 3rd person interpretation allowed?
+Answer: For children aged 7 or younger, emergencies, confused patients such as dementia or post-surgery, mentally ill patients, and trauma-triggered situations.
+
+Question: In a dual interpretation, who takes the lead?
+Answer: The ASL interpreter takes the lead.
+
+Question: For audio closing, what are the 4 steps?
+Answer: One: Offer additional assistance — mandatory. Two: State your interpreter ID number. Three: Say goodbye to the doctor. Four: Say goodbye to the patient in Ukrainian.
+
+Question: For video closing, what is different from audio?
+Answer: Step 2 is: remind the doctor to rate the call, instead of stating your ID number.
+
+Now repeat from the beginning. Critical facts drill, round 2.`;
+}
+
+function escapeBackticks(str) {
+  return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+let speaking = false;
+function speakSection(text) {
+  if ('speechSynthesis' in window) {
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      speaking = false;
+      return;
+    }
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'en-US';
+    utt.rate = 0.9;
+    utt.onend = () => { speaking = false; };
+    window.speechSynthesis.speak(utt);
+    speaking = true;
+  } else {
+    alert('Text-to-speech is not supported in this browser. Please copy the script and paste it into a TTS tool like Natural Reader or ElevenLabs.');
+  }
+}
+
+// ══════════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════════
+function updateStats() {
+  document.getElementById('masteredCount').textContent = knownCards.size;
+  const best = localStorage.getItem('eqt_quiz_best');
+  if (best) document.getElementById('quizBest').textContent = best + '%';
+  renderProgressRings();
+}
+
+// ══════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ══════════════════════════════════════════════
+document.addEventListener('keydown', (e) => {
+  const fc = document.getElementById('content-flashcards');
+  if (!fc.classList.contains('active')) return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === 'g' || e.key === 'G') markCard(true);
+  if (e.key === 'x' || e.key === 'X') markCard(false);
+});
+
+// ══════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>

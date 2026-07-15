@@ -1,0 +1,810 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║        EQT UKRAINIAN INTERPRETER — COMPLETE AUDIOBOOK SCRIPT        ║
+║              For Text-to-Speech Tools (Natural Reader,              ║
+║                 ElevenLabs, Speechify, macOS TTS)                   ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+HOW TO USE:
+• Copy this entire file and paste into your TTS tool of choice
+• Recommended voice: English US for protocols, Ukrainian voice for Ukrainian phrases
+• Recommended speed: 0.8x–0.9x for first listen, 1.2x for review
+• Listen during commute, exercise, or before sleep
+
+═══════════════════════════════════════════════════════════════════════
+PART 1: PROTOCOLS — ALL 10 INTERPRETER PROTOCOLS
+═══════════════════════════════════════════════════════════════════════
+
+─────────────────────────────────────────────────────
+CHAPTER 1: GREETING PROTOCOL
+─────────────────────────────────────────────────────
+
+The Greeting Protocol is mandatory for every call you take.
+
+When you connect with the PROVIDER, you must include these four mandatory elements:
+Number one: Your interpreter's name.
+Number two: The language you interpret — Ukrainian.
+Number three: Your interpreter ID number.
+Number four: The statement that everything in the session will be interpreted.
+
+The script to the provider is:
+"Hello, this is [your name], your Ukrainian interpreter, ID [your number]. Everything in the session will be interpreted. How can I help you?"
+
+When you connect with the PATIENT, you must include these four mandatory elements:
+Number one: Your interpreter's name.
+Number two: The language being interpreted into.
+Number three: That everything will be kept confidential.
+Number four: That everything in the session will be interpreted.
+
+The script to the patient in Ukrainian is:
+"Добрий день, мене звати [ваше ім'я], я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним."
+
+Optional add-ons you may include:
+• "Address questions to each other, not to you."
+• "I may ask end users to reposition the device for optimal setup."
+• "Speak in short sentences."
+• "Speak in a loud and clear tone, pausing often."
+
+─────────────────────────────────────────────────────
+CHAPTER 2: CLOSING PROTOCOL
+─────────────────────────────────────────────────────
+
+The closing is different for audio calls versus video calls.
+
+FOR AUDIO CALLS — 4 steps:
+Step 1: Offer additional assistance — this is MANDATORY. Say: "Is there anything else I can help you with? Do you need help with something else?"
+Step 2: State your Interpreter's ID number. Say: "This is interpreter ID number [your number]."
+Step 3: Say goodbye to the doctor. Say: "Thank you for calling. Have a great day!"
+Step 4: Say goodbye to the patient in Ukrainian: "Гарного вам дня, пане або пані."
+
+FOR VIDEO CALLS — 4 steps:
+Step 1: Offer additional assistance — this is MANDATORY.
+Step 2: Remind the doctor to rate the call. Say: "Please remember to rate the call after we hang up. Your feedback is valuable and appreciated."
+Step 3: Say goodbye to the doctor.
+Step 4: Say goodbye to the patient in Ukrainian: "Гарного вам дня, пане або пані."
+
+KEY DIFFERENCE: In audio calls, step 2 is stating your ID number. In video calls, step 2 is reminding to rate the call.
+
+─────────────────────────────────────────────────────
+CHAPTER 3: INTERVENTION — THE 3-STEP PROCESS
+─────────────────────────────────────────────────────
+
+When you need to intervene to ask for repetition, clarification, or verification, always follow this 3-step process.
+
+Step 1: Identify yourself as the interpreter. Speak first to the party that will be waiting for you to get clarification.
+
+Step 2: Identify yourself as the interpreter to the other party. Then request clarification, repetition, or whatever you need. Say to the required party: "Interpreter speaking, can you please repeat or clarify?"
+
+Step 3: Resume interpreting normally.
+
+When speaking to the opposite party, say: "This is the interpreter speaking. Excuse me, the interpreter needs to clarify."
+
+─────────────────────────────────────────────────────
+CHAPTER 4: 3RD PERSON PROTOCOL
+─────────────────────────────────────────────────────
+
+Normally you interpret in FIRST PERSON — meaning you say what the provider says directly, as if you are the provider speaking.
+
+If the provider or patient speaks to you directly instead of to each other, you must intervene and remind them to speak to each other.
+
+To the PATIENT in Ukrainian:
+"Пане або пані, я перекладач. Будь ласка, звертайтеся безпосередньо до лікаря, щоб уникнути двозначностей і забезпечити точність повідомлення."
+
+To the PROVIDER in English:
+"This is the interpreter. May I please ask you to speak directly to your patient so that we can ensure accuracy and avoid confusion?"
+
+IMPORTANT: If they CONTINUE to speak to you after your reminder, you must continue to interpret in FIRST PERSON regardless.
+
+ALWAYS specify the reason for using 3rd person in the Call Notes.
+
+EXCEPTIONS — 3rd person IS ALLOWED for these cases:
+Exception 1: Very young children — aged 7 or younger.
+Exception 2: Emergencies — when you need to summarize.
+Exception 3: Anyone who is confused — such as dementia patients, substance abuse cases, or post-surgery patients.
+Exception 4: Mentally ill patients.
+Exception 5: Trauma triggered by situations that arise during the call.
+
+─────────────────────────────────────────────────────
+CHAPTER 5: THE SAY NO MODEL
+─────────────────────────────────────────────────────
+
+When someone makes an inappropriate request — such as offering you a gift, asking for your personal schedule, or asking for a sight translation — you use the Say No Model.
+
+The 3 steps are:
+Step 1: Be gracious.
+Step 2: Offer 2 or 3 alternatives.
+Step 3: Give a reason.
+
+Example 1 — Gift scenario:
+Caller says: "Interpreter, you have been amazing. Can I send you a gift?"
+You say: "Thank you for your appreciation of my service. Maybe you can donate this to the hospital and they can make better use of it. Or maybe you can call customer service and let them know about my performance. Your appreciation for my job and kind words are more than enough for me."
+
+Example 2 — Working hours scenario:
+Caller says: "What are your working hours? I want to request you again."
+You say: "Thank you for your appreciation of my service. All of our interpreters are qualified, and you can call the line at any time since we have service 24 hours a day, 7 days a week. My hours can change so it wouldn't be something certain. I do appreciate your words, and you can always leave feedback about my performance."
+
+Example 3 — Sight translation scenario:
+Caller says: "Could you please do a sight translation of this document?"
+You say: "Thank you for trusting my language skills, and I understand that you need the information in this document to be transmitted. As an interpreter, I can help you read it out loud and I'll interpret as you do. Or maybe you can give me a summary of the document orally and I can interpret it as well. I'm stating this due to company policy."
+
+─────────────────────────────────────────────────────
+CHAPTER 6: HOLD PROTOCOL
+─────────────────────────────────────────────────────
+
+STANDARD 10-MINUTE HOLD:
+You can hold up to 10 minutes for a provider to return. Pause your video when there is no provider in the room.
+
+The 5 steps for a standard hold are:
+Step 1: Let the provider know you can only wait up to 10 minutes.
+Step 2: Inform the patient of the hold.
+Step 3: Turn the camera off and mute your audio.
+Step 4: Make a notation in the Call Notes box.
+Step 5: Report on Discord.
+
+Script to the PROVIDER: "This is the interpreter. I need to let you know that I have a 10-minute hold policy. I'll be here with my camera off until you come back."
+
+Script to the PATIENT in Ukrainian: "Пане або пані, з вами говорить перекладач. Я вимкну свою камеру з міркувань безпеки до повернення лікаря. Я слухатиму все, що буде сказано."
+
+FLEXIBLE HOLD — when provider asks for more than 10 minutes:
+• If they give a SPECIFIC amount of time: honor that amount of time.
+• If they give an UNSPECIFIED or uncountable amount of time: hold for 20 minutes.
+• If it is a LIFE OR DEATH situation: hold indefinitely, for as long as needed.
+
+All flexible hold cases must be noted in Call Notes and reported on Discord.
+
+BLUE OR BLACK SCREEN — 1-minute rule:
+At the beginning of a call, if you get a blue or black screen, you have 60 seconds to get a response.
+
+Check whether anyone is connected. Say: "Hello, this is your Ukrainian interpreter. Is there anybody on the line?"
+
+If there is no response after 60 seconds, say: "This is your Ukrainian interpreter. I'm unable to hear anyone on the line. I will disconnect from the call. I apologize for the inconvenience. Goodbye."
+
+─────────────────────────────────────────────────────
+CHAPTER 7: TROUBLESHOOTING PROTOCOL
+─────────────────────────────────────────────────────
+
+If there are technical issues such as poor audio or video quality, follow these 3 steps in order.
+
+Step 1: Ask the provider to move the device closer or change the positioning. Or, turn your camera off and immediately back on to see if the problem is resolved.
+
+Say: "This is the interpreter, [provider name], there are some technical issues. Allow me to troubleshoot."
+
+Step 2: If the problem is not resolved, keep the camera off and continue with the interpretation.
+
+Step 3: If these steps are not successful, ask the provider if you may connect them to another interpreter. Provide the Technical Support number: 1-866-449-4428.
+
+Say: "This is the interpreter, [provider name], we are still experiencing some technical issues. May I connect you with another interpreter to see if this helps? I apologize for the inconvenience."
+
+The Technical Support number is: 1-866-449-4428. One. Eight. Six. Six. Four. Four. Nine. Four. Four. Two. Eight.
+
+─────────────────────────────────────────────────────
+CHAPTER 8: DIAL-OUT PROTOCOL
+─────────────────────────────────────────────────────
+
+If you are asked to place a call, you must collect this information BEFORE you dial.
+
+Ask the provider these 5 questions:
+
+Question 1: "What is the phone number you need me to dial?"
+Question 2: "Who should I say is calling?"
+Question 3: "May I please have the name of the person or patient we're calling?"
+Question 4: "Should I leave a message in case we reach a voicemail box?"
+Question 5: "Is there a callback number, in case the patient calls back?"
+
+Special note on Direct Access Line calls, also called DAL calls: These appear as standard audio calls. When the call sheet loads, check the Account field — it will say Direct Access Line or DAL. In some DAL calls, the patient may offer you a phone number. Take that number and proceed with the dial-out protocol.
+
+─────────────────────────────────────────────────────
+CHAPTER 9: LONG CALLS AND WITHDRAWAL
+─────────────────────────────────────────────────────
+
+AT 90 MINUTES:
+For any call lasting 90 minutes or longer, it is recommended that you self-monitor your performance and make the decision to transfer the call if needed.
+
+Signs that you need to transfer include:
+Sign A: Increased fatigue.
+Sign B: Performance concerns.
+Sign C: Emotional distress responses.
+Sign D: Need to use the restroom or drink water.
+
+Script to the PROVIDER: "[Provider name], as the interpreter, I think we've reached a point in the conversation to switch out interpreters. Please remain on the line and you'll be connected to one of my colleagues momentarily. Thank you."
+
+Script to the PATIENT in Ukrainian: "Як перекладач, вважаю, що ми дійшли до моменту розмови, коли доцільно змінити перекладача. Будь ласка, залишайтеся на лінії — вас негайно з'єднають з одним із моїх колег. Дякую."
+
+AT 120 MINUTES:
+You are expected to transfer the call so you can take a break.
+
+IMPORTANT RULES:
+Rule 1: The end of your shift alone is NOT a valid reason to withdraw. Do not mention your shift to the callers.
+Rule 2: If you don't feel tired at 120 minutes, you may choose to remain on the call.
+Rule 3: Always make a notation in the Call Notes box.
+Rule 4: Report on Discord and keep your Team Leader informed.
+
+─────────────────────────────────────────────────────
+CHAPTER 10: SHADOWING BETWEEN LANGUAGES
+─────────────────────────────────────────────────────
+
+When the provider speaks Ukrainian, or when the patient starts speaking English, you may stay on the line in a shadowing role.
+
+Script to the PROVIDER: "This is the interpreter. I can tell you speak Ukrainian — or — your patient speaks some English. I will stay here shadowing in case you need me. I'll be paying attention and will jump in if there's any piece of information you deem very important."
+
+Script to the PATIENT in Ukrainian: "З вами говорить перекладач. Оскільки лікар розмовляє українською мовою, або ви можете спілкуватися англійською, я залишатимусь на лінії та спостерігатиму на випадок, якщо буду потрібен. Я уважно стежитиму за розмовою та втручатимусь, якщо буде повідомлено важливу інформацію."
+
+While shadowing, you must:
+• Remain alert and keep taking notes as if you were interpreting.
+• Be ready if you are summoned at any point.
+• Pay attention in case there is a misunderstanding, and be proactive if an intervention is needed.
+• Make sure all parties are aware of your presence.
+• Be transparent at all times.
+
+─────────────────────────────────────────────────────
+CHAPTER 11: DUAL INTERPRETATION
+─────────────────────────────────────────────────────
+
+Dual interpretation is requested when a patient — typically a minor — uses ASL to communicate while the parent speaks a different language.
+
+How it works:
+Step 1: Whoever connects to the call first adds the other needed language interpreter.
+Step 2: Put the provider on a brief hold while you brief your teammate on the session.
+Step 3: The ASL interpreter takes the lead on the interpretation and manages call flow and pausing.
+
+Key rules:
+• If the provider primarily interacts with the deaf patient, allow the interaction to occur and take notes before asking to pause.
+• When clarifying, identify yourself as "this is the Ukrainian interpreter."
+• Always interpret each other's interpretation.
+• Be transparent about all interactions with each party.
+• Make a note in Call Notes that this was a dual team interpretation.
+• Report it on Discord as well.
+
+─────────────────────────────────────────────────────
+CHAPTER 12: CALL NOTES
+─────────────────────────────────────────────────────
+
+Always make sure to leave a note during your call, even if nothing eventful happened.
+
+Rules for Call Notes:
+Rule 1: Information must be accurate and grammatically correct.
+Rule 2: Don't be afraid to ask for spelling.
+Rule 3: Names must be written with CAPITAL LETTERS for initials.
+
+When someone refuses to provide full information:
+• If they provide initials, type the initials.
+• If they still refuse, type N/A in CAPITAL letters.
+• Leave a note in the Call Notes box about them refusing to provide information.
+
+═══════════════════════════════════════════════════════════════════════
+PART 2: CRITICAL FACTS RAPID DRILL
+═══════════════════════════════════════════════════════════════════════
+
+Listen to this section repeatedly. The goal is for every answer to become automatic.
+
+Standard hold time: 10 minutes.
+Unspecified flexible hold: 20 minutes.
+Life or death hold: Indefinitely.
+Blue or black screen hold: 60 seconds.
+Consider transfer at: 90 minutes.
+Expected to transfer at: 120 minutes.
+Technical Support number: 1-866-449-4428.
+
+Greeting to provider — 4 mandatory elements: name, language, ID number, everything will be interpreted.
+Greeting to patient — 4 mandatory elements: name, language, confidential, everything interpreted.
+
+Audio closing — 4 steps: offer assistance, state ID, goodbye doctor, goodbye patient.
+Video closing — 4 steps: offer assistance, remind to rate call, goodbye doctor, goodbye patient.
+
+Intervention — 3 steps: identify to waiting party, identify and request clarification from other party, resume interpreting.
+
+Hold — 5 steps: inform provider of 10-min limit, inform patient, camera off and mute, note in call notes, report on Discord.
+
+Dial-out — 5 questions: phone number, who is calling, patient name, voicemail, callback number.
+
+Say No model — 3 steps: be gracious, offer alternatives, give a reason.
+
+3rd person exceptions: children 7 or younger, emergencies, confused patients, mentally ill patients, trauma-triggered.
+
+End of shift alone: NOT a valid reason to withdraw.
+Data refused by patient: type N/A in capital letters.
+Dual interpretation lead: the ASL interpreter.
+
+═══════════════════════════════════════════════════════════════════════
+PART 3: COMPLETE VOCABULARY DRILL — ALL 469 TERMS
+═══════════════════════════════════════════════════════════════════════
+
+Format: English term [pause] Ukrainian translation
+
+
+SECTION 1: GENERAL MEDICAL VOCABULARY
+────────────────────────────────────────────────────────────
+Bloodwork ... Аналіз крові
+Anemia ... Анемія
+Weight gain ... Набір ваги
+Tired ... Втомлений
+Cardiovascular ... Серцево-судинна система
+Red meat ... Червоне м'ясо
+Brain ... Мозок
+Menstrual cycles ... Менструальні цикли
+Appointment ... Прийом
+Kale ... Капуста кале
+Cholesterol ... Холестерин
+Tried-and-true ... Перевірений часом
+Neck ... Шия
+Over-the-counter ... Безрецептурний
+Iron deficiency ... Дефіцит заліза
+Rest ... Відпочинок
+Fainting ... Непритомність
+Diagnosis ... Діагноз
+Muscle pain ... М'язовий біль
+Dosage ... Дозування
+Nurse ... Медсестра
+Spinach ... Шпинат
+(to) Stretch ... Розтягуватися
+Constipation ... Закреп
+Stretch marks ... Розтяжки
+Estrogen ... Естроген
+(Medical) Chart ... Медична картка
+Blood draw ... Забір крові
+Fatigue ... Втома
+Pituitary Gland ... Гіпофіз
+Thyroid gland ... Щитоподібна залоза
+Red blood cells ... Еритроцити / Червоні кров'яні тільця
+Degrees ... Градуси
+Hemoglobin ... Гемоглобін
+Blood panel ... Панель аналізів крові
+Complete Blood Count ... Загальний аналіз крові
+Puffy ... Пухкий / набряклий
+Swollen ... Набряклий
+Hypothyroidism ... Гіпотиреоз
+Thyroid Stimulating Hormone (TSH) ... Тиреотропний гормон
+Uncomfortable ... Незручний / дискомфортний
+Heart failure ... Серцева недостатність
+Lab ... Лабораторія
+Pounds ... Фунти
+Dizziness ... Запаморочення
+Dizzy spell ... Напад запаморочення
+Nervous ... Нервовий
+Hormone levels ... Рівень гормонів
+Break / Split / Crack ... Зламати / розщепити
+Pattern ... Візерунок / схема / шаблон
+Skin ... Шкіра
+Serving ... Порція
+Concerning ... Тривожний
+Blood pressure ... Артеріальний тиск
+Renal problems ... Проблеми з нирками
+Blood test ... Аналіз крові
+(to) Prescribe ... Призначити
+Fluid retention ... Затримка рідини
+Kidneys ... Нирки
+Heart rate ... Частота серцебиття
+(to) Heal ... Вилікувати(-ся)
+Blood ... Кров
+(to) Secrete ... Виділяти
+Sensitivity to cold ... Чутливість до холоду
+Synthetic ... Штучний / синтетичний
+Symptoms ... Симптоми
+Endocrine System ... Ендокринна система
+Iron supplements ... Добавки заліза / залізовмісні препарати
+Thermostat ... Термостат
+Testosterone ... Тестостерон
+Thyroxine (T4) ... Тироксин
+Bloodstream ... Кровотік
+Toxins ... Токсини
+Fingernails ... Нігті
+Cast ... Гіпс
+
+SECTION 2: MEDICAL PROCEDURE ACRONYMS
+────────────────────────────────────────────────────────────
+CAT scan (Computer Axial Tomography) ... КТ (комп’ютерна аксіальна томографія)
+DPT (Diphtheria, Pertussis, Tetanus) ... АКДП (дифтерія, кашлюк, правець)
+PCOS (Polycystic Ovarian Syndrome) ... СПКЯ (синдром полікістозних яєчників)
+MRI (Magnetic Resonance Imaging) ... МРТ (магнітно-резонансна томографія)
+D&C (Dilation and Curettage) ... Дилатація та кюретаж
+MMR (Measles, Mumps, Rubella) ... КПК (кір, паротит, краснуха)
+COPD (Chronic Obstructive Pulmonary Disease) ... ХОЗЛ (хронічне обструктивне захворювання легень)
+EKG (Electrocardiogram) ... ЕКГ (електрокардіограма)
+CBC (Complete Blood Count) ... ЗАК (загальний аналіз крові)
+EEG (Electroencephalogram) ... ЕЕГ (електроенцефалографія)
+CPR (Cardiopulmonary Resuscitation) ... СЛР (серцево-легенева реанімація)
+ICU (Intensive Care Unit) ... ВІТ (відділення інтенсивної терапії)
+CT scan (Computerized Tomography) ... КТ (комп’ютерна томографія)
+PET scan (Positron Emission Tomography) ... ПЕТ (позитронно-емісійна томографія)
+STD (Sexually Transmitted Disease) ... ЗПСШ (захворювання, що передаються статевим шляхом)
+TB (Tuberculosis) ... ТБ (туберкульоз)
+
+SECTION 3: MEDICATIONS
+────────────────────────────────────────────────────────────
+Brand Name ... Торгова назва
+Generic Name ... Міжнародна непатентована назва
+Prescription ... Рецептурний препарат
+Omeprazole ... Омепразол
+Metformin ... Метформін
+Losartan ... Лозартан
+Hydrocodone ... Гідрокодон
+Atorvastatin ... Аторвастатин
+Acetaminophen ... Парацетамол
+Ibuprofen ... Ібупрофен
+Cetirizine ... Цетиризин
+Loratadine ... Лоратадин
+Claritin ... Claritin (Кларитин)
+
+SECTION 4: ROUTINE VISITS
+────────────────────────────────────────────────────────────
+Annual Check-up ... Щорічний медичний огляд
+Physical Exam ... Фізикальний огляд
+Pap Smear ... ПАП-тест
+Dental Cleaning / Prophylaxis ... Професійне чищення зубів / профілактика
+Eye Exam ... Огляд очей
+Immunization ... Щеплення
+DPT (Diphtheria, Pertussis & Tetanus) ... АКДП (дифтерія, кашлюк, правець)
+MMR (Measles, Mumps & Rubella) ... КПК (кір, паротит, краснуха)
+Influenza ... Грип
+Chickenpox ... Вітряна віспа
+Smallpox ... Натуральна віспа
+Hepatitis B ... Гепатит B
+HPV (Human Papillomavirus) ... ВПЛ (вірус папіломи людини)
+Shingles (Herpes Zoster) ... Оперізувальний лишай
+Blood Draw ... Забір крові
+STD / STI Screenings ... Скринінг на ЗПСШ
+Basic Metabolic Panel ... Базова метаболічна панель
+Comprehensive Metabolic Panel ... Розширена метаболічна панель
+CBC ... ЗАК (загальний аналіз крові)
+hCG (pregnancy test) ... ХГЛ (тест на вагітність)
+Glucose Level ... Рівень глюкози
+Hemoglobin A1C ... Глікований гемоглобін (HbA1c)
+Lipid Panel ... Ліпідний профіль
+Liver Function ... Печінкові проби
+Others ... Інше
+Pap Smear ... ПАП-тест
+Urinalysis ... Загальний аналіз сечі
+Strep Test ... Тест на стрептокок
+COVID Test ... Тест на COVID-19
+
+SECTION 5: MEDICAL SPECIALISTS
+────────────────────────────────────────────────────────────
+Internal medicine doctors ... Лікарі внутрішньої медицини
+Pediatricians ... Педіатри
+Family medicine doctors ... Лікарі сімейної медицини
+OB-GYNs (obstetrician and gynecologist) ... Акушери-гінекологи
+Med-Peds ... Лікарі внутрішньої медицини та педіатрії
+Allergist/Immunologist ... Алерголог / Імунолог
+Anesthesiologist ... Анестезіолог
+Colon and Rectal Surgeon ... Колоректальний хірург
+Critical Care Specialist ... Лікар інтенсивної терапії
+Endocrinologist ... Ендокринолог
+Emergency Medicine Specialist ... Лікар невідкладної медицини
+Geriatric Medicine Specialist ... Геріатр
+Hematologist ... Гематолог
+Infectious Disease Specialist ... Інфекціоніст
+Neurologist ... Невролог
+Internist ... Терапевт
+Medical Geneticist ... Медичний генетик
+Nephrologist ... Нефролог
+OB-GYN ... Акушер-гінеколог
+Oncologist ... Онколог
+Ophthalmologist ... Офтальмолог
+Otolaryngologist (ENT) ... Отоларинголог (ЛОР)
+Nursing Staff ... Медичний сестринський персонал
+Registered Nurse (RN) ... Дипломована медична сестра
+Licensed Practical Nurse (LPN) ... Ліцензована практична медична сестра
+Clinical Nurse Specialist (CNS) ... Клінічна медична сестра-спеціаліст
+Certified Registered Nurse Anesthetist (CRNA) ... Сертифікована медична сестра-анестезист
+Nurse Practitioner (NP) ... Медична сестра розширеної практики
+Certified Nurse Midwife ... Сертифікована медична сестра-акушерка
+Pediatricians ... Педіатри
+Psychiatrist ... Психіатр
+Pharmacists ... Фармацевти
+Pulmonologist ... Пульмонолог
+Plastic Surgeons ... Пластичні хірурги
+Podiatrists ... Подіатри
+Radiologist ... Радіолог
+Rheumatologist ... Ревматолог
+Sleep Medicine Specialist ... Спеціаліст із медицини сну
+Urologist ... Уролог
+
+SECTION 6: PAIN DESCRIPTORS
+────────────────────────────────────────────────────────────
+Abrupt ... Раптовий
+Aching ... Той, що болить
+Acute ... Гострий
+Beating ... Пульсуючий
+Blinding ... Сліпучий
+Boring ... Свердлячий
+Brittle ... Ламкий
+Burning ... Пекучий
+Chronic ... Хронічний
+Circumscribed ... Обмежений
+Clammy ... Липкий
+Colicky ... Колікоподібний
+Constant ... Постійний
+Constricting ... Стискаючий
+Continuous ... Безперервний
+Cramping ... Судомний
+Crushing ... Роздавлюючий
+Darting ... Стріляючий
+Deep ... Глибокий
+Diffused ... Дифузний
+Discomforting ... Дискомфортний
+Dizzy ... Запаморочливий
+Drilling ... Свердлячий
+Dull ... Тупий
+Electric ... Наче удар струмом
+Excruciating ... Нестерпний / Мучительний
+Explosive ... Вибуховий
+Fixed ... Фіксований
+Flashing ... Миготливий / Що з'являється і зникає
+Flickering ... Тріпотливий / Переривчастий
+Full feeling ... Відчуття переповнення
+Gas ... Гази
+Generalized ... Генералізований / поширений
+Gnawing ... Гризучий
+Gradual ... Поступовий
+Gripping ... Стискаючий / Хапаючий
+Growing pains ... Зростаючий біль
+Heartburn ... Печія / Печіння в шлунку
+Indigestion ... Розлад травлення
+Intense ... Інтенсивний
+Intermittent ... Переривчастий
+Jumping ... Стрибаючий
+Knot-like ... Вузлоподібний
+Localized ... Локалізований
+Mild ... Слабкий / Помірний
+Moderate ... Помірний
+Nagging ... Ниючий / Нав’язливий
+Needle-like ... Колючий (наче голками)
+Neuralgic ... Невралгічний
+Numb ... Онімілий / Занімілий
+Penetrating ... Проникаючий
+Piercing ... Пронизливий
+Pinching ... Щипаючий / Як защемлення
+Pins and needles ... Відчуття поколювання
+Pounding ... Пульсуючий / Стукаючий
+Pressure ... Тиск
+Pricking ... Поколюючий / Уколи
+Prickly ... Колючий / Подразнюючий
+Pulsing ... Пульсуючий
+Queasy ... Нудотний
+Quivering ... Тремтячий
+Radiating ... Іррадіюючий (що віддає в іншу область)
+Referred ... Відбитий (відображений) біль
+Remittent ... Ремітуючий (що то зникає, то з'являється)
+Scratchy ... Той, що дряпає
+Searing ... Пекучий
+Severe ... Сильний / Важкий
+Sharp ... Гострий
+Shifting ... Переміщуваний / Змінний
+Shock-like ... Наче удар струмом
+Shooting ... Стріляючий
+Sore ... Хворобливий / Чутливий
+Spasmodic ... Спазматичний
+Splitting ... Розколюючий
+Squeezing ... Стискаючий
+Stabbing ... Колючий
+Steady ... Постійний
+Sticking ... Що застрягає
+Stiffness ... Скованість
+Stinging ... Жалючий
+Suffocating ... Задушливий
+Tearing ... Розриваючий
+Tender ... Болісний при натисканні
+Throbbing ... Пульсуючий
+Tight ... Стиснутий
+Tingling ... Поколювання
+Twinge ... Напад болю
+Twisting ... Перекручуючий
+Twitch ... Сіпання / Легкий спазм
+Unbearable ... Нестерпний
+Uncomfortable ... Незручний
+Vague discomfort ... Невизначений дискомфорт
+Warm ... Теплий
+
+SECTION 7: HUMAN ANATOMY
+────────────────────────────────────────────────────────────
+Clavicle ... Ключиця
+Femur ... Стегнова кістка
+Fibula ... Мала гомілкова кістка
+Humerus ... Плечова кістка
+Patella ... Колінна чашечка
+Pelvis ... Таз
+Radius ... Променева кістка
+Rib Cage ... Грудна клітка
+Scapula ... Лопатка
+Skull ... Череп
+Spine ... Хребет
+Sternum ... Грудина
+Tibia ... Велика гомілкова кістка
+Ulna ... Ліктьова кістка
+Vertebra(e) ... Хребець
+Abdominals ... М'язи живота
+Biceps ... Біцепс
+Calf ... Литковий м'яз
+Deltoid ... Дельтоподібний м'яз
+Gluteus ... Сідничний м'яз
+Hamstring ... М'язи задньої поверхні стегна
+Obliques ... Косі м'язи живота
+Pectoral ... Грудний м'яз
+Quadriceps ... Чотириголовий м'яз / Квадріцепс
+Triceps ... Триголовий м'яз / Тріцепс
+Aorta ... Аорта
+Artery ... Артерія
+Atrium ... Передсердя
+Blood Vessels ... Судини
+Capillary ... Капіляр
+Heart ... Серце
+Vein ... Вена
+Ventricle ... Шлуночок
+Alveoli ... Альвеоли
+Bronchi ... Бронхи
+Diaphragm ... Діафрагма
+Larynx ... Гортань
+Lungs ... Легені
+Nasal Cavity ... Носова порожнина
+Pharynx ... Горло (Глотка)
+Trachea ... Трахея
+Anus ... Анус
+Appendix ... Апендикс
+Esophagus ... Стравохід
+Gallbladder ... Жовчний міхур
+Large Intestine ... Товста кишка
+Liver ... Печінка
+Mouth ... Рот
+Pancreas ... Підшлункова залоза
+Rectum ... Пряма кишка
+Small Intestine ... Тонка кишка
+Stomach ... Шлунок
+Brain ... Мозок
+Cerebellum ... Мозочок
+Cerebrum ... Великий мозок
+Medulla Oblongata ... Довгастий мозок
+Nerve ... Нерв
+Neurons ... Нейрони
+Peripheral Nerves ... Периферичні нерви
+Spinal Cord ... Спинний мозок
+Adrenal Glands ... Надниркові залози
+Hypothalamus ... Гіпоталамус
+Ovaries ... Яєчники
+Pancreas ... Підшлункова залоза
+Pineal Gland ... Шишкоподібна залоза/ Епіфіз
+Pituitary Gland ... Гіпофіз
+Testes ... Яєчка
+Thyroid Gland ... Щитоподібна залоза
+Bladder ... Сечовий міхур
+Kidney ... Нирка
+Ureter ... Сечовід
+Urethra ... Сечівник
+Cervix ... Шийка матки
+Fallopian Tubes ... Маткові труби
+Mammary Glands ... Молочні залози
+Ovary ... Яєчник
+Penis ... Пеніс
+Prostate Gland ... Передміхурова залоза
+Scrotum ... Мошонка
+Seminal Vesicle ... Сім'яний міхурець
+Testes ... Яєчка
+Uterus ... Матка
+Vagina ... Вагіна
+Lymph Nodes ... Лімфатичні вузли
+Lymph Vessels ... Лімфатичні судини
+Spleen ... Селезінка
+Thymus ... Тимус (Загруднинна залоза)
+Tonsils ... Мигдалики
+Dermis ... Дерма
+Epidermis ... Епідерміс
+Hair ... Волосся
+Hypodermis ... Гіподерма
+Nails ... Нігті
+Sebaceous Glands ... Сальні залози
+Skin ... Шкіра
+Sweat Glands ... Потові залози
+
+SECTION 8: MEDICAL INSURANCE TERMS
+────────────────────────────────────────────────────────────
+ACA (Affordable Care Act) ... (Закон про доступну медичну допомогу)
+Affordable Care Act (ACA) ... Закон про доступну медичну допомогу
+Beneficiary ... Бенефіціар (вигодонабувач)
+Allowed Amount ... Дозволена кількість
+Asset Limit ... Ліміт активів
+Coverage ... Обсяг/ Покриття
+Appeal ... Апеляція
+Eligibility Requirements ... Вимоги до участі
+Deductible ... Франшиза
+Balance Billing ... Доплата за перевищення ліміту
+Federal Poverty Level (FPL) ... Федеральний рівень бідності
+Enrollment Period ... Період прийому заяв
+Benefit Period ... Період виплати допомоги
+Long-Term Care ... Довгостроковий догляд
+Medicare Advantage (Part C) ... Medicare Advantage (Частина C)
+Benefits ... Переваги
+Managed Care ... Керований догляд
+Medicare Part A (Hospital Insurance) ... Medicare, частина A (страхування лікарняних витрат)
+Capitation ... Пакетна оплата/ на душу пацієнта
+Medicaid Expansion ... Розширення Medicaid
+Medicare Part B (Medical Insurance) ... Medicare, частина B (медичне страхування)
+CHIP (Children’s Health Insurance Program) ... (Програма медичного страхування дітей)
+Prescription Drug Coverage ... Покриття рецептурних ліків
+Medicare Part D (Prescription Drug) ... Medicare, частина D (ліки за рецептом)
+Claim ... Заява
+Qualified Medical Expenses ... Кваліфіковані медичні витрати
+Medigap ... Medigap
+CMS (Centers for Medicare & Medicaid Services) ... (Центри з питань медичного страхування Medicare та Medicaid)
+Spend Down ... Витрати
+Out-of-Pocket Costs ... Власні витрати
+COBRA (Consolidated Omnibus Budget Reconciliation Act) ... (Закон про узгодження бюджету)
+State Medicaid Agency ... Державне агентство Medicaid
+Outpatient Care ... Амбулаторні послуги
+Coinsurance ... Співстрахування
+Supplemental Coverage ... Додаткове покриття
+Premium ... Prima
+Community Rating ... Рейтинг спільноти
+Inpatient Hospital Services ... Стаціонарні лікарняні послуги
+Preventive Services ... Превентивні послуги
+Coordination of Benefits (COB) ... Координація виплат
+Retroactive Coverage ... Ретроактивне покриття
+Rehabilitation ... Реабілітація
+Copayment (Copay) ... Співплата
+Income Limit ... Ліміт доходу
+Skilled Nursing Facility ... Кваліфікований медсестринський заклад
+Cost Sharing ... Розподіл витрат
+Special Enrollment Period ... Спеціальний період реєстрації
+Deductible ... Франшиза (сума, яку пізніше покриє страхування)
+Supplemental Insurance (Medigap) ... Додаткове страхування (Medigap)
+Dependent ... Залежний
+Drug Formulary ... Перелік лікарських препаратів
+Dual Eligibility ... Подвійна правомочність
+Durable Medical Equipment (DME) ... Медичне обладнання тривалого користування
+EOB (Explanation of Benefits) ... (Пояснення щодо виплат)
+Essential Health Benefits ... Основні медичні послуги (10 штук відповідно до Закону АСА)
+Exclusions ... Винятки
+Fee-for-Service (FFS) ... Оплата за надані послуги
+FSA (Flexible Spending Account) ... (рахунок для гнучких витрат)
+Generic Drug ... Генеричний препарат/ Аналог
+Grace Period ... Пільговий період
+Group Health Plan ... Груповий план оздоровлення
+HMO (Health Maintenance Organization) ... HMO (Організація з підтримки здоров'я)
+HRA (Health Reimbursement Account) ... HRA (Рахунок медичного відшкодування)
+HSA (Health Savings Account) ... HSA (Рахунок медичних ощадних витрат)
+In-Network ... Внутрішньомережеві
+Indemnity Plan ... План відшкодування
+Individual Mandate ... Індивідуальний мандат
+Lifetime Limit ... Пожиттєвий догляд
+Long-Term Care ... Довгостроковий догляд
+Managed Care ... Керований догляд
+Maximum Out-of-Pocket ... Максимальна сума власних витрат
+Medically Necessary ... Медична необхідність
+Network ... Мережа
+Open Enrollment Period ... Період відкритої реєстрації
+Out-of-Network ... Позамережеві
+Outpatient Care ... Амбулаторні послуги
+Patient Assistance Program ... Програма допомоги пацієнтам
+PCP (Primary Care Provider) ... Постачальник первинної медичної допомоги
+Payer ... Платник
+Payer of Last Resort ... Платник останньої інстанції
+Pediatric Dental Coverage ... Дитяче стоматологічне страхування
+PPO (Preferred Provider Organization) ... Організація пріоритетного постачальника
+Preauthorization (Precertification) ... Попередня авторизація / сертифікація
+Pre-Existing Condition ... Існуючий стан
+Premium ... Преміум
+Preventive Services ... Профілактичні послуги
+Prior Authorization ... Попередня авторизація
+Provider ... Постачальник
+Provider Network ... Мережа постачальників
+Qualified Health Plan (QHP) ... Кваліфікований план медичного страхування
+Referral ... Направлення
+Rehabilitation Services ... Реабілітаційні послуги
+Rescission ... Розірвання
+Self-Insured Plan ... План самострахування
+Service Area ... Зона обслуговування
+Skilled Nursing Facility (SNF) ... Заклад кваліфікованого догляду
+Special Enrollment Period ... Спеціальний період реєстрації
+State Health Insurance Assistance Program (SHIP) ... Програма допомоги державного медичного страхування
+Subsidy ... Субсидія
+Summary of Benefits and Coverage (SBC) ... Зведення пільг та покриття
+Telehealth ... Телемедицина
+Third-Party Administrator (TPA) ... Сторонній адміністратор
+Tiered Network ... Рівнянова мережа
+Tricare ... Tricare (програма)
+Usual, Customary, and Reasonable (UCR) ... Звичайний, простий та розумний
+Utilization Review (UR) ... Перегляд використання
+Waiting Period ... Період очікування
+Wellness Program ... Програма оздоровлення
+
+═══════════════════════════════════════════════════════════════════════
+END OF AUDIOBOOK — 469 vocabulary terms covered
+Study hard. You've got this! 💪🇺🇦
+═══════════════════════════════════════════════════════════════════════
