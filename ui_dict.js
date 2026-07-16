@@ -1431,9 +1431,9 @@ const UI_DICT = {
     "uk": "Модель \"Скажи ні\" та недоречні запити",
     "es": "Modelo de \"Di No\" y solicitudes inapropiadas"
   },
-  "Play with me 🎭 — choose a language, choose a partner language...": {
-    "uk": "Пограй зі мною 🎭 — обери мову, обери мову партнера...",
-    "es": "Juega conmigo 🎭 — elige un idioma, elige un idioma complementario..."
+  "Play with me": {
+    "uk": "Пограй зі мною",
+    "es": "Juega conmigo"
   },
   "English → Ukrainian": {
     "uk": "Англійська → Українська",
@@ -1714,5 +1714,265 @@ const UI_DICT = {
   "Different steps for AUDIO vs VIDEO calls. Both end with farewell to LEP in Ukrainian.": {
     "uk": "Різні кроки для АУДІО та ВІДЕОдзвінків. Обидва закінчуються прощанням з LEP українською мовою.",
     "es": "Diferentes pasos para llamadas de AUDIO y VIDEO. Ambos terminan con una despedida de la LEP en ucraniano."
+  },
+  "🧭 The Ultimate Call Algorithm": {
+      "uk": "🧭 Найкращий алгоритм дзвінка",
+      "es": "🧭 El algoritmo definitivo de la llamada"
+  },
+  "Every protocol, in the order you'll actually hit them on a live call. Follow the arrows.": {
+      "uk": "Усі протоколи в тому порядку, у якому ви реально стикаєтеся з ними під час дзвінка. Слідуйте за стрілками.",
+      "es": "Todos los protocolos, en el orden real en que los encontrarás durante una llamada. Sigue las flechas."
+  },
+  "📞 Call Connects": {
+      "uk": "📞 Дзвінок з'єднується",
+      "es": "📞 La llamada se conecta"
+  },
+  "Blue / black screen?": {
+      "uk": "Синій / чорний екран?",
+      "es": "¿Pantalla azul / negra?"
+  },
+  "Wait": {
+      "uk": "Зачекайте",
+      "es": "Espera"
+  },
+  "60 sec": {
+      "uk": "60 сек",
+      "es": "60 seg"
+  },
+  "→ \"Hello, this is your Ukrainian interpreter. Is there anybody on the line?\" → still nothing → apologize and disconnect.": {
+      "uk": "→ «Добрий день, це ваш перекладач української мови. Чи є хтось на лінії?» → тиша → вибачитися та завершити дзвінок.",
+      "es": "→ \"Hola, soy su intérprete de ucraniano. ¿Hay alguien en la línea?\" → sigue sin respuesta → discúlpate y cuelga."
+  },
+  "👋 Greeting": {
+      "uk": "👋 Привітання",
+      "es": "👋 Saludo"
+  },
+  "MANDATORY · SCRIPTED": {
+      "uk": "ОБОВ'ЯЗКОВО · ЗА СЦЕНАРІЄМ",
+      "es": "OBLIGATORIO · CON GUION"
+  },
+  "To provider:": {
+      "uk": "Постачальнику:",
+      "es": "Al proveedor:"
+  },
+  "your name → language → ID# → \"everything will be interpreted\"": {
+      "uk": "ваше ім'я → мова → ID-номер → «усе буде перекладено»",
+      "es": "tu nombre → idioma → número de ID → \"todo será interpretado\""
+  },
+  "To patient (Ukrainian):": {
+      "uk": "Пацієнту (українською):",
+      "es": "Al paciente (en ucraniano):"
+  },
+  "your name → target language → confidentiality → \"everything interpreted\"": {
+      "uk": "ваше ім'я → цільова мова → конфіденційність → «усе перекладається»",
+      "es": "tu nombre → idioma de destino → confidencialidad → \"todo se interpreta\""
+  },
+  "🔁 During the Call — interpret in 1st person. Watch for:": {
+      "uk": "🔁 Під час дзвінка — перекладайте від першої особи. Слідкуйте за:",
+      "es": "🔁 Durante la llamada — interpreta en primera persona. Presta atención a:"
+  },
+  "If someone talks to YOU instead of each other": {
+      "uk": "Якщо хтось звертається до ВАС, а не одне до одного",
+      "es": "Si alguien te habla a TI en lugar de hablarse entre ellos"
+  },
+  "👤 3rd Person": {
+      "uk": "👤 Третя особа",
+      "es": "👤 Tercera persona"
+  },
+  "Redirect them to speak to each other": {
+      "uk": "Перенаправте їх говорити одне з одним",
+      "es": "Redirígelos para que se hablen entre ellos"
+  },
+  "Exceptions: kids ≤7, emergencies, confused/dementia/trauma, mentally ill": {
+      "uk": "Винятки: діти ≤7 років, надзвичайні ситуації, сплутаність свідомості/деменція/травма, психічно хворі",
+      "es": "Excepciones: niños ≤7 años, emergencias, confusión/demencia/trauma, enfermos mentales"
+  },
+  "If they persist anyway — keep interpreting 1st person, log why": {
+      "uk": "Якщо вони все одно продовжують — перекладайте від першої особи, зазначте причину",
+      "es": "Si aun así insisten — sigue interpretando en primera persona, anota el motivo"
+  },
+  "If you need to clarify / repeat / verify": {
+      "uk": "Якщо потрібно уточнити / повторити / перевірити",
+      "es": "Si necesitas aclarar / repetir / verificar"
+  },
+  "🔔 Intervention": {
+      "uk": "🔔 Втручання",
+      "es": "🔔 Intervención"
+  },
+  "ID yourself to the waiting party first": {
+      "uk": "Спочатку представтеся стороні, що очікує",
+      "es": "Preséntate primero a la parte que espera"
+  },
+  "ID yourself to the other party, ask your question": {
+      "uk": "Представтеся іншій стороні, поставте своє запитання",
+      "es": "Preséntate a la otra parte, haz tu pregunta"
+  },
+  "If audio/video quality is bad": {
+      "uk": "Якщо якість аудіо/відео погана",
+      "es": "Si la calidad de audio/video es mala"
+  },
+  "🔧 Troubleshoot": {
+      "uk": "🔧 Усунення несправностей",
+      "es": "🔧 Solución de problemas"
+  },
+  "Reposition device / toggle camera": {
+      "uk": "Перемістіть пристрій / увімкніть-вимкніть камеру",
+      "es": "Reposiciona el dispositivo / alterna la cámara"
+  },
+  "Still bad → camera off, keep going": {
+      "uk": "Все ще погано → вимкніть камеру, продовжуйте",
+      "es": "Sigue mal → cámara apagada, continúa"
+  },
+  "Still bad → offer new interpreter +": {
+      "uk": "Все ще погано → запропонуйте нового перекладача +",
+      "es": "Sigue mal → ofrece otro intérprete +"
+  },
+  "If you need to step away": {
+      "uk": "Якщо вам потрібно відійти",
+      "es": "Si necesitas ausentarte"
+  },
+  "⏸️ Hold": {
+      "uk": "⏸️ Утримання",
+      "es": "⏸️ Espera"
+  },
+  "10 min standard · 20 min if unspecified · indefinite if life/death": {
+      "uk": "10 хв стандартно · 20 хв якщо не вказано · безстроково у разі загрози життю",
+      "es": "10 min estándar · 20 min si no se especifica · indefinido si es cuestión de vida o muerte"
+  },
+  "Tell both parties, camera off + mute": {
+      "uk": "Повідомте обидві сторони, вимкніть камеру + звук",
+      "es": "Avisa a ambas partes, cámara apagada + silencio"
+  },
+  "Log it, report on Discord": {
+      "uk": "Зафіксуйте це, повідомте в Discord",
+      "es": "Regístralo, infórmalo en Discord"
+  },
+  "If asked for a gift / your hours / sight translation": {
+      "uk": "Якщо просять подарунок / ваш графік / переклад з листа",
+      "es": "Si te piden un regalo / tu horario / traducción a la vista"
+  },
+  "🚫 Say No": {
+      "uk": "🚫 Скажіть «ні»",
+      "es": "🚫 Di que no"
+  },
+  "Give a reason (company policy)": {
+      "uk": "Назвіть причину (політика компанії)",
+      "es": "Da una razón (política de la empresa)"
+  },
+  "If provider speaks Ukrainian / patient speaks English": {
+      "uk": "Якщо постачальник говорить українською / пацієнт говорить англійською",
+      "es": "Si el proveedor habla ucraniano / el paciente habla inglés"
+  },
+  "👁️ Shadowing": {
+      "uk": "👁️ Тіньовий супровід",
+      "es": "👁️ Observación en la sombra"
+  },
+  "Tell both parties you're staying on, listening": {
+      "uk": "Повідомте обидві сторони, що ви залишаєтесь на лінії й слухаєте",
+      "es": "Avisa a ambas partes que te quedas en la línea, escuchando"
+  },
+  "Stay alert, keep taking notes": {
+      "uk": "Будьте уважні, продовжуйте робити нотатки",
+      "es": "Mantente alerta, sigue tomando notas"
+  },
+  "Jump in only if something important needs interpreting": {
+      "uk": "Втручайтесь лише якщо потрібно перекласти щось важливе",
+      "es": "Interviene solo si hay algo importante que interpretar"
+  },
+  "If you need to place an outbound call": {
+      "uk": "Якщо потрібно здійснити вихідний дзвінок",
+      "es": "Si necesitas realizar una llamada saliente"
+  },
+  "📲 Dial-Out": {
+      "uk": "📲 Вихідний дзвінок",
+      "es": "📲 Llamada saliente"
+  },
+  "Number to dial? Who's calling?": {
+      "uk": "Який номер набрати? Хто телефонує?",
+      "es": "¿Qué número marcar? ¿Quién llama?"
+  },
+  "Patient's name?": {
+      "uk": "Ім'я пацієнта?",
+      "es": "¿Nombre del paciente?"
+  },
+  "Leave voicemail? Callback #?": {
+      "uk": "Залишити голосове повідомлення? Номер для зворотного дзвінка?",
+      "es": "¿Dejar buzón de voz? ¿Número de devolución de llamada?"
+  },
+  "If ASL + another spoken language both needed": {
+      "uk": "Якщо потрібні одночасно ASL і ще одна усна мова",
+      "es": "Si se necesitan tanto ASL como otro idioma hablado"
+  },
+  "👥 Dual Interpretation": {
+      "uk": "👥 Подвійна інтерпретація",
+      "es": "👥 Interpretación dual"
+  },
+  "First one connected adds the second interpreter": {
+      "uk": "Хто підключився першим — додає другого перекладача",
+      "es": "El primero en conectarse añade al segundo intérprete"
+  },
+  "Brief provider on hold, brief your team": {
+      "uk": "Поставте постачальника на утримання, проінформуйте свою команду",
+      "es": "Pon al proveedor en espera, informa a tu equipo"
+  },
+  "ASL interpreter leads": {
+      "uk": "Перекладач ASL веде розмову",
+      "es": "El intérprete de ASL lidera"
+  },
+  "If the call is running long": {
+      "uk": "Якщо дзвінок затягується",
+      "es": "Si la llamada se está alargando"
+  },
+  "⏰ Long Call": {
+      "uk": "⏰ Довгий дзвінок",
+      "es": "⏰ Llamada larga"
+  },
+  "→ self-monitor, consider transfer": {
+      "uk": "→ самоконтроль, розгляньте передачу дзвінка",
+      "es": "→ autoevalúate, considera transferir"
+  },
+  "→ expected to transfer (unless not tired)": {
+      "uk": "→ очікується передача дзвінка (якщо ви не втомились)",
+      "es": "→ se espera que transfieras (a menos que no estés cansado)"
+  },
+  "\"End of shift\" alone is NOT a valid reason": {
+      "uk": "«Кінець зміни» сам по собі НЕ є вагомою причиною",
+      "es": "\"Fin del turno\" por sí solo NO es una razón válida"
+  },
+  "🏁 Wrapping Up": {
+      "uk": "🏁 Завершення",
+      "es": "🏁 Cerrando la llamada"
+  },
+  "Closing": {
+      "uk": "Завершення",
+      "es": "Cierre"
+  },
+  "📞 Audio:": {
+      "uk": "📞 Аудіо:",
+      "es": "📞 Audio:"
+  },
+  "offer more help → state your ID# → bye to doctor → bye to patient (Ukrainian)": {
+      "uk": "запропонуйте додаткову допомогу → назвіть свій ID-номер → попрощайтеся з лікарем → попрощайтеся з пацієнтом (українською)",
+      "es": "ofrece más ayuda → indica tu número de ID → despídete del médico → despídete del paciente (en ucraniano)"
+  },
+  "📹 Video:": {
+      "uk": "📹 Відео:",
+      "es": "📹 Video:"
+  },
+  "offer more help → remind them to rate the call → bye to doctor → bye to patient (Ukrainian)": {
+      "uk": "запропонуйте додаткову допомогу → нагадайте оцінити дзвінок → попрощайтеся з лікарем → попрощайтеся з пацієнтом (українською)",
+      "es": "ofrece más ayuda → recuérdales calificar la llamada → despídete del médico → despídete del paciente (en ucraniano)"
+  },
+  "📝 Call Notes": {
+      "uk": "📝 Нотатки дзвінка",
+      "es": "📝 Notas de la llamada"
+  },
+  "ALWAYS": {
+      "uk": "ЗАВЖДИ",
+      "es": "SIEMPRE"
+  },
+  "Leave a note every single call, even if nothing happened. Names in CAPS. Refusals → initials, or N/A in caps if none given.": {
+      "uk": "Залишайте нотатку після кожного дзвінка, навіть якщо нічого не сталося. Імена — ВЕЛИКИМИ ЛІТЕРАМИ. Відмови → ініціали, або N/A великими літерами, якщо їх не надано.",
+      "es": "Deja una nota en cada llamada, incluso si no pasó nada. Nombres en MAYÚSCULAS. Rechazos → iniciales, o N/A en mayúsculas si no se dieron."
   }
 };

@@ -850,6 +850,87 @@
     margin-top: 1px;
   }
 
+  /* ── ULTIMATE CALL ALGORITHM ── */
+  .algo-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .algo-heading { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .algo-sub { font-size: 13px; color: var(--text3); margin-bottom: 8px; }
+
+  .algo-phase {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin: 26px 0 12px;
+  }
+
+  .algo-phase:first-of-type { margin-top: 0; }
+
+  .algo-step {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+  }
+
+  .algo-step.mandatory { border-left-color: var(--red); }
+
+  .algo-step-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .algo-step-body { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+  .algo-arrow {
+    text-align: center;
+    color: var(--text3);
+    font-size: 18px;
+    line-height: 1;
+    margin: 6px 0;
+  }
+
+  .algo-branch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+  }
+
+  .algo-branch {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .algo-branch-if {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .algo-branch-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+
+  .numbered-list.compact li { font-size: 12.5px; padding: 6px 0; }
+  .numbered-list.compact li::before { width: 18px; height: 18px; font-size: 10px; }
+
   /* ── AUDIOBOOK SECTION ── */
   .audio-grid {
     display: grid;
@@ -1901,6 +1982,136 @@
   <div class="tab-content" id="content-cheatsheet">
     <h2 class="section-title">⚡ Quick Cheat Sheet</h2>
     <div class="section-subtitle">Everything critical on one page. Memorize these cold.</div>
+
+    <div class="algo-wrap">
+      <div class="algo-heading">🧭 The Ultimate Call Algorithm</div>
+      <div class="algo-sub">Every protocol, in the order you'll actually hit them on a live call. Follow the arrows.</div>
+
+      <div class="algo-phase">📞 Call Connects</div>
+      <div class="algo-step">
+        <div class="algo-step-title">Blue / black screen?</div>
+        <div class="algo-step-body">Wait <strong style="color:var(--yellow)">60 sec</strong> → "Hello, this is your Ukrainian interpreter. Is there anybody on the line?" → still nothing → apologize and disconnect.</div>
+      </div>
+      <div class="algo-arrow">↓</div>
+      <div class="algo-step mandatory">
+        <div class="algo-step-title">👋 Greeting <span style="color:var(--red);font-size:11px;">MANDATORY · SCRIPTED</span></div>
+        <div class="algo-step-body">
+          <strong>To provider:</strong> your name → language → ID# → "everything will be interpreted"<br>
+          <strong>To patient (Ukrainian):</strong> your name → target language → confidentiality → "everything interpreted"
+        </div>
+      </div>
+
+      <div class="algo-arrow">↓</div>
+      <div class="algo-phase">🔁 During the Call — interpret in 1st person. Watch for:</div>
+      <div class="algo-branch-grid">
+
+        <div class="algo-branch" style="border-top-color:var(--purple);">
+          <div class="algo-branch-if">If someone talks to YOU instead of each other</div>
+          <div class="algo-branch-title">👤 3rd Person</div>
+          <ol class="numbered-list compact">
+            <li>Redirect them to speak to each other</li>
+            <li>Exceptions: kids ≤7, emergencies, confused/dementia/trauma, mentally ill</li>
+            <li>If they persist anyway — keep interpreting 1st person, log why</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--yellow);">
+          <div class="algo-branch-if">If you need to clarify / repeat / verify</div>
+          <div class="algo-branch-title">🔔 Intervention</div>
+          <ol class="numbered-list compact">
+            <li>ID yourself to the waiting party first</li>
+            <li>ID yourself to the other party, ask your question</li>
+            <li>Resume interpreting</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--yellow);">
+          <div class="algo-branch-if">If audio/video quality is bad</div>
+          <div class="algo-branch-title">🔧 Troubleshoot</div>
+          <ol class="numbered-list compact">
+            <li>Reposition device / toggle camera</li>
+            <li>Still bad → camera off, keep going</li>
+            <li>Still bad → offer new interpreter + <strong style="color:var(--green)">1-866-449-4428</strong></li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--red);">
+          <div class="algo-branch-if">If you need to step away</div>
+          <div class="algo-branch-title">⏸️ Hold</div>
+          <ol class="numbered-list compact">
+            <li>10 min standard · 20 min if unspecified · indefinite if life/death</li>
+            <li>Tell both parties, camera off + mute</li>
+            <li>Log it, report on Discord</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--pink);">
+          <div class="algo-branch-if">If asked for a gift / your hours / sight translation</div>
+          <div class="algo-branch-title">🚫 Say No</div>
+          <ol class="numbered-list compact">
+            <li>Be gracious</li>
+            <li>Offer 2-3 alternatives</li>
+            <li>Give a reason (company policy)</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--accent2);">
+          <div class="algo-branch-if">If provider speaks Ukrainian / patient speaks English</div>
+          <div class="algo-branch-title">👁️ Shadowing</div>
+          <ol class="numbered-list compact">
+            <li>Tell both parties you're staying on, listening</li>
+            <li>Stay alert, keep taking notes</li>
+            <li>Jump in only if something important needs interpreting</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--green);">
+          <div class="algo-branch-if">If you need to place an outbound call</div>
+          <div class="algo-branch-title">📲 Dial-Out</div>
+          <ol class="numbered-list compact">
+            <li>Number to dial? Who's calling?</li>
+            <li>Patient's name?</li>
+            <li>Leave voicemail? Callback #?</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--accent2);">
+          <div class="algo-branch-if">If ASL + another spoken language both needed</div>
+          <div class="algo-branch-title">👥 Dual Interpretation</div>
+          <ol class="numbered-list compact">
+            <li>First one connected adds the second interpreter</li>
+            <li>Brief provider on hold, brief your team</li>
+            <li>ASL interpreter leads</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--red);">
+          <div class="algo-branch-if">If the call is running long</div>
+          <div class="algo-branch-title">⏰ Long Call</div>
+          <ol class="numbered-list compact">
+            <li><strong style="color:var(--yellow)">90 min</strong> → self-monitor, consider transfer</li>
+            <li><strong style="color:var(--red)">120 min</strong> → expected to transfer (unless not tired)</li>
+            <li>"End of shift" alone is NOT a valid reason</li>
+          </ol>
+        </div>
+
+      </div>
+
+      <div class="algo-arrow">↓</div>
+      <div class="algo-phase">🏁 Wrapping Up</div>
+      <div class="algo-step">
+        <div class="algo-step-title">Closing <span style="color:var(--red);font-size:11px;">MANDATORY · SCRIPTED</span></div>
+        <div class="algo-step-body">
+          <strong>📞 Audio:</strong> offer more help → state your ID# → bye to doctor → bye to patient (Ukrainian)<br>
+          <strong>📹 Video:</strong> offer more help → remind them to rate the call → bye to doctor → bye to patient (Ukrainian)
+        </div>
+      </div>
+      <div class="algo-arrow">↓</div>
+      <div class="algo-step mandatory">
+        <div class="algo-step-title">📝 Call Notes <span style="color:var(--red);font-size:11px;">ALWAYS</span></div>
+        <div class="algo-step-body">Leave a note every single call, even if nothing happened. Names in CAPS. Refusals → initials, or N/A in caps if none given.</div>
+      </div>
+    </div>
 
     <div class="cheatsheet-grid">
 
@@ -4898,17 +5109,21 @@ function startQuiz() {
   }
 
   if (cat !== 'protocols') {
+    // Quizzing "translate English to English" is meaningless, so default to
+    // Ukrainian whenever the app is in plain-English mode.
+    const targetLang = currentAppLang === 'spanish' ? 'spanish' : 'ukrainian';
+    const targetLabel = targetLang === 'spanish' ? 'Spanish' : 'Ukrainian';
     const terms = cat === 'all' ? allCards : allCards.filter(c => c.category === cat);
     const shuffled = [...terms].sort(() => Math.random() - 0.5).slice(0, 80);
     for (const term of shuffled) {
-      const wrongPool = terms.filter(t => t.english !== term.english);
+      const wrongPool = terms.filter(t => t.english !== term.english && t[targetLang]);
       if (wrongPool.length < 3) continue;
-      const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t.ukrainian);
-      const options = [...wrongs, term[currentAppLang]].sort(() => Math.random() - 0.5);
-      const correct = options.indexOf(term[currentAppLang]);
+      const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t[targetLang]);
+      const options = [...wrongs, term[targetLang]].sort(() => Math.random() - 0.5);
+      const correct = options.indexOf(term[targetLang]);
       pool.push({
         type: 'vocab',
-        q: `What is the Ukrainian translation of "${term.english}"?`,
+        q: `What is the ${targetLabel} translation of "${term.english}"?`,
         options, correct
       });
     }
@@ -5475,7 +5690,7 @@ initClippy();
 <div class="clippy-widget" id="clippyWidget">
   <div class="clippy-speech" onclick="window.open('playscape.html', '_blank')">
     <button class="clippy-close" onclick="dismissClippy(event)">×</button>
-    Play with me 🎭 — choose a language, choose a partner language...
+    Play with me
   </div>
   <div class="clippy-avatar" onclick="window.open('playscape.html', '_blank')">📎</div>
 </div>
