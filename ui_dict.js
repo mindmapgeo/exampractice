@@ -1431,9 +1431,9 @@ const UI_DICT = {
     "uk": "Модель \"Скажи ні\" та недоречні запити",
     "es": "Modelo de \"Di No\" y solicitudes inapropiadas"
   },
-  "Try Playscape — practice live interpreting scenarios 🎭": {
-    "uk": "Спробуйте Playscape — практикуйте усний переклад у живих сценаріях 🎭",
-    "es": "Prueba Playscape — practica interpretación en vivo con escenarios reales 🎭"
+  "Play with me 🎭 — choose a language, choose a partner language...": {
+    "uk": "Пограй зі мною 🎭 — обери мову, обери мову партнера...",
+    "es": "Juega conmigo 🎭 — elige un idioma, elige un idioma complementario..."
   },
   "English → Ukrainian": {
     "uk": "Англійська → Українська",
