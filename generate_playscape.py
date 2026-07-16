@@ -778,7 +778,16 @@ html_template = """<!DOCTYPE html>
 <div id="homeView">
   <header>
     <div class="logo">Playscape // Hub</div>
-    <div class="hub-counter" id="hubCounter" style="display:none;"></div>
+    <div style="display:flex; align-items:center; gap:16px; z-index: 20;">
+      <select id="langToggle" onchange="changeLanguage(this.value)" style="
+        padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); 
+        color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; 
+        cursor: pointer; font-family: 'Inter', sans-serif; outline: none;
+      ">
+        <option value="ukrainian" style="color:black;">🇺🇦 Ukrainian Practice</option>
+        <option value="spanish" style="color:black;">🇪🇸 Spanish Practice</option>
+      </select>
+    </div>
   </header>
   <div class="hub-content">
     <h1 class="hub-title">Virtual Scenarios</h1>
@@ -856,6 +865,11 @@ html_template = """<!DOCTYPE html>
   let currentStep = 0;
   let totalWorldsVisited = 0;
   let autoChainTimer = null;
+  let currentChatActiveLength = 0;
+
+  // Retrieve shared language setting
+  let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+  document.getElementById('langToggle').value = currentAppLang;
 
   const homeView = document.getElementById('homeView');
   const instanceView = document.getElementById('instanceView');
@@ -870,6 +884,11 @@ html_template = """<!DOCTYPE html>
   const portalTitle = document.getElementById('portalTitle');
   const portalTopic = document.getElementById('portalTopic');
   const countdownFill = document.getElementById('countdownFill');
+
+  function changeLanguage(lang) {
+    currentAppLang = lang;
+    localStorage.setItem('ges_lang', lang);
+  }
 
   function initHub() {
     scenarioGrid.innerHTML = '';
@@ -904,8 +923,12 @@ html_template = """<!DOCTYPE html>
     chatTopic.textContent = currentChat.topic;
     worldCounter.textContent = `World ${totalWorldsVisited} · ∞`;
 
+    const targetLangCode = currentAppLang === 'ukrainian' ? 'uk' : 'es';
+    const activeMessages = currentChat.messages.filter(msg => msg.lang === 'en' || msg.lang === targetLangCode);
+    currentChatActiveLength = activeMessages.length;
+
     chatMessagesEl.innerHTML = '';
-    currentChat.messages.forEach((msg, i) => {
+    activeMessages.forEach((msg, i) => {
       const wrapper = document.createElement('div');
       wrapper.className = `message ${msg.role}`;
       wrapper.id = `msg-${i}`;
@@ -957,7 +980,7 @@ html_template = """<!DOCTYPE html>
     if (!currentChat) return;
     // If portal is showing, Space advances to next world
     if (completionPortal.style.display === 'flex') { chainNext(); return; }
-    if (currentStep >= currentChat.messages.length) return;
+    if (currentStep >= currentChatActiveLength) return;
     const msgEl = document.getElementById(`msg-${currentStep}`);
     if (msgEl) {
       msgEl.classList.add('visible');
@@ -978,12 +1001,12 @@ html_template = """<!DOCTYPE html>
   }
 
   function updateUI() {
-    const total = currentChat ? currentChat.messages.length : 0;
+    const total = currentChat ? currentChatActiveLength : 0;
     const done = currentStep >= total;
     chatProgress.textContent = `${currentStep} / ${total} lines`;
     btnNext.textContent = done ? '→ Next World' : 'Reveal Next Line (Space)';
     btnNext.disabled = false;
-    if (done) { showCompletionPortal(); }
+    if (done && total > 0) { showCompletionPortal(); }
   }
 
   document.addEventListener('keydown', e => {
@@ -1005,7 +1028,10 @@ html_template = """<!DOCTYPE html>
 import re
 html_content = html_template.replace("CHATS_JSON_PLACEHOLDER", json.dumps(chats, ensure_ascii=False))
 
-with open("/Users/rootv/Documents/job/exam/playscape.html", "w", encoding="utf-8") as f:
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+output_path = os.path.join(script_dir, "playscape.html")
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
 print("Done. Generated playscape.html with", len(chats), "scenarios.")
