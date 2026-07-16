@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medical Interpreter Study Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- ResponsiveVoice: consistent TTS across all student browsers/devices -->
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 <style>
   :root {
     --bg: #0a0d14;
@@ -4695,63 +4697,43 @@ function markCard(known) {
 }
 
 // ══════════════════════════════════════════════
-// VOICE PICKER — picks highest quality available
-// Priority for ES: Paulina > Mónica > Flo > Eddy > Google español > any es-MX/es-ES
-// Priority for UK: Lesya > Milena > any uk-UA
+// TTS ENGINE
+// Uses ResponsiveVoice (cloud, consistent across all devices/browsers)
+// Falls back to Web Speech API if offline
 // ══════════════════════════════════════════════
-const _voiceCache = {};
-function getBestVoice(lang) {
-  if (_voiceCache[lang]) return _voiceCache[lang];
-  const voices = window.speechSynthesis.getVoices();
-  let voice = null;
-  if (lang === 'es-ES' || lang === 'es-MX' || lang.startsWith('es')) {
-    const priority = ['Paulina', 'Mónica', 'Flo (Spanish', 'Eddy (Spanish', 'Sandy (Spanish', 'Google español de Estados Unidos', 'Google español'];
-    for (const name of priority) {
-      voice = voices.find(v => v.name.startsWith(name) && v.lang.startsWith('es'));
-      if (voice) break;
-    }
-    if (!voice) voice = voices.find(v => v.lang === 'es-MX') || voices.find(v => v.lang.startsWith('es'));
-  } else if (lang === 'uk-UA' || lang.startsWith('uk')) {
-    const priority = ['Lesya', 'Milena', 'Yulia'];
-    for (const name of priority) {
-      voice = voices.find(v => v.name.startsWith(name) && v.lang.startsWith('uk'));
-      if (voice) break;
-    }
-    if (!voice) voice = voices.find(v => v.lang.startsWith('uk'));
-  } else if (lang === 'en-US' || lang.startsWith('en')) {
-    const priority = ['Samantha', 'Karen', 'Google US English', 'Google UK English Female', 'Moira'];
-    for (const name of priority) {
-      voice = voices.find(v => v.name.startsWith(name) && v.lang.startsWith('en'));
-      if (voice) break;
-    }
-    if (!voice) voice = voices.find(v => v.lang === 'en-US');
+const RV_VOICES = {
+  'es': 'Spanish Female',      // Google-quality Spanish, same for every student
+  'uk': 'Ukrainian Female',    // Ukrainian
+  'en': 'UK English Female'    // English
+};
+
+function _getLangKey() {
+  return currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
+}
+
+function speakText(text, langKey, rate) {
+  rate = rate || 0.85;
+  // ResponsiveVoice (preferred — works for all students)
+  if (typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
+    responsiveVoice.cancel();
+    const rvVoice = RV_VOICES[langKey] || 'UK English Female';
+    responsiveVoice.speak(text, rvVoice, { rate: rate, pitch: 1, volume: 1 });
+    return;
   }
-  if (voice) _voiceCache[lang] = voice;
-  return voice;
+  // Fallback: Web Speech API (offline / adblocker)
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  const langMap = { es: 'es-ES', uk: 'uk-UA', en: 'en-US' };
+  utt.lang = langMap[langKey] || 'en-US';
+  utt.rate = rate;
+  window.speechSynthesis.speak(utt);
 }
 
 function speakWord() {
   const word = document.getElementById('fcBackWord').textContent;
-  if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const langCode = currentAppLang === 'ukrainian' ? 'uk-UA' : 'es-ES';
-  const utt = new SpeechSynthesisUtterance(word);
-  utt.lang = langCode;
-  utt.rate = 0.85;
-  utt.pitch = 1.0;
-  // Voices may not be loaded yet — wait then speak
-  const trySpeak = () => {
-    const voice = getBestVoice(langCode);
-    if (voice) utt.voice = voice;
-    window.speechSynthesis.speak(utt);
-  };
-  if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = trySpeak;
-  } else {
-    trySpeak();
-  }
+  speakText(word, _getLangKey(), 0.8);
 }
-
 
 // ══════════════════════════════════════════════
 // QUIZ
@@ -5252,47 +5234,27 @@ function copyText(btn, text) {
 
 let speaking = false;
 function speakSection(text) {
-  if (!('speechSynthesis' in window)) {
-    alert('Text-to-speech is not supported in this browser.');
-    return;
-  }
   if (speaking) {
-    window.speechSynthesis.cancel();
+    if (typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+    else if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     speaking = false;
     return;
   }
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'en-US';
-  utt.rate = 0.88;
-  utt.onend = () => { speaking = false; };
-  const trySpeak = () => {
-    const voice = getBestVoice('en-US') || null;
-    if (voice) utt.voice = voice;
-    window.speechSynthesis.speak(utt);
-    speaking = true;
-  };
-  if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = trySpeak;
-  } else { trySpeak(); }
+  speaking = true;
+  speakText(text, 'en', 0.88);
+  // Track end for toggle (RV doesn't expose onend easily, reset after estimate)
+  if (typeof responsiveVoice !== 'undefined') {
+    responsiveVoice.speak(text, RV_VOICES['en'], {
+      rate: 0.88, pitch: 1, volume: 1,
+      onend: () => { speaking = false; }
+    });
+  }
 }
 
 function speakGlossary(text, lang) {
-  if (!('speechSynthesis' in window)) {
-    alert('Text-to-speech is not supported in this browser.');
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = lang;
-  utt.rate = 0.85;
-  const trySpeak = () => {
-    const voice = getBestVoice(lang);
-    if (voice) utt.voice = voice;
-    window.speechSynthesis.speak(utt);
-  };
-  if (window.speechSynthesis.getVoices().length === 0) {
-    window.speechSynthesis.onvoiceschanged = trySpeak;
-  } else { trySpeak(); }
+  // lang comes in as e.g. 'es-ES', 'uk-UA', 'en-US' — map to RV key
+  const langKey = lang.startsWith('es') ? 'es' : (lang.startsWith('uk') ? 'uk' : 'en');
+  speakText(text, langKey, 0.85);
 }
 
 // ══════════════════════════════════════════════
