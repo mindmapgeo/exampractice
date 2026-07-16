@@ -517,7 +517,12 @@ html_template = """<!DOCTYPE html>
   
   body {
     background: var(--bg);
-    background-image: var(--bg-glow);
+    background-image: var(--bg-glow),
+      repeating-linear-gradient(93deg,
+        rgba(201,150,63,0.025) 0px, rgba(201,150,63,0.025) 1px,
+        transparent 1px, transparent 3px,
+        rgba(120,80,40,0.02) 3px, rgba(120,80,40,0.02) 4px,
+        transparent 4px, transparent 9px);
     background-attachment: fixed;
     color: var(--text);
     font-family: 'Inter', sans-serif;
@@ -583,7 +588,7 @@ html_template = """<!DOCTYPE html>
   .scenario-card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 18px;
     padding: 24px;
     cursor: pointer;
     backdrop-filter: blur(10px);
@@ -601,7 +606,7 @@ html_template = """<!DOCTYPE html>
     transition: opacity 0.3s ease;
   }
   .scenario-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.015);
     background: var(--card-hover);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--border-glow);
     border-color: rgba(255,255,255,0.1);
