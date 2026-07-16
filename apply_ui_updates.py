@@ -49,9 +49,8 @@ function changeLanguage(lang) {
   });
 
   // Re-render active tab content
-  loadFlashcard();
-  renderGlossary();
-  buildQuiz();
+  if (typeof initFlashcards === 'function') initFlashcards();
+  if (typeof renderGlossary === 'function') renderGlossary();
 }
 
 // Initial setup of protocols

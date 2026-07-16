@@ -48,7 +48,7 @@
   }
 
   /* ── HEADER ── */
-  header {
+  header { display: flex; align-items: center; justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 100;
@@ -292,7 +292,7 @@
   }
 
   /* ── FLASHCARD MODE ── */
-  .fc-header {
+  .fc-header { display: flex; align-items: center; justify-content: space-between;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -574,7 +574,7 @@
 
   .protocol-card:hover { border-color: var(--accent2); }
 
-  .protocol-header {
+  .protocol-header { display: flex; align-items: center; justify-content: space-between;
     padding: 20px 24px;
     cursor: pointer;
     display: flex;
@@ -711,7 +711,7 @@
   .timing-badge.ok { border-color: var(--green); color: var(--green); }
 
   /* ── GLOSSARY TABLE ── */
-  .glossary-header {
+  .glossary-header { display: flex; align-items: center; justify-content: space-between;
     display: flex;
     gap: 12px;
     margin-bottom: 20px;
@@ -998,9 +998,18 @@
     .cheatsheet-grid { grid-template-columns: 1fr; }
     .dash-grid { grid-template-columns: 1fr; }
     .progress-grid { grid-template-columns: repeat(2, 1fr); }
-    header { padding: 0 16px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
     main { padding: 20px 16px; }
   }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-search input { padding: 8px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; width: 300px; outline: none; }
+  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
+  #langToggle { padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; }
+  #langToggle option { color: black; }
+  #searchResults { display: none; padding: 20px; background: var(--bg2); border-radius: 12px; margin-top: 20px; }
+  .search-highlight { background: rgba(255,215,0,0.3); font-weight: bold; }
+
 </style>
 </head>
 <body>
@@ -1011,8 +1020,16 @@
     Medical Interpreter Study Guide
   </div>
   <div style="display:flex; gap:16px; align-items:center;">
-    <div id="google_translate_element"></div>
-    <div class="header-stats">
+    
+  <div class="header-search">
+    <input type="text" id="globalSearch" placeholder="🔍 Search glossary & protocols..." onkeyup="handleSearch(event)">
+  </div>
+  <div class="header-right">
+    <select id="langToggle" onchange="changeLanguage(this.value)">
+      <option value="ukrainian">🇺🇦 Ukrainian</option>
+      <option value="spanish">🇪🇸 Spanish</option>
+    </select>
+    <div class="header-stats" style="display:flex;gap:12px;">
       <div class="stat-pill">Cards mastered: <span id="masteredCount">0</span></div>
       <div class="stat-pill">Quiz score: <span id="quizBest">—</span></div>
     </div>
@@ -4405,6 +4422,82 @@ let quizAnswered = false;
 let progress = {};
 
 // ══════════════════════════════════════════════
+
+// MULTI-LANGUAGE & SEARCH SYSTEM
+let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+document.getElementById('langToggle').value = currentAppLang;
+
+function changeLanguage(lang) {
+  currentAppLang = lang;
+  localStorage.setItem('ges_lang', lang);
+  
+  // Update Protocols UI
+  document.querySelectorAll('.script-box.ukraine, .script-box.spanish').forEach(el => {
+    el.style.display = 'none';
+  });
+  document.querySelectorAll(`.script-box.${lang === 'ukrainian' ? 'ukraine' : 'spanish'}`).forEach(el => {
+    el.style.display = 'block';
+  });
+
+  // Re-render active tab content
+  if (typeof initFlashcards === 'function') initFlashcards();
+  if (typeof renderGlossary === 'function') renderGlossary();
+}
+
+// Initial setup of protocols
+changeLanguage(currentAppLang);
+
+function handleSearch(e) {
+  const q = e.target.value.toLowerCase().trim();
+  const resContainer = document.getElementById('searchResults') || createSearchContainer();
+  
+  if (q.length < 2) {
+    resContainer.style.display = 'none';
+    document.querySelectorAll('.tab-content').forEach(el => {
+      if(el.id === 'content-' + document.querySelector('.nav-btn.active').id.split('-')[1]) el.style.display = 'block';
+    });
+    return;
+  }
+  
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  resContainer.style.display = 'block';
+  
+  let html = `<h3>🔍 Search Results for "${q}"</h3><div class="glossary-list">`;
+  
+  // Search Glossary
+  let found = 0;
+  for (const [cat, terms] of Object.entries(GLOSSARY_DATA)) {
+    for (const item of terms) {
+      if (item.english.toLowerCase().includes(q) || 
+          item[currentAppLang].toLowerCase().includes(q) || 
+          (item.spanish && item.spanish.toLowerCase().includes(q))) {
+        html += `
+          <div class="glos-item">
+            <div class="glos-en">${item.english.replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
+            <div class="glos-uk">${item[currentAppLang].replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
+          </div>`;
+        found++;
+      }
+    }
+  }
+  
+  if (found === 0) html += `<p>No matches found in glossary.</p>`;
+  html += `</div>`;
+  resContainer.innerHTML = html;
+}
+
+function createSearchContainer() {
+  const main = document.querySelector('main');
+  const div = document.createElement('div');
+  div.id = 'searchResults';
+  main.prepend(div);
+  return div;
+}
+
+// Overrides for existing functions to use currentAppLang
+
+
 // INIT
 // ══════════════════════════════════════════════
 function init() {
@@ -4477,13 +4570,13 @@ function showCard() {
   const dir = document.getElementById('fcDirection').value;
   const isEnToUk = dir === 'en-uk' || (dir === 'random' && Math.random() > 0.5);
 
-  const frontWord = isEnToUk ? card.english : card.ukrainian;
-  const backWord = isEnToUk ? card.ukrainian : card.english;
+  const frontWord = isEnToUk ? card.english : card[currentAppLang];
+  const backWord = isEnToUk ? card[currentAppLang] : card.english;
 
   document.getElementById('fcFrontWord').textContent = frontWord;
   document.getElementById('fcBackWord').textContent = backWord;
-  document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : 'UKRAINIAN';
-  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? 'UKRAINIAN' : 'ENGLISH';
+  document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : currentAppLang.toUpperCase();
+  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? currentAppLang.toUpperCase() : 'ENGLISH';
 
   cardFlipped = false;
   document.getElementById('flashcard').classList.remove('flipped');
@@ -4560,8 +4653,8 @@ function startQuiz() {
       const wrongPool = terms.filter(t => t.english !== term.english);
       if (wrongPool.length < 3) continue;
       const wrongs = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3).map(t => t.ukrainian);
-      const options = [...wrongs, term.ukrainian].sort(() => Math.random() - 0.5);
-      const correct = options.indexOf(term.ukrainian);
+      const options = [...wrongs, term[currentAppLang]].sort(() => Math.random() - 0.5);
+      const correct = options.indexOf(term[currentAppLang]);
       pool.push({
         type: 'vocab',
         q: `What is the Ukrainian translation of "${term.english}"?`,
@@ -5095,11 +5188,5 @@ document.addEventListener('keydown', (e) => {
 // ══════════════════════════════════════════════
 init();
 </script>
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>

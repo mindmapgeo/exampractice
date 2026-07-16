@@ -487,17 +487,17 @@ html_template = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Playscape — Interpreter Chat Training</title>
+<title>Playscape — Virtual Discovery Worlds</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #08090f;
-    --bg2: #0e1018;
-    --bg3: #13161f;
-    --card: #181c28;
-    --card-hover: #1d2230;
-    --border: #222840;
-    --border2: #2e3555;
+    --bg: #050608;
+    --bg2: #0a0c12;
+    --bg-glow: radial-gradient(circle at top right, #1a153a 0%, #050608 60%);
+    --card: rgba(20, 24, 36, 0.6);
+    --card-hover: rgba(30, 38, 55, 0.8);
+    --border: rgba(255, 255, 255, 0.05);
+    --border-glow: rgba(91, 156, 246, 0.4);
     --accent: #5b9cf6;
     --accent2: #8b6ef7;
     --text: #dde3f0;
@@ -511,351 +511,340 @@ html_template = """<!DOCTYPE html>
   
   body {
     background: var(--bg);
+    background-image: var(--bg-glow);
+    background-attachment: fixed;
     color: var(--text);
     font-family: 'Inter', sans-serif;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
   }
   
   /* HEADER */
   header {
-    background: rgba(8,9,15,0.9);
-    border-bottom: 1px solid var(--border);
-    padding: 0 28px;
+    padding: 24px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
-    flex-shrink: 0;
-    backdrop-filter: blur(20px);
+    height: 80px;
+    z-index: 10;
+    position: relative;
   }
   .logo { 
     font-weight: 800;
-    font-size: 15px;
-    letter-spacing: 0.08em;
+    font-size: 18px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .header-hint {
-    font-size: 12px;
-    color: var(--text3);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .kbd {
-    background: var(--card);
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    padding: 2px 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--text2);
-  }
 
-  /* LAYOUT */
-  .main-container {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    width: 300px;
-    min-width: 300px;
-    background: var(--bg2);
-    border-right: 1px solid var(--border);
+  /* HOME HUB VIEW */
+  #homeView {
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0; left: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .hub-content {
+    padding: 20px 40px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .hub-content::-webkit-scrollbar { width: 6px; }
+  .hub-content::-webkit-scrollbar-track { background: transparent; }
+  .hub-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  
+  .hub-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .hub-subtitle {
+    color: var(--text2);
+    margin-bottom: 32px;
+    font-size: 15px;
+  }
+  
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+  .scenario-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
     overflow: hidden;
   }
-  .filters {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  .filters select {
-    width: 100%;
-    padding: 9px 12px;
-    background: var(--card);
-    border: 1px solid var(--border2);
-    color: var(--text);
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    outline: none;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238a95b0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
-  }
-  .chat-list { flex: 1; overflow-y: auto; }
-  .chat-list::-webkit-scrollbar { width: 4px; }
-  .chat-list::-webkit-scrollbar-track { background: transparent; }
-  .chat-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
-  
-  .chat-item {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.15s;
-    position: relative;
-  }
-  .chat-item:hover { background: var(--bg3); }
-  .chat-item.active { background: var(--card-hover); }
-  .chat-item.active::before {
+  .scenario-card::before {
     content: '';
     position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: linear-gradient(to bottom, var(--accent), var(--accent2));
-    border-radius: 0 2px 2px 0;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-  .chat-item-topic {
-    font-size: 10px;
+  .scenario-card:hover {
+    transform: translateY(-5px);
+    background: var(--card-hover);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--border-glow);
+    border-color: rgba(255,255,255,0.1);
+  }
+  .scenario-card:hover::before {
+    opacity: 1;
+  }
+  .card-topic {
+    font-size: 11px;
     color: var(--accent);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 5px;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
   }
-  .chat-item-title {
-    font-size: 13.5px;
-    font-weight: 500;
-    color: var(--text);
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
     line-height: 1.4;
   }
 
-  /* CHAT AREA */
-  .chat-area {
-    flex: 1;
+  /* INSTANCE VIEW */
+  #instanceView {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0; left: 0;
+    background: radial-gradient(circle at center, #111424 0%, #050608 100%);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 50;
   }
-  .chat-header {
-    padding: 18px 28px;
+  #instanceView.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+  }
+  
+  .instance-header {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
     border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    flex-shrink: 0;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(20px);
   }
-  .chat-header h2 {
-    font-size: 18px;
+  .btn-exit {
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 24px;
+  }
+  .btn-exit:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .instance-title-area h2 {
+    font-size: 20px;
     font-weight: 700;
     margin-bottom: 4px;
-    line-height: 1.3;
   }
-  .chat-header-meta {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-  .chat-header-topic {
-    font-size: 12px;
-    color: var(--accent);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .chat-header-progress {
-    font-size: 12px;
+  .instance-meta {
+    font-size: 13px;
     color: var(--text3);
     font-family: 'JetBrains Mono', monospace;
   }
 
-  /* MESSAGES */
   .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 28px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
   }
-  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar { width: 6px; }
   .chat-messages::-webkit-scrollbar-track { background: transparent; }
-  .chat-messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
   .message {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
     display: none;
-    max-width: 78%;
-    animation: slideIn 0.25s ease-out;
+    position: relative;
+    backdrop-filter: blur(10px);
   }
-  .message.visible { display: flex; flex-direction: column; gap: 4px; }
-  
-  .message.Doctor  { align-self: flex-start; }
-  .message.Patient { align-self: flex-start; padding-left: 24px; }
-  .message.Interpreter { align-self: flex-end; }
-
+  .message.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+  }
   .message-label {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 0 4px;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    display: inline-block;
   }
-  .Doctor .message-label { color: var(--doctor); }
-  .Patient .message-label { color: var(--patient); }
-  .Interpreter .message-label { color: var(--interpreter); text-align: right; }
-
+  .message.Doctor .message-label { color: var(--doctor); }
+  .message.Patient .message-label { color: var(--patient); }
+  .message.Interpreter .message-label { color: var(--interpreter); }
+  .message.Doctor { border-left: 3px solid var(--doctor); align-self: flex-start; }
+  .message.Patient { border-left: 3px solid var(--patient); align-self: flex-end; }
+  .message.Interpreter { border-left: 3px solid var(--interpreter); align-self: center; background: rgba(255,255,255,0.05); }
+  
   .message-bubble {
-    padding: 14px 18px;
-    border-radius: 14px;
-    font-size: 14.5px;
-    line-height: 1.65;
-    font-weight: 400;
-  }
-  .Doctor .message-bubble {
-    background: rgba(62, 207, 142, 0.08);
-    border: 1px solid rgba(62, 207, 142, 0.2);
-    border-radius: 4px 14px 14px 14px;
-  }
-  .Patient .message-bubble {
-    background: rgba(245, 200, 66, 0.08);
-    border: 1px solid rgba(245, 200, 66, 0.2);
-    border-radius: 4px 14px 14px 14px;
-  }
-  .Interpreter .message-bubble {
-    background: rgba(180, 142, 247, 0.1);
-    border: 1px solid rgba(180, 142, 247, 0.25);
-    border-radius: 14px 4px 14px 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
   }
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* EMPTY STATE */
-  .empty-state {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 16px;
-    color: var(--text3);
-    text-align: center;
-    padding: 40px;
-  }
-  .empty-icon { font-size: 48px; opacity: 0.3; }
-  .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--text2); }
-  .empty-state p { font-size: 14px; max-width: 360px; line-height: 1.6; }
-
-  /* LEGEND */
-  .legend {
-    display: flex;
-    gap: 20px;
-    margin-top: 12px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text2);
-  }
-  .legend-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-  }
-
-  /* CONTROLS */
   .controls {
-    padding: 14px 28px;
-    border-top: 1px solid var(--border);
-    background: var(--bg2);
+    padding: 24px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
+    justify-content: center;
+    gap: 16px;
   }
   .btn {
-    padding: 10px 22px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 30px;
     font-family: 'Inter', sans-serif;
-    font-size: 13.5px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    transition: all 0.2s;
+    border: none;
   }
   .btn-primary {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: white;
-    box-shadow: 0 0 20px rgba(91,156,246,0.25);
+    box-shadow: 0 4px 15px rgba(91, 156, 246, 0.3);
   }
-  .btn-primary:hover { filter: brightness(1.1); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; filter: none; box-shadow: none; }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px rgba(91, 156, 246, 0.5);
+    transform: translateY(-2px);
+  }
+  .btn-primary:disabled {
+    background: var(--border);
+    color: var(--text3);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
   .btn-secondary {
-    background: var(--card);
-    color: var(--text2);
-    border: 1px solid var(--border2);
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
   }
-  .btn-secondary:hover { color: var(--text); background: var(--card-hover); }
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">Playscape // Interpreter Training</div>
-  <div class="header-hint">
-    Press <span class="kbd">Space</span> or click Reveal to advance
+<!-- HOME HUB -->
+<div id="homeView">
+  <header>
+    <div class="logo">Playscape // Hub</div>
+    <div class="hub-counter" id="hubCounter" style="display:none;"></div>
+  </header>
+  <div class="hub-content">
+    <h1 class="hub-title">Virtual Scenarios</h1>
+    <p class="hub-subtitle">Select an instance to enter the discovery world.</p>
+    <div class="scenario-grid" id="scenarioGrid"></div>
   </div>
-</header>
+</div>
 
-<div class="main-container">
-  <div class="sidebar">
-    <div class="filters">
-      <select id="topicFilter">
-        <option value="ALL">All Topics (20 scenarios)</option>
-        <option value="ANEMIA">Anemia</option>
-        <option value="THYROID">Thyroid</option>
-        <option value="SEIZURES">Seizures</option>
-        <option value="GENERAL WELLNESS">General Wellness</option>
-        <option value="HEART ISSUES">Heart Issues</option>
-        <option value="DIABETES">Diabetes</option>
-        <option value="PREGNANCY">Pregnancy</option>
-      </select>
-    </div>
-    <div class="chat-list" id="chatList"></div>
-  </div>
-
-  <div class="chat-area">
-    <div class="chat-header" id="chatHeader" style="display:none;">
+<!-- INSTANCE VIEW -->
+<div id="instanceView">
+  <div class="instance-header">
+    <button class="btn-exit" onclick="exitInstance()">
+      ← Return to Hub
+    </button>
+    <div class="instance-title-area">
       <h2 id="chatTitle"></h2>
-      <div class="chat-header-meta">
-        <span class="chat-header-topic" id="chatTopic"></span>
-        <span class="chat-header-progress" id="chatProgress"></span>
+      <div class="instance-meta">
+        <span id="chatTopic" style="color:var(--accent);margin-right:12px;"></span>
+        <span id="chatProgress"></span>
       </div>
     </div>
-    
-    <div class="chat-messages" id="chatMessages">
-      <div class="empty-state">
-        <div class="empty-icon">💬</div>
-        <h3>Select a scenario</h3>
-        <p>Each scenario is a real conversation between a curious patient, a caring doctor, and the interpreter who bridges them.</p>
-        <div class="legend">
-          <div class="legend-item"><div class="legend-dot" style="background:var(--doctor)"></div> Doctor</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--patient)"></div> Patient</div>
-          <div class="legend-item"><div class="legend-dot" style="background:var(--interpreter)"></div> Interpreter</div>
-        </div>
-      </div>
-    </div>
+    <div id="worldCounter" style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);"></div>
+  </div>
+  
+  <div class="chat-messages" id="chatMessages"></div>
 
-    <div class="controls" id="chatControls" style="display:none;">
-      <button class="btn btn-secondary" id="btnReset">↺ Reset</button>
-      <button class="btn btn-primary" id="btnNext">Reveal Next Line</button>
+  <div class="controls">
+    <button class="btn btn-secondary" onclick="resetChat()">↺ Reset</button>
+    <button class="btn btn-primary" id="btnNext" onclick="revealNext()">Reveal Next Line (Space)</button>
+  </div>
+
+  <!-- COMPLETION PORTAL -->
+  <div id="completionPortal" style="
+    display:none;
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at center, rgba(91,156,246,0.15) 0%, rgba(5,6,8,0.97) 70%);
+    z-index:100;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    backdrop-filter:blur(20px);
+  ">
+    <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);font-weight:700;">Scenario Complete</div>
+    <div id="portalTitle" style="font-size:28px;font-weight:800;text-align:center;max-width:600px;line-height:1.3;"></div>
+    <div id="portalTopic" style="font-size:13px;color:var(--text2);"></div>
+    <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin:8px 0;"></div>
+    <div style="font-size:14px;color:var(--text2);">Next world loading...</div>
+    <button class="btn btn-primary" id="btnEnterNext" style="margin-top:8px;padding:14px 36px;font-size:16px;" onclick="chainNext()">
+      Enter Next World →
+    </button>
+    <div id="countdownBar" style="
+      width:200px;height:3px;
+      background:var(--border);
+      border-radius:4px;
+      overflow:hidden;
+    ">
+      <div id="countdownFill" style="
+        height:100%;
+        width:0%;
+        background:linear-gradient(90deg,var(--accent),var(--accent2));
+        transition:width 5s linear;
+      "></div>
     </div>
+    <div style="font-size:12px;color:var(--text3);">auto-advancing in 5s — or press Space</div>
   </div>
 </div>
 
@@ -863,44 +852,57 @@ html_template = """<!DOCTYPE html>
   const chats = CHATS_JSON_PLACEHOLDER;
   
   let currentChat = null;
+  let currentIndex = 0;
   let currentStep = 0;
-  let currentIndex = null;
+  let totalWorldsVisited = 0;
+  let autoChainTimer = null;
 
-  const chatListEl = document.getElementById('chatList');
+  const homeView = document.getElementById('homeView');
+  const instanceView = document.getElementById('instanceView');
+  const scenarioGrid = document.getElementById('scenarioGrid');
   const chatMessagesEl = document.getElementById('chatMessages');
-  const topicFilter = document.getElementById('topicFilter');
-  const chatHeader = document.getElementById('chatHeader');
-  const chatControls = document.getElementById('chatControls');
   const chatTitle = document.getElementById('chatTitle');
   const chatTopic = document.getElementById('chatTopic');
   const chatProgress = document.getElementById('chatProgress');
   const btnNext = document.getElementById('btnNext');
-  const btnReset = document.getElementById('btnReset');
+  const worldCounter = document.getElementById('worldCounter');
+  const completionPortal = document.getElementById('completionPortal');
+  const portalTitle = document.getElementById('portalTitle');
+  const portalTopic = document.getElementById('portalTopic');
+  const countdownFill = document.getElementById('countdownFill');
 
-  function renderList(filter = 'ALL') {
-    chatListEl.innerHTML = '';
+  function initHub() {
+    scenarioGrid.innerHTML = '';
     chats.forEach((chat, index) => {
-      if (filter !== 'ALL' && chat.topic !== filter) return;
-      const div = document.createElement('div');
-      div.className = 'chat-item' + (index === currentIndex ? ' active' : '');
-      div.innerHTML = `<div class="chat-item-topic">${chat.topic}</div><div class="chat-item-title">${chat.title}</div>`;
-      div.addEventListener('click', () => loadChat(index, div));
-      chatListEl.appendChild(div);
+      const card = document.createElement('div');
+      card.className = 'scenario-card';
+      card.innerHTML = `<div class="card-topic">${chat.topic}</div><div class="card-title">${chat.title}</div>`;
+      card.onclick = () => enterInstance(index);
+      scenarioGrid.appendChild(card);
     });
   }
 
-  function loadChat(index, el) {
-    currentChat = chats[index];
-    currentIndex = index;
-    currentStep = 0;
-    
-    document.querySelectorAll('.chat-item').forEach(e => e.classList.remove('active'));
-    if (el) el.classList.add('active');
+  function enterInstance(index) {
+    if (autoChainTimer) { clearTimeout(autoChainTimer); autoChainTimer = null; }
+    completionPortal.style.display = 'none';
 
-    chatHeader.style.display = 'block';
-    chatControls.style.display = 'flex';
+    currentIndex = index % chats.length;
+    currentChat = chats[currentIndex];
+    currentStep = 0;
+    totalWorldsVisited++;
+
+    // Transition UI from hub
+    homeView.style.opacity = '0';
+    homeView.style.pointerEvents = 'none';
+    setTimeout(() => instanceView.classList.add('active'), 300);
+
+    loadChatContent();
+  }
+
+  function loadChatContent() {
     chatTitle.textContent = currentChat.title;
     chatTopic.textContent = currentChat.topic;
+    worldCounter.textContent = `World ${totalWorldsVisited} · ∞`;
 
     chatMessagesEl.innerHTML = '';
     currentChat.messages.forEach((msg, i) => {
@@ -910,12 +912,52 @@ html_template = """<!DOCTYPE html>
       wrapper.innerHTML = `<div class="message-label">${msg.role}</div><div class="message-bubble">${msg.text}</div>`;
       chatMessagesEl.appendChild(wrapper);
     });
-    
+    chatMessagesEl.scrollTop = 0;
     updateUI();
   }
 
+  function chainNext() {
+    if (autoChainTimer) { clearTimeout(autoChainTimer); autoChainTimer = null; }
+    completionPortal.style.display = 'none';
+    currentIndex = (currentIndex + 1) % chats.length;
+    currentChat = chats[currentIndex];
+    currentStep = 0;
+    totalWorldsVisited++;
+    loadChatContent();
+  }
+
+  function showCompletionPortal() {
+    const nextIndex = (currentIndex + 1) % chats.length;
+    const nextChat = chats[nextIndex];
+    portalTitle.textContent = nextChat.title;
+    portalTopic.textContent = nextChat.topic;
+    completionPortal.style.display = 'flex';
+
+    // animate countdown bar
+    countdownFill.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { countdownFill.style.width = '100%'; });
+    });
+
+    autoChainTimer = setTimeout(chainNext, 5000);
+  }
+
+  function exitInstance() {
+    if (autoChainTimer) { clearTimeout(autoChainTimer); autoChainTimer = null; }
+    completionPortal.style.display = 'none';
+    instanceView.classList.remove('active');
+    setTimeout(() => {
+      homeView.style.opacity = '1';
+      homeView.style.pointerEvents = 'all';
+      currentChat = null;
+    }, 300);
+  }
+
   function revealNext() {
-    if (!currentChat || currentStep >= currentChat.messages.length) return;
+    if (!currentChat) return;
+    // If portal is showing, Space advances to next world
+    if (completionPortal.style.display === 'flex') { chainNext(); return; }
+    if (currentStep >= currentChat.messages.length) return;
     const msgEl = document.getElementById(`msg-${currentStep}`);
     if (msgEl) {
       msgEl.classList.add('visible');
@@ -927,6 +969,8 @@ html_template = """<!DOCTYPE html>
 
   function resetChat() {
     if (!currentChat) return;
+    if (autoChainTimer) { clearTimeout(autoChainTimer); autoChainTimer = null; }
+    completionPortal.style.display = 'none';
     currentStep = 0;
     document.querySelectorAll('.message').forEach(el => el.classList.remove('visible'));
     chatMessagesEl.scrollTop = 0;
@@ -937,21 +981,22 @@ html_template = """<!DOCTYPE html>
     const total = currentChat ? currentChat.messages.length : 0;
     const done = currentStep >= total;
     chatProgress.textContent = `${currentStep} / ${total} lines`;
-    btnNext.textContent = done ? '✓ Complete' : 'Reveal Next Line';
-    btnNext.disabled = done;
+    btnNext.textContent = done ? '→ Next World' : 'Reveal Next Line (Space)';
+    btnNext.disabled = false;
+    if (done) { showCompletionPortal(); }
   }
 
-  topicFilter.addEventListener('change', e => renderList(e.target.value));
-  btnNext.addEventListener('click', revealNext);
-  btnReset.addEventListener('click', resetChat);
   document.addEventListener('keydown', e => {
-    if (e.code === 'Space' && currentChat && document.activeElement.tagName !== 'SELECT') {
+    if (e.code === 'Space' && currentChat) {
       e.preventDefault();
       revealNext();
     }
+    if (e.code === 'Escape' && currentChat) {
+      exitInstance();
+    }
   });
 
-  renderList();
+  initHub();
 </script>
 </body>
 </html>
