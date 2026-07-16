@@ -494,6 +494,7 @@ html_template = """<!DOCTYPE html>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 <script src="ui_dict.js"></script>
 <script src="es_audio_map.js"></script>
+<script src="version.js"></script>
 <style>
   :root {
     --bg: #050608;

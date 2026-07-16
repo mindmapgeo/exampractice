@@ -1974,5 +1974,9 @@ const UI_DICT = {
   "Leave a note every single call, even if nothing happened. Names in CAPS. Refusals → initials, or N/A in caps if none given.": {
       "uk": "Залишайте нотатку після кожного дзвінка, навіть якщо нічого не сталося. Імена — ВЕЛИКИМИ ЛІТЕРАМИ. Відмови → ініціали, або N/A великими літерами, якщо їх не надано.",
       "es": "Deja una nota en cada llamada, incluso si no pasó nada. Nombres en MAYÚSCULAS. Rechazos → iniciales, o N/A en mayúsculas si no se dieron."
+  },
+  "🔗 Open as standalone page": {
+      "uk": "🔗 Відкрити як окрему сторінку",
+      "es": "🔗 Abrir como página independiente"
   }
 };

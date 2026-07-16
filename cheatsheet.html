@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet — Medical Interpreter Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg2: #111520;
+    --bg3: #181d2c;
+    --card: #1a2035;
+    --card2: #1f2640;
+    --border: #2a3350;
+    --accent: #4f8ef7;
+    --accent2: #7c5af7;
+    --green: #34d399;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --purple: #a78bfa;
+    --pink: #f472b6;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --glow: 0 0 40px rgba(79,142,247,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── BACKGROUND ANIMATION ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,142,247,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(124,90,247,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header { display: flex; align-items: center; justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,13,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    -webkit-text-fill-color: white;
+    box-shadow: 0 0 20px rgba(79,142,247,0.4);
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .stat-pill span { color: var(--accent); font-weight: 700; }
+
+  /* ── NAV TABS ── */
+  .nav {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    padding: 14px 20px;
+    border: none;
+    background: none;
+    color: var(--text3);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-btn:hover { color: var(--text); }
+
+  .nav-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .nav-badge {
+    background: var(--accent);
+    color: white;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── DASHBOARD ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .dash-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dash-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-color, var(--accent)) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .dash-card:hover {
+    border-color: var(--accent-color, var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+
+  .dash-card:hover::before { opacity: 0.05; }
+
+  .dash-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .dash-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .dash-card-desc {
+    font-size: 13px;
+    color: var(--text3);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .dash-card-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .meta-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* ── PROGRESS RINGS ── */
+  .progress-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .progress-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .progress-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .progress-ring-wrap {
+    position: relative;
+    width: 80px; height: 80px;
+  }
+
+  .progress-ring-wrap svg { transform: rotate(-90deg); }
+
+  .progress-ring-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+  .progress-ring-fill {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .progress-ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .progress-name {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+  }
+
+  /* ── FLASHCARD MODE ── */
+  .fc-header { display: flex; align-items: center; justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .fc-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .select-styled {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 9px 14px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .select-styled:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(79,142,247,0.45); }
+
+  .btn-ghost {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-green { background: rgba(52,211,153,0.15); border: 1px solid var(--green); color: var(--green); }
+  .btn-green:hover { background: rgba(52,211,153,0.25); }
+
+  .btn-red { background: rgba(248,113,113,0.15); border: 1px solid var(--red); color: var(--red); }
+  .btn-red:hover { background: rgba(248,113,113,0.25); }
+
+  /* Flashcard */
+  .flashcard-container {
+    perspective: 1200px;
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+
+  .flashcard {
+    position: relative;
+    height: 280px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .flashcard.flipped { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px;
+    text-align: center;
+    border: 2px solid var(--border);
+  }
+
+  .fc-front {
+    background: linear-gradient(135deg, var(--card2) 0%, var(--card) 100%);
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(79,142,247,0.1);
+  }
+
+  .fc-back {
+    background: linear-gradient(135deg, #1a2a1a 0%, #1a2520 100%);
+    border-color: var(--green);
+    transform: rotateY(180deg);
+    box-shadow: 0 0 40px rgba(52,211,153,0.1);
+  }
+
+  .fc-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+  }
+
+  .fc-word {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .fc-back .fc-word { color: var(--green); }
+
+  .fc-hint { font-size: 13px; color: var(--text3); }
+
+  .fc-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .fc-counter {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text2);
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .fc-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s;
+  }
+
+  /* ── QUIZ MODE ── */
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 720px;
+    margin: 0 auto 24px;
+  }
+
+  .quiz-question {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .quiz-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 32px;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .quiz-option {
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .quiz-option:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.08);
+  }
+
+  .quiz-option.correct {
+    border-color: var(--green) !important;
+    background: rgba(52,211,153,0.15) !important;
+    color: var(--green);
+  }
+
+  .quiz-option.wrong {
+    border-color: var(--red) !important;
+    background: rgba(248,113,113,0.12) !important;
+    color: var(--red);
+  }
+
+  .quiz-option:disabled { cursor: not-allowed; }
+
+  .quiz-feedback {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 28px;
+  }
+
+  .quiz-score-board {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 24px;
+  }
+
+  .score-item {
+    text-align: center;
+  }
+
+  .score-num {
+    font-size: 32px;
+    font-weight: 900;
+    display: block;
+  }
+
+  .score-label {
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── PROTOCOLS STUDY ── */
+  .protocol-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .protocol-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .protocol-card:hover { border-color: var(--accent2); }
+
+  .protocol-header { display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+
+  .protocol-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .protocol-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .protocol-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .protocol-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .tag-critical { background: rgba(248,113,113,0.2); color: var(--red); }
+  .tag-mandatory { background: rgba(251,191,36,0.2); color: var(--yellow); }
+  .tag-scripted { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .tag-timing { background: rgba(52,211,153,0.2); color: var(--green); }
+
+  .protocol-chevron { transition: transform 0.3s; color: var(--text3); font-size: 18px; }
+  .protocol-card.open .protocol-chevron { transform: rotate(180deg); }
+
+  .protocol-body {
+    display: none;
+    padding: 0 24px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .protocol-card.open .protocol-body { display: block; }
+
+  .script-box {
+    background: rgba(79,142,247,0.08);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 12px 0;
+    font-style: italic;
+    color: #c7d8ff;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .script-box.ukraine {
+    background: rgba(124,90,247,0.08);
+    border-color: rgba(124,90,247,0.25);
+    border-left-color: var(--accent2);
+    color: #d4c7ff;
+  }
+
+  .script-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 8px;
+    font-style: normal;
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text2);
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .check-icon.req { background: rgba(248,113,113,0.2); color: var(--red); }
+  .check-icon.opt { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .check-icon.note { background: rgba(251,191,36,0.2); color: var(--yellow); }
+
+  .timing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 8px 6px 8px 0;
+  }
+
+  .timing-badge.warn { border-color: var(--yellow); color: var(--yellow); }
+  .timing-badge.danger { border-color: var(--red); color: var(--red); }
+  .timing-badge.ok { border-color: var(--green); color: var(--green); }
+
+  /* ── GLOSSARY TABLE ── */
+  .glossary-header { display: flex; align-items: center; justify-content: space-between;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 10px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text3); }
+
+  .glossary-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .glossary-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .glossary-table th {
+    background: var(--card2);
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+  }
+
+  .glossary-table td {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    line-height: 1.4;
+  }
+
+  .glossary-table tr:last-child td { border-bottom: none; }
+
+  .glossary-table tr:hover td {
+    background: rgba(79,142,247,0.05);
+  }
+
+  .glossary-table td:first-child { color: var(--text); font-weight: 500; }
+  .glossary-table td:last-child { color: var(--purple); }
+
+  .sheet-badge {
+    display: inline-block;
+    background: rgba(167,139,250,0.15);
+    border: 1px solid rgba(167,139,250,0.3);
+    color: var(--purple);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* ── CHEAT SHEET ── */
+  .cheatsheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .cs-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .cs-card-head {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cs-card-body { padding: 0 20px 20px; }
+
+  .numbered-list {
+    counter-reset: item;
+    list-style: none;
+    margin: 0;
+  }
+
+  .numbered-list li {
+    counter-increment: item;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .numbered-list li:last-child { border-bottom: none; }
+
+  .numbered-list li::before {
+    content: counter(item);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── ULTIMATE CALL ALGORITHM ── */
+  .algo-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .algo-heading { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  .algo-sub { font-size: 13px; color: var(--text3); margin-bottom: 8px; }
+
+  .algo-phase {
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin: 26px 0 12px;
+  }
+
+  .algo-phase:first-of-type { margin-top: 0; }
+
+  .algo-step {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 14px 18px;
+  }
+
+  .algo-step.mandatory { border-left-color: var(--red); }
+
+  .algo-step-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .algo-step-body { font-size: 13px; color: var(--text2); line-height: 1.65; }
+
+  .algo-arrow {
+    text-align: center;
+    color: var(--text3);
+    font-size: 18px;
+    line-height: 1;
+    margin: 6px 0;
+  }
+
+  .algo-branch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+  }
+
+  .algo-branch {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .algo-branch-if {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+
+  .algo-branch-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; }
+
+  .numbered-list.compact li { font-size: 12.5px; padding: 6px 0; }
+  .numbered-list.compact li::before { width: 18px; height: 18px; font-size: 10px; }
+
+  /* ── AUDIOBOOK SECTION ── */
+  .audio-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .audio-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .audio-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .audio-card p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .audio-script {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+    white-space: pre-wrap;
+    max-height: 340px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .copy-btn {
+    margin-top: 12px;
+  }
+
+  /* ── SPEAKER ── */
+  .speak-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.3);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .speak-btn:hover { background: rgba(79,142,247,0.25); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tab-content.active { animation: fadeIn 0.3s ease; }
+
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(79,142,247,0); }
+    100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
+  }
+
+  .pulsing { animation: pulse-ring 2s infinite; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* ── RESULT MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.show .modal { transform: scale(1); }
+
+  .modal-emoji { font-size: 64px; margin-bottom: 16px; }
+  .modal-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+  .modal-score { font-size: 48px; font-weight: 900; margin-bottom: 8px; }
+  .modal-desc { font-size: 14px; color: var(--text2); margin-bottom: 28px; line-height: 1.5; }
+  .modal-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── MISC ── */
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--text3);
+    margin-bottom: 28px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  @media (max-width: 640px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .cheatsheet-grid { grid-template-columns: 1fr; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .progress-grid { grid-template-columns: repeat(2, 1fr); }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+    main { padding: 20px 16px; }
+  }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-search input { padding: 8px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; width: 300px; outline: none; }
+  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
+  #langToggle { padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; }
+  #langToggle option { color: black; }
+  #searchResults { display: none; padding: 20px; background: var(--bg2); border-radius: 12px; margin-top: 20px; }
+  .search-highlight { background: rgba(255,215,0,0.3); font-weight: bold; }
+
+  /* Clippy Assistant Widget */
+  .clippy-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+  }
+  .clippy-widget.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .clippy-speech {
+    background: rgba(26, 32, 53, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 28px 12px 16px;
+    max-width: 200px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(79, 142, 247, 0.1);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .clippy-speech:hover {
+    transform: scale(1.03);
+    border-color: var(--accent);
+  }
+  .clippy-speech::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    bottom: 12px;
+    border-width: 8px 0 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(26, 32, 53, 0.95);
+    display: block;
+    width: 0;
+  }
+  .clippy-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #ff4b82, var(--accent2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(255, 75, 130, 0.5);
+    cursor: pointer;
+    animation: clippyFloat 3s ease-in-out infinite;
+  }
+  .clippy-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 14px;
+    opacity: 0.5;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+    padding: 2px;
+  }
+  .clippy-close:hover {
+    opacity: 1;
+  }
+  @keyframes clippyFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+</style>
+<style>
+  .cs-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cs-back-link {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .cs-back-link:hover { color: var(--accent); }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px; }
+</style>
+</head>
+<body>
+
+<div class="cs-page-header">
+  <a class="cs-back-link" href="index.html">← Full Study Guide</a>
+  <select id="langToggle" onchange="changeLanguage(this.value)">
+    <option value="english">🇺🇸 English</option>
+    <option value="ukrainian">🇺🇸 ↔ 🇺🇦 English - Ukrainian</option>
+    <option value="spanish">🇺🇸 ↔ 🇪🇸 English - Spanish</option>
+  </select>
+</div>
+
+<main>
+<h2 class="section-title">⚡ Quick Cheat Sheet</h2>
+    <div class="section-subtitle">Everything critical on one page. Memorize these cold.</div>
+
+    <div class="algo-wrap">
+      <div class="algo-heading">🧭 The Ultimate Call Algorithm</div>
+      <div class="algo-sub">Every protocol, in the order you'll actually hit them on a live call. Follow the arrows.</div>
+
+      <div class="algo-phase">📞 Call Connects</div>
+      <div class="algo-step">
+        <div class="algo-step-title">Blue / black screen?</div>
+        <div class="algo-step-body">Wait <strong style="color:var(--yellow)">60 sec</strong> → "Hello, this is your Ukrainian interpreter. Is there anybody on the line?" → still nothing → apologize and disconnect.</div>
+      </div>
+      <div class="algo-arrow">↓</div>
+      <div class="algo-step mandatory">
+        <div class="algo-step-title">👋 Greeting <span style="color:var(--red);font-size:11px;">MANDATORY · SCRIPTED</span></div>
+        <div class="algo-step-body">
+          <strong>To provider:</strong> your name → language → ID# → "everything will be interpreted"<br>
+          <strong>To patient (Ukrainian):</strong> your name → target language → confidentiality → "everything interpreted"
+        </div>
+      </div>
+
+      <div class="algo-arrow">↓</div>
+      <div class="algo-phase">🔁 During the Call — interpret in 1st person. Watch for:</div>
+      <div class="algo-branch-grid">
+
+        <div class="algo-branch" style="border-top-color:var(--purple);">
+          <div class="algo-branch-if">If someone talks to YOU instead of each other</div>
+          <div class="algo-branch-title">👤 3rd Person</div>
+          <ol class="numbered-list compact">
+            <li>Redirect them to speak to each other</li>
+            <li>Exceptions: kids ≤7, emergencies, confused/dementia/trauma, mentally ill</li>
+            <li>If they persist anyway — keep interpreting 1st person, log why</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--yellow);">
+          <div class="algo-branch-if">If you need to clarify / repeat / verify</div>
+          <div class="algo-branch-title">🔔 Intervention</div>
+          <ol class="numbered-list compact">
+            <li>ID yourself to the waiting party first</li>
+            <li>ID yourself to the other party, ask your question</li>
+            <li>Resume interpreting</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--yellow);">
+          <div class="algo-branch-if">If audio/video quality is bad</div>
+          <div class="algo-branch-title">🔧 Troubleshoot</div>
+          <ol class="numbered-list compact">
+            <li>Reposition device / toggle camera</li>
+            <li>Still bad → camera off, keep going</li>
+            <li>Still bad → offer new interpreter + <strong style="color:var(--green)">1-866-449-4428</strong></li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--red);">
+          <div class="algo-branch-if">If you need to step away</div>
+          <div class="algo-branch-title">⏸️ Hold</div>
+          <ol class="numbered-list compact">
+            <li>10 min standard · 20 min if unspecified · indefinite if life/death</li>
+            <li>Tell both parties, camera off + mute</li>
+            <li>Log it, report on Discord</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--pink);">
+          <div class="algo-branch-if">If asked for a gift / your hours / sight translation</div>
+          <div class="algo-branch-title">🚫 Say No</div>
+          <ol class="numbered-list compact">
+            <li>Be gracious</li>
+            <li>Offer 2-3 alternatives</li>
+            <li>Give a reason (company policy)</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--accent2);">
+          <div class="algo-branch-if">If provider speaks Ukrainian / patient speaks English</div>
+          <div class="algo-branch-title">👁️ Shadowing</div>
+          <ol class="numbered-list compact">
+            <li>Tell both parties you're staying on, listening</li>
+            <li>Stay alert, keep taking notes</li>
+            <li>Jump in only if something important needs interpreting</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--green);">
+          <div class="algo-branch-if">If you need to place an outbound call</div>
+          <div class="algo-branch-title">📲 Dial-Out</div>
+          <ol class="numbered-list compact">
+            <li>Number to dial? Who's calling?</li>
+            <li>Patient's name?</li>
+            <li>Leave voicemail? Callback #?</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--accent2);">
+          <div class="algo-branch-if">If ASL + another spoken language both needed</div>
+          <div class="algo-branch-title">👥 Dual Interpretation</div>
+          <ol class="numbered-list compact">
+            <li>First one connected adds the second interpreter</li>
+            <li>Brief provider on hold, brief your team</li>
+            <li>ASL interpreter leads</li>
+          </ol>
+        </div>
+
+        <div class="algo-branch" style="border-top-color:var(--red);">
+          <div class="algo-branch-if">If the call is running long</div>
+          <div class="algo-branch-title">⏰ Long Call</div>
+          <ol class="numbered-list compact">
+            <li><strong style="color:var(--yellow)">90 min</strong> → self-monitor, consider transfer</li>
+            <li><strong style="color:var(--red)">120 min</strong> → expected to transfer (unless not tired)</li>
+            <li>"End of shift" alone is NOT a valid reason</li>
+          </ol>
+        </div>
+
+      </div>
+
+      <div class="algo-arrow">↓</div>
+      <div class="algo-phase">🏁 Wrapping Up</div>
+      <div class="algo-step">
+        <div class="algo-step-title">Closing <span style="color:var(--red);font-size:11px;">MANDATORY · SCRIPTED</span></div>
+        <div class="algo-step-body">
+          <strong>📞 Audio:</strong> offer more help → state your ID# → bye to doctor → bye to patient (Ukrainian)<br>
+          <strong>📹 Video:</strong> offer more help → remind them to rate the call → bye to doctor → bye to patient (Ukrainian)
+        </div>
+      </div>
+      <div class="algo-arrow">↓</div>
+      <div class="algo-step mandatory">
+        <div class="algo-step-title">📝 Call Notes <span style="color:var(--red);font-size:11px;">ALWAYS</span></div>
+        <div class="algo-step-body">Leave a note every single call, even if nothing happened. Names in CAPS. Refusals → initials, or N/A in caps if none given.</div>
+      </div>
+    </div>
+
+    <div class="cheatsheet-grid">
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">⏱️ Critical Timings</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <table style="width:100%;font-size:13px;border-collapse:collapse;">
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Blue/black screen hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--red);font-weight:700;text-align:right;">60 seconds</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Standard hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">10 minutes</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Unspecified flexible hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">20 minutes</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Life/death hold</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--green);font-weight:700;text-align:right;">Indefinitely</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--text2);">Self-monitor & consider transfer</td>
+              <td style="padding:8px 0;border-bottom:1px solid var(--border);color:var(--yellow);font-weight:700;text-align:right;">90 min</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:var(--text2);">Must transfer</td>
+              <td style="padding:8px 0;color:var(--red);font-weight:700;text-align:right;">120 min</td>
+            </tr>
+          </table>
+          <div style="margin-top:16px;padding:12px;background:rgba(52,211,153,0.1);border-radius:8px;border:1px solid rgba(52,211,153,0.2);">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">📞 TECH SUPPORT NUMBER</div>
+            <div style="font-size:20px;font-weight:800;color:var(--green);">1-866-449-4428</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(79,142,247,0.1);color:var(--accent);">👋 Greeting — Provider (Mandatory)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Your name</li>
+            <li>Language (Ukrainian)</li>
+            <li>ID number</li>
+            <li>"Everything will be interpreted"</li>
+          </ol>
+          <div style="margin-top:16px;padding:12px;background:rgba(79,142,247,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
+            "Hello, this is _____, your Ukrainian interpreter, ID XXXXX. Everything in the session will be interpreted. How can I help you?"
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(167,139,250,0.1);color:var(--purple);">🇺🇦 Greeting — Patient (Mandatory)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Your name</li>
+            <li>Language being interpreted into</li>
+            <li>Everything will be kept confidential</li>
+            <li>Everything will be interpreted</li>
+          </ol>
+          <div style="margin-top:16px;padding:12px;background:rgba(167,139,250,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
+            "Добрий день, мене звати ___, я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним."
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">🏁 Closing — Audio (4 steps)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>State Interpreter's ID #</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to LEP (in Ukrainian)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">📹 Closing — Video (4 steps)</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Offer additional assistance (MANDATORY)</li>
+            <li>Remind doctor to rate the call</li>
+            <li>Say goodbye to doctor</li>
+            <li>Say goodbye to LEP (in Ukrainian)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(251,191,36,0.1);color:var(--yellow);">⏸️ Hold — 5 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Inform provider of 10-min policy</li>
+            <li>Inform LEP of the hold</li>
+            <li>Turn camera off + mute audio</li>
+            <li>Note in Call Notes</li>
+            <li>Report on Discord</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(52,211,153,0.1);color:var(--green);">📲 Dial-Out — 5 Questions</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>What phone number to dial?</li>
+            <li>Who should I say is calling?</li>
+            <li>Name of person/patient?</li>
+            <li>Leave a voicemail message?</li>
+            <li>Callback number?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">🔧 Troubleshoot — 3 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Ask provider to reposition / toggle camera</li>
+            <li>If unresolved: camera off, continue</li>
+            <li>If still unresolved: connect to another interpreter + give Tech Support # (1-866-449-4428)</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(124,90,247,0.1);color:var(--accent2);">🔔 Intervention — 3 Steps</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Identify self as interpreter to waiting party</li>
+            <li>Identify self to the other party, request clarification</li>
+            <li>Resume interpreting</li>
+          </ol>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">Script: "This is the interpreter speaking / Excuse me, the interpreter needs to clarify..."</div>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(248,113,113,0.1);color:var(--red);">👤 3rd Person Exceptions</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:12px;">3rd person is ALLOWED for:</div>
+          <ul style="list-style:none;font-size:13px;color:var(--text2);">
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Children ≤ 7 years old</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Emergencies (summarizing)</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Dementia / substance abuse / post-surgery</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Mentally ill patients</li>
+            <li style="padding:6px 0;">• Trauma-triggered during call</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(251,191,36,0.1);color:var(--yellow);">📝 Call Notes Rules</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ul style="list-style:none;font-size:13px;color:var(--text2);">
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• ALWAYS leave a note, even if nothing happened</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Names → CAPITAL LETTERS</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Refused initials → type initials given</li>
+            <li style="padding:6px 0;border-bottom:1px solid var(--border);">• Full refusal → type <strong>N/A</strong> in caps</li>
+            <li style="padding:6px 0;">• Note reason for refusal</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-card-head" style="background:rgba(244,114,182,0.1);color:var(--pink);">🚫 "Say No" Model</div>
+        <div class="cs-card-body" style="padding-top:16px;">
+          <ol class="numbered-list">
+            <li>Be gracious</li>
+            <li>Offer 2-3 alternatives</li>
+            <li>Give a reason (e.g., company policy)</li>
+          </ol>
+          <div style="margin-top:12px;font-size:12px;color:var(--text3);">Use for: gift offers, working hours questions, sight translation requests</div>
+        </div>
+      </div>
+
+    </div>
+</main>
+
+<script src="ui_dict.js"></script>
+<script src="version.js"></script>
+<script>
+let currentAppLang = localStorage.getItem('ges_lang') || 'english';
+document.getElementById('langToggle').value = currentAppLang;
+
+const originalTexts = new Map();
+
+function translatePage() {
+  if (typeof UI_DICT === 'undefined') return;
+  const langCode = currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
+
+  const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  let node;
+  while (node = walk.nextNode()) {
+    const parent = node.parentNode;
+    if (!parent) continue;
+    if (['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION'].includes(parent.tagName)) continue;
+
+    const rawVal = node.nodeValue;
+    const text = rawVal.trim();
+    if (text.length <= 1) continue;
+
+    if (!originalTexts.has(node)) {
+      originalTexts.set(node, rawVal);
+    }
+
+    const originalText = originalTexts.get(node).trim();
+    if (UI_DICT[originalText]) {
+      const translation = UI_DICT[originalText][langCode];
+      if (translation) {
+        const leading = originalTexts.get(node).match(/^\s*/)[0];
+        const trailing = originalTexts.get(node).match(/\s*$/)[0];
+        node.nodeValue = leading + translation + trailing;
+      } else {
+        node.nodeValue = originalTexts.get(node);
+      }
+    } else {
+      node.nodeValue = originalTexts.get(node);
+    }
+  }
+}
+
+function changeLanguage(lang) {
+  currentAppLang = lang;
+  localStorage.setItem('ges_lang', lang);
+  document.getElementById('langToggle').value = lang;
+  translatePage();
+}
+
+changeLanguage(currentAppLang);
+</script>
+
+</body>
+</html>
