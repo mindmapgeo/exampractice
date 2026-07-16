@@ -1113,6 +1113,7 @@
   </div>
   <div class="header-right">
     <select id="langToggle" onchange="changeLanguage(this.value)">
+      <option value="english">🇺🇸 English</option>
       <option value="ukrainian">🇺🇸 ↔ 🇺🇦 English - Ukrainian</option>
       <option value="spanish">🇺🇸 ↔ 🇪🇸 English - Spanish</option>
     </select>
@@ -4512,10 +4513,7 @@ let progress = {};
 // ══════════════════════════════════════════════
 
 // MULTI-LANGUAGE & SEARCH SYSTEM
-let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
-if (currentAppLang !== 'ukrainian' && currentAppLang !== 'spanish') {
-  currentAppLang = 'ukrainian';
-}
+let currentAppLang = localStorage.getItem('ges_lang') || 'english';
 document.getElementById('langToggle').value = currentAppLang;
 
 function changeLanguage(lang) {
