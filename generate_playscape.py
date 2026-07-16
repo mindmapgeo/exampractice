@@ -789,8 +789,8 @@ html_template = """<!DOCTYPE html>
         cursor: pointer; font-family: 'Inter', sans-serif; outline: none;
       ">
         <option value="english" style="color:black;">🇺🇸 English</option>
-        <option value="ukrainian" style="color:black;">🇺🇦 Ukrainian Practice</option>
-        <option value="spanish" style="color:black;">🇪🇸 Spanish Practice</option>
+        <option value="ukrainian" style="color:black;">🇺🇦 Ukrainian</option>
+        <option value="spanish" style="color:black;">🇪🇸 Spanish</option>
       </select>
     </div>
   </header>
