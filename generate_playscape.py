@@ -857,6 +857,7 @@ html_template = """<!DOCTYPE html>
   </div>
 </div>
 
+<script src="ui_dict.js"></script>
 <script>
   const chats = CHATS_JSON_PLACEHOLDER;
   
@@ -869,7 +870,6 @@ html_template = """<!DOCTYPE html>
 
   // Retrieve shared language setting
   let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
-  document.getElementById('langToggle').value = currentAppLang;
 
   const homeView = document.getElementById('homeView');
   const instanceView = document.getElementById('instanceView');
@@ -888,6 +888,45 @@ html_template = """<!DOCTYPE html>
   function changeLanguage(lang) {
     currentAppLang = lang;
     localStorage.setItem('ges_lang', lang);
+    document.getElementById('langToggle').value = lang;
+    translatePage();
+  }
+
+  const originalTexts = new Map();
+
+  function translatePage() {
+    if (typeof UI_DICT === 'undefined') return;
+    const langCode = currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
+    
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while (node = walk.nextNode()) {
+      const parent = node.parentNode;
+      if (!parent) continue;
+      if (['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION'].includes(parent.tagName)) continue;
+      
+      const rawVal = node.nodeValue;
+      const text = rawVal.trim();
+      if (text.length <= 1) continue;
+      
+      if (!originalTexts.has(node)) {
+        originalTexts.set(node, rawVal);
+      }
+      
+      const originalText = originalTexts.get(node).trim();
+      if (UI_DICT[originalText]) {
+        const translation = UI_DICT[originalText][langCode];
+        if (translation) {
+          const leading = originalTexts.get(node).match(/^\s*/)[0];
+          const trailing = originalTexts.get(node).match(/\s*$/)[0];
+          node.nodeValue = leading + translation + trailing;
+        } else {
+          node.nodeValue = originalTexts.get(node);
+        }
+      } else {
+        node.nodeValue = originalTexts.get(node);
+      }
+    }
   }
 
   function initHub() {
@@ -1020,6 +1059,7 @@ html_template = """<!DOCTYPE html>
   });
 
   initHub();
+  changeLanguage(currentAppLang);
 </script>
 </body>
 </html>

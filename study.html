@@ -2032,6 +2032,7 @@
   </div>
 </div>
 
+<script src="ui_dict.js"></script>
 <script>
 // ══════════════════════════════════════════════
 // DATA — All 469 glossary terms
@@ -4452,9 +4453,66 @@ function changeLanguage(lang) {
     }
   }
 
+  // Translate UI strings
+  translatePage();
+
   // Re-render active tab content
   if (typeof initFlashcards === 'function') initFlashcards();
   if (typeof renderGlossary === 'function') renderGlossary();
+}
+
+const originalTexts = new Map();
+
+function translatePage() {
+  if (typeof UI_DICT === 'undefined') return;
+  const langCode = currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
+  
+  const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  let node;
+  while (node = walk.nextNode()) {
+    const parent = node.parentNode;
+    if (!parent) continue;
+    if (['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION'].includes(parent.tagName)) continue;
+    
+    const rawVal = node.nodeValue;
+    const text = rawVal.trim();
+    if (text.length <= 1) continue;
+    
+    if (!originalTexts.has(node)) {
+      originalTexts.set(node, rawVal);
+    }
+    
+    const originalText = originalTexts.get(node).trim();
+    if (UI_DICT[originalText]) {
+      const translation = UI_DICT[originalText][langCode];
+      if (translation) {
+        const leading = originalTexts.get(node).match(/^\s*/)[0];
+        const trailing = originalTexts.get(node).match(/\s*$/)[0];
+        node.nodeValue = leading + translation + trailing;
+      } else {
+        node.nodeValue = originalTexts.get(node);
+      }
+    } else {
+      node.nodeValue = originalTexts.get(node);
+    }
+  }
+
+  document.querySelectorAll('[placeholder]').forEach(el => {
+    if (!originalTexts.has(el)) {
+      originalTexts.set(el, el.getAttribute('placeholder'));
+    }
+    const origPlaceholder = originalTexts.get(el).trim();
+    if (UI_DICT[origPlaceholder]) {
+      const translation = UI_DICT[origPlaceholder][langCode];
+      if (translation) {
+        el.setAttribute('placeholder', translation);
+      } else {
+        el.setAttribute('placeholder', originalTexts.get(el));
+      }
+    } else {
+      el.setAttribute('placeholder', originalTexts.get(el));
+    }
+  });
 }
 
 // Initial setup of protocols

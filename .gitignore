@@ -1,0 +1,21 @@
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# macOS System Files
+.DS_Store
+
+# Temporary Audio Outputs
+1.mp3
+2.mp3
+3.mp3
+combined.mp3
+test_multi.mp3
