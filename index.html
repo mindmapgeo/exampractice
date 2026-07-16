@@ -5027,14 +5027,34 @@ function renderProgressRings() {
 function renderAudiobook() {
   const grid = document.getElementById('audiobookGrid');
 
+  let langName = 'English';
+  let greetingPatient = "Hello, my name is [your name], I am your English interpreter. Everything during this session will be interpreted and kept confidential.";
+  let closingPatient = "Have a good day, sir or madam.";
+  let thirdPersonPatient = "Sir or madam, I am the interpreter. Please speak directly to the doctor to avoid ambiguity and ensure the accuracy of the message.";
+  let longCallPatient = "As the interpreter, I believe we have reached a point in the conversation where it is appropriate to switch interpreters. Please stay on the line — you will be connected with one of my colleagues momentarily. Thank you.";
+
+  if (currentAppLang === 'ukrainian') {
+    langName = 'Ukrainian';
+    greetingPatient = "Добрий день, мене звати [ваше ім'я], я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним.";
+    closingPatient = "Гарного вам дня, пане або пані.";
+    thirdPersonPatient = "Пане або пані, я перекладач. Будь ласка, звертайтеся безпосередньо до лікаря, щоб уникнути двозначностей і забезпечити точність повідомлення.";
+    longCallPatient = "Як перекладач, вважаю, що ми дійшли до моменту розмови, коли доцільно змінити перекладача. Будь ласка, залишайтеся на лінії — вас негайно з'єднають з одним із моїх колег. Дякую.";
+  } else if (currentAppLang === 'spanish') {
+    langName = 'Spanish';
+    greetingPatient = "Buenos días, mi nombre es [su nombre], soy su intérprete de inglés. Todo durante esta sesión será interpretado y se mantendrá confidencial.";
+    closingPatient = "Que tenga un buen día, señor o señora.";
+    thirdPersonPatient = "Señor o señora, soy el intérprete. Por favor, diríjase directamente al médico para evitar ambigüedades y asegurar la precisión del mensaje.";
+    longCallPatient = "Como intérprete, creo que hemos llegado a un punto en la conversación en el que es apropiado cambiar de intérprete. Por favor manténgase en la línea — será conectado con uno de mis colegas de inmediato. Gracias.";
+  }
+
   const protocolScript = `
 CHAPTER 1: GREETING PROTOCOL
 
 When you answer a call, you must introduce yourself to the provider and to the patient separately.
 
-To the PROVIDER, you must say: Hello, this is [your name], your Ukrainian interpreter, ID [your number]. Everything in the session will be interpreted. How can I help you?
+To the PROVIDER, you must say: Hello, this is [your name], your ${langName} interpreter, ID [your number]. Everything in the session will be interpreted. How can I help you?
 
-To the PATIENT in Ukrainian: Добрий день, мене звати [ваше ім'я], я ваш перекладач англійської мови. Усе під час цієї сесії буде перекладатися та залишатиметься конфіденційним.
+To the PATIENT in ${langName}: ${greetingPatient}
 
 Mandatory elements for the provider: your name, the language you interpret, your interpreter ID number, and the statement that everything will be interpreted.
 
@@ -5048,13 +5068,13 @@ For AUDIO calls, you close in this order:
 Step 1: Offer additional assistance — this is mandatory. Say: Is there anything else I can help you with?
 Step 2: State your interpreter ID number.
 Step 3: Say goodbye to the doctor.
-Step 4: Say goodbye to the patient in Ukrainian: Гарного вам дня, пане або пані.
+Step 4: Say goodbye to the patient in ${langName}: ${closingPatient}
 
 For VIDEO calls, you close in this order:
 Step 1: Offer additional assistance — this is mandatory.
 Step 2: Remind the doctor to rate the call. Say: Please remember to rate the call after we hang up. Your feedback is valuable and appreciated.
 Step 3: Say goodbye to the doctor.
-Step 4: Say goodbye to the patient in Ukrainian.
+Step 4: Say goodbye to the patient in ${langName}.
 
 ---
 
@@ -5076,7 +5096,7 @@ CHAPTER 4: THE 3RD PERSON PROTOCOL
 
 Normally you must interpret in FIRST PERSON. If the provider or patient speaks to you directly instead of each other, you must intervene.
 
-To the patient in Ukrainian: Пане або пані, я перекладач. Будь ласка, звертайтеся безпосередньо до лікаря, щоб уникнути двозначностей і забезпечити точність повідомлення.
+To the patient in ${langName}: ${thirdPersonPatient}
 
 To the provider: This is the interpreter. May I please ask you to speak directly to your patient so that we can ensure accuracy and avoid confusion?
 
@@ -5097,7 +5117,7 @@ Standard hold: 10 minutes. You can hold up to 10 minutes for a provider to retur
 
 Flexible hold: If the provider gives you a SPECIFIC amount of time, honor it. If the provider gives an UNSPECIFIED amount of time, hold for 20 minutes. If it is a life or death situation, hold indefinitely.
 
-Blue or black screen: You have 60 seconds to try to get a response. Say: Hello, this is your Ukrainian interpreter. Is there anybody on the line? If no response: This is your Ukrainian interpreter. I'm unable to hear anyone on the line. I will disconnect from the call. I apologize for the inconvenience. Goodbye.
+Blue or black screen: You have 60 seconds to try to get a response. Say: Hello, this is your ${langName} interpreter. Is there anybody on the line? If no response: This is your ${langName} interpreter. I'm unable to hear anyone on the line. I will disconnect from the call. I apologize for the inconvenience. Goodbye.
 
 During a standard hold, you must follow 5 steps:
 Step 1: Let the provider know you can only wait 10 minutes.
@@ -5144,7 +5164,7 @@ Signs you need to transfer include: increased fatigue, performance concerns, emo
 
 To the provider: [Provider name], as the interpreter, I think we've reached a point in the conversation to switch out interpreters. Please remain on the line and you'll be connected to one of my colleagues momentarily. Thank you.
 
-To the patient in Ukrainian: Як перекладач, вважаю, що ми дійшли до моменту розмови, коли доцільно змінити перекладача. Будь ласка, залишайтеся на лінії — вас негайно з'єднають з одним із моїх колег. Дякую.
+To the patient in ${langName}: ${longCallPatient}
 
 At 120 minutes: You are expected to transfer the call.
 
