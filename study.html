@@ -4443,10 +4443,8 @@ function changeLanguage(lang) {
     document.querySelectorAll('.script-box.ukraine').forEach(el => el.style.display = 'block');
   } else if (lang === 'spanish') {
     document.querySelectorAll('.script-box.spanish').forEach(el => el.style.display = 'block');
-  } else {
-    // English — show all scripts (both Ukrainian and Spanish versions visible for reference)
-    document.querySelectorAll('.script-box.ukraine').forEach(el => el.style.display = 'block');
   }
+  // If 'english', leave both hidden so only the base English scripts show.
 
   // Update Audiobook player
   const player = document.getElementById('audiobookPlayer');
@@ -4526,41 +4524,48 @@ function translatePage() {
 // Initial setup of protocols
 changeLanguage(currentAppLang);
 
+// Returns the target language key for data lookups based on current mode
+function getTargetLang() {
+  if (currentAppLang === 'spanish') return 'spanish';
+  if (currentAppLang === 'ukrainian') return 'ukrainian';
+  return 'english';
+}
+
 function handleSearch(e) {
   const q = e.target.value.toLowerCase().trim();
   const resContainer = document.getElementById('searchResults') || createSearchContainer();
-  
+
   if (q.length < 2) {
     resContainer.style.display = 'none';
     document.querySelectorAll('.tab-content').forEach(el => {
-      if(el.id === 'content-' + document.querySelector('.nav-btn.active').id.split('-')[1]) el.style.display = 'block';
+      if (el.id === 'content-' + document.querySelector('.nav-btn.active').id.split('-')[1]) el.style.display = 'block';
     });
     return;
   }
-  
-  // Hide all tabs
+
   document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
   resContainer.style.display = 'block';
-  
+
+  const targetLang = getTargetLang();
+  const targetLabel = targetLang === 'spanish' ? 'Spanish' : (targetLang === 'ukrainian' ? 'Ukrainian' : 'English');
   let html = `<h3>🔍 Search Results for "${q}"</h3><div class="glossary-list">`;
-  
-  // Search Glossary
+
   let found = 0;
   for (const [cat, terms] of Object.entries(GLOSSARY_DATA)) {
     for (const item of terms) {
-      if (item.english.toLowerCase().includes(q) || 
-          item[currentAppLang].toLowerCase().includes(q) || 
-          (item.spanish && item.spanish.toLowerCase().includes(q))) {
+      const targetVal = item[targetLang] || '';
+      if (item.english.toLowerCase().includes(q) || targetVal.toLowerCase().includes(q)) {
+        const highlight = str => str.replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), m => `<span class="search-highlight">${m}</span>`);
         html += `
           <div class="glos-item">
-            <div class="glos-en">${item.english.replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
-            <div class="glos-uk">${item[currentAppLang].replace(new RegExp(q, 'gi'), match => `<span class="search-highlight">${match}</span>`)}</div>
+            <div class="glos-en">${highlight(item.english)}</div>
+            <div class="glos-uk" title="${targetLabel}">${highlight(targetVal)}</div>
           </div>`;
         found++;
       }
     }
   }
-  
+
   if (found === 0) html += `<p>No matches found in glossary.</p>`;
   html += `</div>`;
   resContainer.innerHTML = html;
@@ -4620,6 +4625,44 @@ function toggleProtocol(id) {
   card.classList.toggle('open');
 }
 
+function renderGlossary(filtered) {
+  const terms = filtered !== undefined ? filtered : allCards;
+  const tbody = document.getElementById('glossaryBody');
+  const catLabels = {
+    'VOCAB': 'Vocab', 'PROC ACRONYMS': 'Acronyms', 'MEDICATIONS': 'Medications',
+    'ROUTINE VISITS': 'Routine Visits', 'SPECIALTY CARE': 'Specialty', 'PAIN DESCRIPTORS': 'Pain',
+    'ANATOMY': 'Anatomy', 'MED INSURANCE': 'Insurance'
+  };
+  const targetLang = getTargetLang();
+  const isSpanish = targetLang === 'spanish';
+  const isUk = targetLang === 'ukrainian';
+
+  tbody.innerHTML = terms.map(t => {
+    const safeEn = t.english.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+    const targetText = t[targetLang] || '';
+    const safeTarget = targetText.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+    const targetLangCode = isSpanish ? 'es-ES' : (isUk ? 'uk-UA' : 'en-US');
+    const targetTitle = isSpanish ? 'Listen in Spanish' : (isUk ? 'Listen in Ukrainian' : 'Listen in English');
+    return `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${t.english}
+          <button onclick="speakGlossary('${safeEn}', 'en-US')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Listen in English">🔊</button>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${targetText}
+          ${targetText && targetLang !== 'english' ? `<button onclick="speakGlossary('${safeTarget}', '${targetLangCode}')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="${targetTitle}">🔊</button>` : ''}
+        </div>
+      </td>
+      <td><span class="sheet-badge">${catLabels[t.category] || t.category}</span></td>
+    </tr>
+  `}).join('');
+  document.getElementById('glossaryCount').textContent = `Showing ${terms.length} of ${allCards.length} terms`;
+}
+
 // ══════════════════════════════════════════════
 // FLASHCARDS
 // ══════════════════════════════════════════════
@@ -4648,14 +4691,16 @@ function showCard() {
   const card = currentCards[currentCardIdx];
   const dir = document.getElementById('fcDirection').value;
   const isEnToUk = dir === 'en-uk' || (dir === 'random' && Math.random() > 0.5);
+  const targetLang = getTargetLang();
+  const targetLabel = targetLang === 'spanish' ? 'SPANISH' : (targetLang === 'ukrainian' ? 'UKRAINIAN' : 'ENGLISH');
 
-  const frontWord = isEnToUk ? card.english : card[currentAppLang];
-  const backWord = isEnToUk ? card[currentAppLang] : card.english;
+  const frontWord = isEnToUk ? card.english : (card[targetLang] || card.english);
+  const backWord = isEnToUk ? (card[targetLang] || card.english) : card.english;
 
   document.getElementById('fcFrontWord').textContent = frontWord;
   document.getElementById('fcBackWord').textContent = backWord;
-  document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : currentAppLang.toUpperCase();
-  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? currentAppLang.toUpperCase() : 'ENGLISH';
+  document.getElementById('fcFront').querySelector('.fc-label').textContent = isEnToUk ? 'ENGLISH' : targetLabel;
+  document.getElementById('fcBack').querySelector('.fc-label').textContent = isEnToUk ? targetLabel : 'ENGLISH';
 
   cardFlipped = false;
   document.getElementById('flashcard').classList.remove('flipped');
@@ -4925,12 +4970,12 @@ function renderGlossary(filtered) {
 function filterGlossary() {
   const query = document.getElementById('glossarySearch').value.toLowerCase();
   const cat = document.getElementById('glossaryFilter').value;
+  const targetLang = getTargetLang();
   let filtered = allCards;
   if (cat !== 'all') filtered = filtered.filter(t => t.category === cat);
   if (query) filtered = filtered.filter(t =>
     t.english.toLowerCase().includes(query) ||
-    t.ukrainian.toLowerCase().includes(query) ||
-    (t.spanish && t.spanish.toLowerCase().includes(query))
+    (t[targetLang] && t[targetLang].toLowerCase().includes(query))
   );
   renderGlossary(filtered);
 }
