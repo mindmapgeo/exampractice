@@ -493,6 +493,7 @@ html_template = """<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 <script src="ui_dict.js"></script>
+<script src="es_audio_map.js"></script>
 <style>
   :root {
     --bg: #050608;
@@ -945,10 +946,25 @@ html_template = """<!DOCTYPE html>
     return UI_DICT[text][langCode] || text;
   }
 
+  let _staticAudioClip = null;
+
   function speakMessage(role, lang, text) {
+    if (typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+    if (_staticAudioClip) { _staticAudioClip.pause(); _staticAudioClip = null; }
+
+    // Pre-generated high-quality Spanish audio (Microsoft neural voice)
+    if (lang === 'es' && typeof ES_AUDIO_MAP !== 'undefined' && ES_AUDIO_MAP[text]) {
+      _staticAudioClip = new Audio(ES_AUDIO_MAP[text]);
+      _staticAudioClip.onended = () => updateUI();
+      _staticAudioClip.play();
+      if (currentStep < currentChatActiveLength) {
+        btnNext.innerHTML = uiTranslate('🔊 Speaking... <i>(Space to skip)</i>');
+      }
+      return;
+    }
+
     if (typeof responsiveVoice === 'undefined') return;
-    responsiveVoice.cancel();
-    
+
     let voiceKey = 'US English Female';
     if (role === 'Doctor') voiceKey = 'UK English Male';
     else if (role === 'Patient') {
@@ -957,9 +973,9 @@ html_template = """<!DOCTYPE html>
       if (lang === 'en') voiceKey = 'US English Female';
       else voiceKey = lang === 'es' ? 'Spanish Latin American Female' : 'Ukrainian Female';
     }
-    
-    responsiveVoice.speak(text, voiceKey, { 
-      rate: 0.9, 
+
+    responsiveVoice.speak(text, voiceKey, {
+      rate: 0.9,
       pitch: 1,
       onstart: () => {
         if (currentStep < currentChatActiveLength) {

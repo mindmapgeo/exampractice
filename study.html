@@ -2121,6 +2121,7 @@
 </div>
 
 <script src="ui_dict.js"></script>
+<script src="es_audio_map.js"></script>
 <script>
 // ══════════════════════════════════════════════
 // DATA — All 469 glossary terms
@@ -4847,11 +4848,22 @@ function _getLangKey() {
   return currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
 }
 
+let _staticAudioClip = null;
+
 function speakText(text, langKey, rate) {
   rate = rate || 0.85;
+  if (typeof responsiveVoice !== 'undefined') responsiveVoice.cancel();
+  if (_staticAudioClip) { _staticAudioClip.pause(); _staticAudioClip = null; }
+
+  // Pre-generated high-quality Spanish audio (Microsoft neural voice) — falls
+  // back to ResponsiveVoice below for anything not in the map.
+  if (langKey === 'es' && typeof ES_AUDIO_MAP !== 'undefined' && ES_AUDIO_MAP[text]) {
+    _staticAudioClip = new Audio(ES_AUDIO_MAP[text]);
+    _staticAudioClip.play();
+    return;
+  }
   // ResponsiveVoice (preferred — works for all students)
   if (typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
-    responsiveVoice.cancel();
     const rvVoice = RV_VOICES[langKey] || 'UK English Female';
     responsiveVoice.speak(text, rvVoice, { rate: rate, pitch: 1, volume: 1 });
     return;
