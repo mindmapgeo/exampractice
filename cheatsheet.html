@@ -13,8 +13,8 @@
     --card: #1a2035;
     --card2: #1f2640;
     --border: #2a3350;
-    --accent: #4f8ef7;
-    --accent2: #7c5af7;
+    --accent: #c9963f;
+    --accent2: #3f6fa8;
     --green: #34d399;
     --red: #f87171;
     --yellow: #fbbf24;
@@ -23,7 +23,7 @@
     --text: #e2e8f0;
     --text2: #94a3b8;
     --text3: #64748b;
-    --glow: 0 0 40px rgba(79,142,247,0.15);
+    --glow: 0 0 40px rgba(201,150,63,0.15);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,8 +41,8 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,142,247,0.07) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(124,90,247,0.07) 0%, transparent 60%);
+    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,150,63,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 90%, rgba(63,111,168,0.07) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
@@ -81,7 +81,7 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 18px;
     -webkit-text-fill-color: white;
-    box-shadow: 0 0 20px rgba(79,142,247,0.4);
+    box-shadow: 0 0 20px rgba(201,150,63,0.4);
   }
 
   .header-stats {
@@ -339,10 +339,10 @@
   .btn-primary {
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: white;
-    box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+    box-shadow: 0 4px 20px rgba(201,150,63,0.3);
   }
 
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(79,142,247,0.45); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(201,150,63,0.45); }
 
   .btn-ghost {
     background: var(--card);
@@ -392,7 +392,7 @@
   .fc-front {
     background: linear-gradient(135deg, var(--card2) 0%, var(--card) 100%);
     border-color: var(--accent);
-    box-shadow: 0 0 40px rgba(79,142,247,0.1);
+    box-shadow: 0 0 40px rgba(201,150,63,0.1);
   }
 
   .fc-back {
@@ -509,7 +509,7 @@
 
   .quiz-option:hover:not(:disabled) {
     border-color: var(--accent);
-    background: rgba(79,142,247,0.08);
+    background: rgba(201,150,63,0.08);
   }
 
   .quiz-option.correct {
@@ -618,7 +618,7 @@
 
   .tag-critical { background: rgba(248,113,113,0.2); color: var(--red); }
   .tag-mandatory { background: rgba(251,191,36,0.2); color: var(--yellow); }
-  .tag-scripted { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .tag-scripted { background: rgba(201,150,63,0.2); color: var(--accent); }
   .tag-timing { background: rgba(52,211,153,0.2); color: var(--green); }
 
   .protocol-chevron { transition: transform 0.3s; color: var(--text3); font-size: 18px; }
@@ -633,8 +633,8 @@
   .protocol-card.open .protocol-body { display: block; }
 
   .script-box {
-    background: rgba(79,142,247,0.08);
-    border: 1px solid rgba(79,142,247,0.25);
+    background: rgba(201,150,63,0.08);
+    border: 1px solid rgba(201,150,63,0.25);
     border-left: 4px solid var(--accent);
     border-radius: 0 12px 12px 0;
     padding: 16px 20px;
@@ -646,8 +646,8 @@
   }
 
   .script-box.ukraine {
-    background: rgba(124,90,247,0.08);
-    border-color: rgba(124,90,247,0.25);
+    background: rgba(63,111,168,0.08);
+    border-color: rgba(63,111,168,0.25);
     border-left-color: var(--accent2);
     color: #d4c7ff;
   }
@@ -690,7 +690,7 @@
   }
 
   .check-icon.req { background: rgba(248,113,113,0.2); color: var(--red); }
-  .check-icon.opt { background: rgba(79,142,247,0.2); color: var(--accent); }
+  .check-icon.opt { background: rgba(201,150,63,0.2); color: var(--accent); }
   .check-icon.note { background: rgba(251,191,36,0.2); color: var(--yellow); }
 
   .timing-badge {
@@ -772,7 +772,7 @@
   .glossary-table tr:last-child td { border-bottom: none; }
 
   .glossary-table tr:hover td {
-    background: rgba(79,142,247,0.05);
+    background: rgba(201,150,63,0.05);
   }
 
   .glossary-table td:first-child { color: var(--text); font-weight: 500; }
@@ -983,8 +983,8 @@
     align-items: center;
     gap: 6px;
     padding: 5px 12px;
-    background: rgba(79,142,247,0.12);
-    border: 1px solid rgba(79,142,247,0.3);
+    background: rgba(201,150,63,0.12);
+    border: 1px solid rgba(201,150,63,0.3);
     border-radius: 8px;
     color: var(--accent);
     font-size: 12px;
@@ -994,7 +994,7 @@
     font-family: 'Inter', sans-serif;
   }
 
-  .speak-btn:hover { background: rgba(79,142,247,0.25); }
+  .speak-btn:hover { background: rgba(201,150,63,0.25); }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeIn {
@@ -1005,9 +1005,9 @@
   .tab-content.active { animation: fadeIn 0.3s ease; }
 
   @keyframes pulse-ring {
-    0% { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
-    70% { box-shadow: 0 0 0 12px rgba(79,142,247,0); }
-    100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
+    0% { box-shadow: 0 0 0 0 rgba(201,150,63,0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(201,150,63,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,150,63,0); }
   }
 
   .pulsing { animation: pulse-ring 2s infinite; }
@@ -1120,7 +1120,7 @@
     font-size: 13px;
     line-height: 1.4;
     color: var(--text);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(79, 142, 247, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,150,63, 0.1);
     position: relative;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -1380,7 +1380,7 @@
       </div>
 
       <div class="cs-card">
-        <div class="cs-card-head" style="background:rgba(79,142,247,0.1);color:var(--accent);">👋 Greeting — Provider (Mandatory)</div>
+        <div class="cs-card-head" style="background:rgba(201,150,63,0.1);color:var(--accent);">👋 Greeting — Provider (Mandatory)</div>
         <div class="cs-card-body" style="padding-top:16px;">
           <ol class="numbered-list">
             <li>Your name</li>
@@ -1388,7 +1388,7 @@
             <li>ID number</li>
             <li>"Everything will be interpreted"</li>
           </ol>
-          <div style="margin-top:16px;padding:12px;background:rgba(79,142,247,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
+          <div style="margin-top:16px;padding:12px;background:rgba(201,150,63,0.08);border-radius:8px;font-style:italic;font-size:13px;color:var(--text2);">
             "Hello, this is _____, your Ukrainian interpreter, ID XXXXX. Everything in the session will be interpreted. How can I help you?"
           </div>
         </div>
@@ -1471,7 +1471,7 @@
       </div>
 
       <div class="cs-card">
-        <div class="cs-card-head" style="background:rgba(124,90,247,0.1);color:var(--accent2);">🔔 Intervention — 3 Steps</div>
+        <div class="cs-card-head" style="background:rgba(63,111,168,0.1);color:var(--accent2);">🔔 Intervention — 3 Steps</div>
         <div class="cs-card-body" style="padding-top:16px;">
           <ol class="numbered-list">
             <li>Identify self as interpreter to waiting party</li>
