@@ -97,7 +97,8 @@ chats = [
             {"role": "Patient", "text": "Мені вже легше на душі від того, що є причина. Дякую.", "lang": "uk"},
             {"role": "Interpreter", "text": "I already feel lighter just knowing there's a reason. Thank you.", "lang": "en"},
             {"role": "Doctor", "text": "That's the best part of my job. We check levels in 6 weeks and adjust the dose if needed. You're going to feel like yourself again.", "lang": "en"},
-            {"role": "Interpreter", "text": "Це найкраща частина моєї роботи. Через 6 тижнів перевіряємо рівні і якщо потрібно, коригуємо дозу. Ви знову будете почуватися собою.", "lang": "uk"}
+            {"role": "Interpreter", "text": "Это лучшая часть моей работы. Через 6 тижнів перевіряємо рівні і якщо потрібно, коригуємо дозу. Ви знову будете почуватися собою.", "lang": "uk"},
+            {"role": "Interpreter", "text": "Esa es la mejor parte de mi trabajo. Revisamos los niveles en 6 semanas y, si es necesario, ajustamos la dosis. Te volverás a sentir tú mismo.", "lang": "es"}
         ]
     },
     {
@@ -183,6 +184,7 @@ chats = [
             {"role": "Doctor", "text": "You're thinking about this exactly right and I respect that. Here's the answer: we don't stop — we switch. There's a medication called Lamictal that controls seizures just as well without the mood effects for most people. We'll taper you off Keppra slowly while bringing Lamictal up.", "lang": "en"},
             {"role": "Interpreter", "text": "Ви думаєте про це саме правильно, і я це поважаю. Ось відповідь: ми не зупиняємось — ми переходимо. Є препарат під назвою Ламіктал, який контролює напади так само добре, але без впливу на настрій у більшості людей. Ми будемо повільно знижувати Кеппру, одночасно вводячи Ламіктал.", "lang": "uk"},
             {"role": "Patient", "text": "І ваша дружина — вона знає як це важко для сім'ї?", "lang": "uk"},
+            {"role": "Patient", "text": "¿Y su esposa? ¿Sabe lo difícil que es esto para la familia?", "lang": "es"},
             {"role": "Interpreter", "text": "And your wife — does she know how hard this is for the family?", "lang": "en"},
             {"role": "Doctor", "text": "Would it help if I spoke with her together with you today, to explain that this was the medication and not you? Sometimes families need to hear it from the doctor.", "lang": "en"},
             {"role": "Interpreter", "text": "Чи допомогло б якщо б я поговорила з нею разом з вами сьогодні, щоб пояснити, що це були ліки, а не ви? Іноді сім'ям потрібно почути це від лікаря.", "lang": "uk"},
