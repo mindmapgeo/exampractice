@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Playscape — Virtual Discovery Worlds</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
 <style>
   :root {
     --bg: #050608;
@@ -383,9 +384,10 @@
   let totalWorldsVisited = 0;
   let autoChainTimer = null;
   let currentChatActiveLength = 0;
+  let activeMessages = []; // Track globally for TTS access
 
   // Retrieve shared language setting
-  let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+  let currentAppLang = localStorage.getItem('ges_lang') || 'english';
 
   const homeView = document.getElementById('homeView');
   const instanceView = document.getElementById('instanceView');
@@ -445,6 +447,22 @@
     }
   }
 
+  function speakMessage(role, lang, text) {
+    if (typeof responsiveVoice === 'undefined') return;
+    responsiveVoice.cancel();
+    
+    let voiceKey = 'US English Female';
+    if (role === 'Doctor') voiceKey = 'UK English Male';
+    else if (role === 'Patient') {
+      voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+    } else if (role === 'Interpreter') {
+      if (lang === 'en') voiceKey = 'US English Female';
+      else voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+    }
+    
+    responsiveVoice.speak(text, voiceKey, { rate: 0.9, pitch: 1 });
+  }
+
   function initHub() {
     scenarioGrid.innerHTML = '';
     chats.forEach((chat, index) => {
@@ -478,8 +496,9 @@
     chatTopic.textContent = currentChat.topic;
     worldCounter.textContent = `World ${totalWorldsVisited} · ∞`;
 
-    const targetLangCode = currentAppLang === 'ukrainian' ? 'uk' : 'es';
-    const activeMessages = currentChat.messages.filter(msg => msg.lang === 'en' || msg.lang === targetLangCode);
+    // If 'english', default to ukrainian for the patient so there's a language to interpret
+    const targetLangCode = currentAppLang === 'spanish' ? 'es' : 'uk';
+    activeMessages = currentChat.messages.filter(msg => msg.lang === 'en' || msg.lang === targetLangCode);
     currentChatActiveLength = activeMessages.length;
 
     chatMessagesEl.innerHTML = '';
@@ -487,7 +506,14 @@
       const wrapper = document.createElement('div');
       wrapper.className = `message ${msg.role}`;
       wrapper.id = `msg-${i}`;
-      wrapper.innerHTML = `<div class="message-label">${msg.role}</div><div class="message-bubble">${msg.text}</div>`;
+      const safeText = msg.text.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+      wrapper.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="message-label">${msg.role}</div>
+          <button onclick="speakMessage('${msg.role}', '${msg.lang}', '${safeText}')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Replay Audio">🔊</button>
+        </div>
+        <div class="message-bubble">${msg.text}</div>
+      `;
       chatMessagesEl.appendChild(wrapper);
     });
     chatMessagesEl.scrollTop = 0;
@@ -540,6 +566,9 @@
     if (msgEl) {
       msgEl.classList.add('visible');
       setTimeout(() => msgEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      
+      const msgData = activeMessages[currentStep];
+      speakMessage(msgData.role, msgData.lang, msgData.text);
     }
     currentStep++;
     updateUI();
