@@ -789,8 +789,8 @@ html_template = """<!DOCTYPE html>
         cursor: pointer; font-family: 'Inter', sans-serif; outline: none;
       ">
         <option value="english" style="color:black;">🇺🇸 English</option>
-        <option value="ukrainian" style="color:black;">🇺🇦 Ukrainian</option>
-        <option value="spanish" style="color:black;">🇪🇸 Spanish</option>
+        <option value="ukrainian" style="color:black;">🇺🇸 ↔ 🇺🇦 English - Ukrainian</option>
+        <option value="spanish" style="color:black;">🇺🇸 ↔ 🇪🇸 English - Spanish</option>
       </select>
     </div>
   </header>
@@ -876,6 +876,9 @@ html_template = """<!DOCTYPE html>
 
   // Retrieve shared language setting
   let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+  if (currentAppLang !== 'ukrainian' && currentAppLang !== 'spanish') {
+    currentAppLang = 'ukrainian';
+  }
 
   const homeView = document.getElementById('homeView');
   const instanceView = document.getElementById('instanceView');
