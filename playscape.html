@@ -466,10 +466,10 @@
     let voiceKey = 'US English Female';
     if (role === 'Doctor') voiceKey = 'UK English Male';
     else if (role === 'Patient') {
-      voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+      voiceKey = lang === 'es' ? 'Spanish Latin American Female' : 'Ukrainian Female';
     } else if (role === 'Interpreter') {
       if (lang === 'en') voiceKey = 'US English Female';
-      else voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+      else voiceKey = lang === 'es' ? 'Spanish Latin American Female' : 'Ukrainian Female';
     }
     
     responsiveVoice.speak(text, voiceKey, { 
