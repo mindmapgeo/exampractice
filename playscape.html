@@ -460,7 +460,18 @@
       else voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
     }
     
-    responsiveVoice.speak(text, voiceKey, { rate: 0.9, pitch: 1 });
+    responsiveVoice.speak(text, voiceKey, { 
+      rate: 0.9, 
+      pitch: 1,
+      onstart: () => {
+        if (currentStep < currentChatActiveLength) {
+          btnNext.innerHTML = '🔊 Speaking... <i>(Space to skip)</i>';
+        }
+      },
+      onend: () => {
+        updateUI(); // Resets button to prompt the next action
+      }
+    });
   }
 
   function initHub() {
@@ -588,9 +599,20 @@
     const total = currentChat ? currentChatActiveLength : 0;
     const done = currentStep >= total;
     chatProgress.textContent = `${currentStep} / ${total} lines`;
-    btnNext.textContent = done ? '→ Next World' : 'Reveal Next Line (Space)';
+    
+    if (done) {
+      btnNext.textContent = '→ Next World';
+      if (total > 0) showCompletionPortal();
+    } else {
+      const nextRole = activeMessages[currentStep].role;
+      if (nextRole === 'Interpreter' && currentStep > 0) {
+        // If the next line is the interpreter, the student should be talking right now
+        btnNext.innerHTML = '🎤 Speak your translation, then press Space to check';
+      } else {
+        btnNext.innerHTML = 'Press Space to reveal next line';
+      }
+    }
     btnNext.disabled = false;
-    if (done && total > 0) { showCompletionPortal(); }
   }
 
   document.addEventListener('keydown', e => {
