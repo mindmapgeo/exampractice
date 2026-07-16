@@ -491,6 +491,8 @@ html_template = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Playscape — Virtual Discovery Worlds</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<script src="ui_dict.js"></script>
 <style>
   :root {
     --bg: #050608;
@@ -779,13 +781,14 @@ html_template = """<!DOCTYPE html>
 <!-- HOME HUB -->
 <div id="homeView">
   <header>
-    <div class="logo">Playscape // Hub</div>
+    <h1 class="logo">Playscape // Hub</h1>
     <div style="display:flex; align-items:center; gap:16px; z-index: 20;">
       <select id="langToggle" onchange="changeLanguage(this.value)" style="
         padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.1); 
         color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; 
         cursor: pointer; font-family: 'Inter', sans-serif; outline: none;
       ">
+        <option value="english" style="color:black;">🇺🇸 English</option>
         <option value="ukrainian" style="color:black;">🇺🇦 Ukrainian Practice</option>
         <option value="spanish" style="color:black;">🇪🇸 Spanish Practice</option>
       </select>
@@ -869,6 +872,7 @@ html_template = """<!DOCTYPE html>
   let totalWorldsVisited = 0;
   let autoChainTimer = null;
   let currentChatActiveLength = 0;
+  let activeMessages = []; // Track globally for TTS access
 
   // Retrieve shared language setting
   let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
@@ -892,6 +896,9 @@ html_template = """<!DOCTYPE html>
     localStorage.setItem('ges_lang', lang);
     document.getElementById('langToggle').value = lang;
     translatePage();
+    // Also re-render UI elements that rely on JS translation
+    if (currentChat) loadChatContent();
+    else initHub();
   }
 
   const originalTexts = new Map();
@@ -931,12 +938,46 @@ html_template = """<!DOCTYPE html>
     }
   }
 
+  function uiTranslate(text) {
+    if (typeof UI_DICT === 'undefined' || !UI_DICT[text]) return text;
+    const langCode = currentAppLang === 'ukrainian' ? 'uk' : (currentAppLang === 'spanish' ? 'es' : 'en');
+    if (langCode === 'en') return text;
+    return UI_DICT[text][langCode] || text;
+  }
+
+  function speakMessage(role, lang, text) {
+    if (typeof responsiveVoice === 'undefined') return;
+    responsiveVoice.cancel();
+    
+    let voiceKey = 'US English Female';
+    if (role === 'Doctor') voiceKey = 'UK English Male';
+    else if (role === 'Patient') {
+      voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+    } else if (role === 'Interpreter') {
+      if (lang === 'en') voiceKey = 'US English Female';
+      else voiceKey = lang === 'es' ? 'Spanish Female' : 'Ukrainian Female';
+    }
+    
+    responsiveVoice.speak(text, voiceKey, { 
+      rate: 0.9, 
+      pitch: 1,
+      onstart: () => {
+        if (currentStep < currentChatActiveLength) {
+          btnNext.innerHTML = uiTranslate('🔊 Speaking... <i>(Space to skip)</i>');
+        }
+      },
+      onend: () => {
+        updateUI(); // Resets button to prompt the next action
+      }
+    });
+  }
+
   function initHub() {
     scenarioGrid.innerHTML = '';
     chats.forEach((chat, index) => {
       const card = document.createElement('div');
       card.className = 'scenario-card';
-      card.innerHTML = `<div class="card-topic">${chat.topic}</div><div class="card-title">${chat.title}</div>`;
+      card.innerHTML = `<div class="card-topic">${uiTranslate(chat.topic)}</div><div class="card-title">${uiTranslate(chat.title)}</div>`;
       card.onclick = () => enterInstance(index);
       scenarioGrid.appendChild(card);
     });
@@ -960,12 +1001,13 @@ html_template = """<!DOCTYPE html>
   }
 
   function loadChatContent() {
-    chatTitle.textContent = currentChat.title;
-    chatTopic.textContent = currentChat.topic;
+    chatTitle.textContent = uiTranslate(currentChat.title);
+    chatTopic.textContent = uiTranslate(currentChat.topic);
     worldCounter.textContent = `World ${totalWorldsVisited} · ∞`;
 
-    const targetLangCode = currentAppLang === 'ukrainian' ? 'uk' : 'es';
-    const activeMessages = currentChat.messages.filter(msg => msg.lang === 'en' || msg.lang === targetLangCode);
+    // If 'english', default to ukrainian for the patient so there's a language to interpret
+    const targetLangCode = currentAppLang === 'spanish' ? 'es' : 'uk';
+    activeMessages = currentChat.messages.filter(msg => msg.lang === 'en' || msg.lang === targetLangCode);
     currentChatActiveLength = activeMessages.length;
 
     chatMessagesEl.innerHTML = '';
@@ -973,7 +1015,14 @@ html_template = """<!DOCTYPE html>
       const wrapper = document.createElement('div');
       wrapper.className = `message ${msg.role}`;
       wrapper.id = `msg-${i}`;
-      wrapper.innerHTML = `<div class="message-label">${msg.role}</div><div class="message-bubble">${msg.text}</div>`;
+      const safeText = msg.text.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+      wrapper.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div class="message-label">${msg.role}</div>
+          <button onclick="speakMessage('${msg.role}', '${msg.lang}', '${safeText}')" style="background:none;border:none;cursor:pointer;opacity:0.6;font-size:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" title="Replay Audio">🔊</button>
+        </div>
+        <div class="message-bubble">${msg.text}</div>
+      `;
       chatMessagesEl.appendChild(wrapper);
     });
     chatMessagesEl.scrollTop = 0;
@@ -993,8 +1042,8 @@ html_template = """<!DOCTYPE html>
   function showCompletionPortal() {
     const nextIndex = (currentIndex + 1) % chats.length;
     const nextChat = chats[nextIndex];
-    portalTitle.textContent = nextChat.title;
-    portalTopic.textContent = nextChat.topic;
+    portalTitle.textContent = uiTranslate(nextChat.title);
+    portalTopic.textContent = uiTranslate(nextChat.topic);
     completionPortal.style.display = 'flex';
 
     // animate countdown bar
@@ -1026,6 +1075,9 @@ html_template = """<!DOCTYPE html>
     if (msgEl) {
       msgEl.classList.add('visible');
       setTimeout(() => msgEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+      
+      const msgData = activeMessages[currentStep];
+      speakMessage(msgData.role, msgData.lang, msgData.text);
     }
     currentStep++;
     updateUI();
@@ -1045,9 +1097,20 @@ html_template = """<!DOCTYPE html>
     const total = currentChat ? currentChatActiveLength : 0;
     const done = currentStep >= total;
     chatProgress.textContent = `${currentStep} / ${total} lines`;
-    btnNext.textContent = done ? '→ Next World' : 'Reveal Next Line (Space)';
+    
+    if (done) {
+      btnNext.textContent = uiTranslate('→ Next World');
+      if (total > 0) showCompletionPortal();
+    } else {
+      const nextRole = activeMessages[currentStep].role;
+      if (nextRole === 'Interpreter' && currentStep > 0) {
+        // If the next line is the interpreter, the student should be talking right now
+        btnNext.innerHTML = uiTranslate('🎤 Speak your translation, then press Space to check');
+      } else {
+        btnNext.innerHTML = uiTranslate('Press Space to reveal next line');
+      }
+    }
     btnNext.disabled = false;
-    if (done && total > 0) { showCompletionPortal(); }
   }
 
   document.addEventListener('keydown', e => {
