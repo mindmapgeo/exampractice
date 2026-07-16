@@ -1013,6 +1013,90 @@
   #searchResults { display: none; padding: 20px; background: var(--bg2); border-radius: 12px; margin-top: 20px; }
   .search-highlight { background: rgba(255,215,0,0.3); font-weight: bold; }
 
+  /* Clippy Assistant Widget */
+  .clippy-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+  }
+  .clippy-widget.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .clippy-speech {
+    background: rgba(26, 32, 53, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 28px 12px 16px;
+    max-width: 200px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(79, 142, 247, 0.1);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .clippy-speech:hover {
+    transform: scale(1.03);
+    border-color: var(--accent);
+  }
+  .clippy-speech::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    bottom: 12px;
+    border-width: 8px 0 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent transparent rgba(26, 32, 53, 0.95);
+    display: block;
+    width: 0;
+  }
+  .clippy-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(79, 142, 247, 0.4);
+    cursor: pointer;
+    animation: clippyFloat 3s ease-in-out infinite;
+  }
+  .clippy-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 14px;
+    opacity: 0.5;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+    padding: 2px;
+  }
+  .clippy-close:hover {
+    opacity: 1;
+  }
+  @keyframes clippyFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
 </style>
 </head>
 <body>
@@ -5357,8 +5441,34 @@ document.addEventListener('keydown', (e) => {
 // ══════════════════════════════════════════════
 // BOOT
 // ══════════════════════════════════════════════
+// Clippy helper popup
+function initClippy() {
+  if (sessionStorage.getItem('clippy_dismissed') === 'true') return;
+  setTimeout(() => {
+    const clippy = document.getElementById('clippyWidget');
+    if (clippy) clippy.classList.add('active');
+  }, 2500);
+}
+
+function dismissClippy(event) {
+  event.stopPropagation();
+  const clippy = document.getElementById('clippyWidget');
+  if (clippy) clippy.classList.remove('active');
+  sessionStorage.setItem('clippy_dismissed', 'true');
+}
+
 init();
 changeLanguage(currentAppLang);
+initClippy();
 </script>
+
+<div class="clippy-widget" id="clippyWidget">
+  <div class="clippy-speech" onclick="window.open('playscape.html', '_blank')">
+    <button class="clippy-close" onclick="dismissClippy(event)">×</button>
+    Play with me! 🎭 Playscape now
+  </div>
+  <div class="clippy-avatar" onclick="window.open('playscape.html', '_blank')">📎</div>
+</div>
+
 </body>
 </html>
