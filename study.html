@@ -1028,6 +1028,7 @@
   </div>
   <div class="header-right">
     <select id="langToggle" onchange="changeLanguage(this.value)">
+      <option value="english">🇺🇸 English</option>
       <option value="ukrainian">🇺🇦 Ukrainian</option>
       <option value="spanish">🇪🇸 Spanish</option>
     </select>
@@ -4427,7 +4428,7 @@ let progress = {};
 // ══════════════════════════════════════════════
 
 // MULTI-LANGUAGE & SEARCH SYSTEM
-let currentAppLang = localStorage.getItem('ges_lang') || 'ukrainian';
+let currentAppLang = localStorage.getItem('ges_lang') || 'english';
 document.getElementById('langToggle').value = currentAppLang;
 
 function changeLanguage(lang) {
@@ -4438,20 +4439,25 @@ function changeLanguage(lang) {
   document.querySelectorAll('.script-box.ukraine, .script-box.spanish').forEach(el => {
     el.style.display = 'none';
   });
-  document.querySelectorAll(`.script-box.${lang === 'ukrainian' ? 'ukraine' : 'spanish'}`).forEach(el => {
-    el.style.display = 'block';
-  });
+  if (lang === 'ukrainian') {
+    document.querySelectorAll('.script-box.ukraine').forEach(el => el.style.display = 'block');
+  } else if (lang === 'spanish') {
+    document.querySelectorAll('.script-box.spanish').forEach(el => el.style.display = 'block');
+  } else {
+    // English — show all scripts (both Ukrainian and Spanish versions visible for reference)
+    document.querySelectorAll('.script-box.ukraine').forEach(el => el.style.display = 'block');
+  }
 
   // Update Audiobook player
   const player = document.getElementById('audiobookPlayer');
   const label = document.getElementById('audiobookLabel');
   if (player && label) {
-    if (lang === 'ukrainian') {
-      player.src = 'glossary_audiobook_comprehensive.mp3';
-      label.textContent = '🎧 Comprehensive Audiobook (English & Ukrainian)';
-    } else {
+    if (lang === 'spanish') {
       player.src = 'glossary_audiobook_comprehensive_spanish.mp3';
       label.textContent = '🎧 Comprehensive Audiobook (English & Spanish)';
+    } else {
+      player.src = 'glossary_audiobook_comprehensive.mp3';
+      label.textContent = '🎧 Comprehensive Audiobook (English & Ukrainian)';
     }
   }
 
