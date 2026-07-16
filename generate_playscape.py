@@ -788,7 +788,6 @@ html_template = """<!DOCTYPE html>
         color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: bold; 
         cursor: pointer; font-family: 'Inter', sans-serif; outline: none;
       ">
-        <option value="english" style="color:black;">🇺🇸 English</option>
         <option value="ukrainian" style="color:black;">🇺🇸 ↔ 🇺🇦 English - Ukrainian</option>
         <option value="spanish" style="color:black;">🇺🇸 ↔ 🇪🇸 English - Spanish</option>
       </select>
