@@ -1,6 +1,6 @@
 // Single source of truth for the visible version badge shown on every page.
 // Bump this on any content/feature edit so it's obvious which rendition is live.
-const SITE_VERSION = { number: 'v3', date: '2026-07-16' };
+const SITE_VERSION = { number: 'v4', date: '2026-07-16' };
 
 (function () {
   function addBadge() {
